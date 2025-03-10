@@ -2,56 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Search Results</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #000; /* CMC Black */
-            color: #800000; /* CMC Maroon */
-            padding: 20px;
-        }
-        div {
-            margin-bottom: 20px;
-            padding: 15px;
-            border: 1px solid #d4af37; /* CMC Gold */
-            background-color: #fff;
-            color: #000; /* CMC Black */
-        }
-        a {
-            color: #d4af37; /* CMC Gold */
-            text-decoration: none;
-            font-weight: bold;
-        }
-        header {
-            color: #d4af37; /* CMC Gold */
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        img {
-            height: 100px;
-            width: auto;
-            margin-bottom: 20px;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <header>
-        <img src="CMC_logo.jpeg" alt="Claremont McKenna College Logo">
-        <h1>Search Results</h1>
+        <img src="{{ url_for('static', filename='CMC_logo.jpg') }}" alt="CMC Logo">
+        <h1>Query Results</h1>
     </header>
-    {% for row in rows %}
-        <div>
-            <h2>{{ row['Title'] }}</h2>
-            <p><strong>Author:</strong> {{ row['author_full_name'] }}</p>
-            <p><strong>Advisors:</strong> {{ row['advisor1'] }}, {{ row['advisor2'] }}</p>
-            <p><strong>Department:</strong> {{ row['department'] }}</p>
-            <p><strong>Publication Date:</strong> {{ row['publication_date'].strftime('%Y-%m-%d') if row['publication_date'] else 'N/A' }}</p>
-            <p><strong>Award:</strong> {{ row['award'] }}</p>
-            <p><strong>Keywords:</strong> {{ row['keywords'] }}</p>
-            <p><strong>Abstract:</strong> {{ row['abstract'] }}</p>
-        </div>
-    {% endfor %}
-    <a href="/">New Search</a>
+    <main>
+        <p><strong>Question:</strong> {{ question }}</p>
+        <p><strong>Answer:</strong> {{ answer }}</p>
+        <p><strong>Response Time:</strong> {{ response_time }} seconds</p>
+        <a href="{{ url_for('index') }}">Ask another question</a>
+    </main>
 </body>
 </html>
 

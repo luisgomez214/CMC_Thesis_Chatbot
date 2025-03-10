@@ -2,46 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Thesis Query System</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #000; /* CMC Black */
-            color: #800000; /* CMC Maroon */
-            padding: 20px;
-        }
-        input[type="text"], button {
-            padding: 10px;
-            margin: 10px;
-            font-size: 16px;
-        }
-        button {
-            background-color: #d4af37; /* CMC Gold */
-            color: #000; /* CMC Black */
-            border: none;
-            cursor: pointer;
-        }
-        header {
-            color: #d4af37; /* CMC Gold */
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        img {
-            height: 100px;
-            width: auto;
-            margin-bottom: 20px;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claremont McKenna Thesis Search System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <header>
-        <img src="CMC_logo.jpeg" alt="Claremont McKenna College Logo">
-        <h1>Welcome to the Claremont McKenna Theses Query System</h1>
+        <img src="{{ url_for('static', filename='CMC_logo.jpg') }}" alt="CMC Logo">
+        <h1>Thesis Search System</h1>
     </header>
-    <form method="post">
-        <input type="text" name="query" placeholder="Enter your query" required>
-        <button type="submit">Search</button>
-    </form>
+    <main>
+        {% for message, category in get_flashed_messages(with_categories=True) %}
+            <div class="alert {{ category }}">{{ message }}</div>
+        {% endfor %}
+
+        <form action="{{ url_for('query') }}" method="post">
+            <input type="text" name="question" placeholder="Enter your thesis query" required>
+            <button type="submit">Search</button>
+        </form>
+    </main>
+
+    <!-- Footer at the bottom of the page -->
+    <footer>
+        <p>
+            I am a RAG (Retrieval Augmented Generation) system filled with information about the 
+            Claremont McKenna College theses database. In other words, I'm a theses chatbot, 
+            and I specialize in CMC theses. Ask me anything about these theses, authors, departments, 
+            or research topics!
+        </p>
+    </footer>
 </body>
 </html>
 

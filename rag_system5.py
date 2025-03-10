@@ -4,7 +4,7 @@ import logging
 import re
 import sqlite3
 import pandas as pd
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Tuple
 
 import groq
 from groq import Groq
@@ -63,6 +63,68 @@ def run_llm(system: str, user: str, model: str = DEFAULT_MODEL, seed: Optional[i
         return f"Error: {str(e)}"
 
 ################################################################################
+# Query Analysis Functions
+################################################################################
+
+def analyze_query_type(question: str) -> Dict[str, Any]:
+    """
+    Analyze the user query to determine the appropriate search strategy.
+    
+    Args:
+        question: User's question
+        
+    Returns:
+        Dictionary with query type and relevant entities
+    """
+    system_prompt = """You are a query analyzer for a thesis database. 
+    Your task is to determine what kind of information the user is looking for.
+    
+    Output a JSON object with the following structure:
+    {
+        "query_type": "advisor", "author", "department", "topic", "year", or "general",
+        "entities": [list of relevant names, terms, or years mentioned],
+        "columns_needed": [list of likely needed columns, keep this minimal],
+        "is_exact_title_search": true/false,
+        "exact_title": "full title if user is looking for a specific thesis" 
+    }
+    
+    Include only the JSON in your response, no other text.
+    """
+    
+    response = run_llm(system_prompt, question)
+    
+    # Try to extract JSON from the response
+    try:
+        # Find JSON pattern in the response
+        json_match = re.search(r'({.*})', response, re.DOTALL)
+        if json_match:
+            import json
+            query_info = json.loads(json_match.group(1))
+            return query_info
+    except Exception as e:
+        logger.error(f"Error parsing query analysis: {e}")
+    
+    # Fallback to a simpler analysis if JSON parsing fails
+    if "advisor" in question.lower():
+        return {
+            "query_type": "advisor",
+            "entities": [e.strip() for e in question.split() if len(e) > 3],
+            "columns_needed": ["Title", "department", "publication_date", "advisor1", "advisor2"]
+        }
+    elif any(term in question.lower() for term in ["author", "student", "wrote"]):
+        return {
+            "query_type": "author",
+            "entities": [e.strip() for e in question.split() if len(e) > 3],
+            "columns_needed": ["Title", "publication_date", "author1_fname", "author1_lname", "department"]
+        }
+    else:
+        return {
+            "query_type": "general",
+            "entities": [e.strip() for e in question.split() if len(e) > 3],
+            "columns_needed": ["Title", "abstract", "department", "publication_date"]
+        }
+
+################################################################################
 # Data Loading and Management
 ################################################################################
 
@@ -114,6 +176,9 @@ class ThesisDataManager:
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_author1_fname ON theses (author1_fname)")
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_publication_date ON theses (publication_date)")
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_department ON theses (department)")
+            # Add full-text search capability
+            cursor.execute("CREATE VIRTUAL TABLE IF NOT EXISTS theses_fts USING fts5(Title, abstract, keywords, advisor1, advisor2, author1_fname, author1_lname, department, content='theses', content_rowid='rowid')")
+            cursor.execute("INSERT INTO theses_fts(rowid, Title, abstract, keywords, advisor1, advisor2, author1_fname, author1_lname, department) SELECT rowid, Title, abstract, keywords, advisor1, advisor2, author1_fname, author1_lname, department FROM theses")
             self.conn.commit()
             
             logger.info(f"Successfully converted CSV to SQLite database at {self.db_path}")
@@ -145,6 +210,17 @@ class ThesisDataManager:
                 if not cursor.fetchone():
                     logger.info(f"Database exists but missing tables. Recreating from CSV.")
                     return self.csv_to_sqlite()
+                
+                # Check for full-text search table, add if missing
+                cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='theses_fts'")
+                if not cursor.fetchone():
+                    try:
+                        logger.info("Adding full-text search capability to existing database")
+                        cursor.execute("CREATE VIRTUAL TABLE IF NOT EXISTS theses_fts USING fts5(Title, abstract, keywords, advisor1, advisor2, author1_fname, author1_lname, department, content='theses', content_rowid='rowid')")
+                        cursor.execute("INSERT INTO theses_fts(rowid, Title, abstract, keywords, advisor1, advisor2, author1_fname, author1_lname, department) SELECT rowid, Title, abstract, keywords, advisor1, advisor2, author1_fname, author1_lname, department FROM theses")
+                        self.conn.commit()
+                    except Exception as e:
+                        logger.error(f"Error adding full-text search: {e}")
                 
                 logger.info(f"Successfully connected to existing database at {self.db_path}")
                 self.loaded = True
@@ -201,7 +277,7 @@ class ThesisDataManager:
             logger.error(f"Error getting column sample: {e}")
             return []
     
-    def search_column(self, column_name: str, search_term: str, limit: int = 50) -> List[Dict[str, Any]]:
+    def search_column(self, column_name: str, search_term: str, limit: int = 100) -> List[Dict[str, Any]]:
         """
         Search for a term in a specific column.
         
@@ -240,31 +316,44 @@ class ThesisDataManager:
             logger.error(f"Error searching column {column_name}: {e}")
             return []
     
-    def execute_query(self, query: str, params: tuple = ()) -> List[Dict[str, Any]]:
+    def execute_query(self, query: str, params: tuple = (), column_subset: List[str] = None) -> List[Dict[str, Any]]:
         """
-        Execute a custom SQL query.
-        
+        Execute a custom SQL query with option to return only specific columns.
+    
         Args:
             query: SQL query to execute
             params: Parameters for the query
-            
+            column_subset: Optional list of columns to include in results (to reduce data size)
+    
         Returns:
             List of records matching the query
         """
         if not self.loaded:
             self.load_data()
-            
+    
         try:
             cursor = self.conn.cursor()
+            # Log the query to check for correctness
+            logger.debug(f"Executing SQL query: {query} with params: {params}")
             cursor.execute(query, params)
-            
+    
             # Get column names
             columns = [description[0] for description in cursor.description]
-            
+    
             results = []
             for row in cursor.fetchall():
-                results.append(dict(zip(columns, row)))
-            
+                # If column_subset is specified, only include those columns
+                if column_subset:
+                    result_dict = {}
+                    row_dict = dict(zip(columns, row))
+                    for col in column_subset:
+                        if col in row_dict:
+                            result_dict[col] = row_dict[col]
+                    results.append(result_dict)
+                else:
+                    results.append(dict(zip(columns, row)))
+    
+            logger.info(f"Query successfully executed and returned {len(results)} results")
             return results
         except Exception as e:
             logger.error(f"Error executing query: {e}")
@@ -272,7 +361,7 @@ class ThesisDataManager:
     
     def get_table_stats(self) -> Dict[str, Any]:
         """
-        Get statistics about the theses table.
+        Get basic statistics about the theses table (keeping response size small).
         
         Returns:
             Dictionary with table statistics
@@ -291,52 +380,251 @@ class ThesisDataManager:
             columns = self.get_columns()
             column_count = len(columns)
             
-            # Get sample of publication dates
-            cursor.execute("SELECT DISTINCT publication_date FROM theses WHERE publication_date IS NOT NULL ORDER BY publication_date LIMIT 10")
-            date_sample = [row[0] for row in cursor.fetchall()]
-            
-            # Get common departments
-            cursor.execute("""
-                SELECT department, COUNT(*) as count 
-                FROM theses 
-                WHERE department IS NOT NULL 
-                GROUP BY department 
-                ORDER BY count DESC 
-                LIMIT 10
-            """)
-            departments = [(row[0], row[1]) for row in cursor.fetchall()]
-            
             return {
                 "row_count": row_count,
                 "column_count": column_count,
-                "columns": columns,
-                "date_sample": date_sample,
-                "top_departments": departments
+                "columns": columns[:10],  # Just return a subset of columns to keep response size down
             }
         except Exception as e:
             logger.error(f"Error getting table stats: {e}")
+            return {
+                "row_count": "unknown",
+                "column_count": "unknown",
+                "columns": [],
+            }
+
+    # Specialized query functions to reduce data size
+    
+    def search_by_advisor(self, advisor_name: str, limit: int = 25) -> List[Dict[str, Any]]:
+        """Search for theses by advisor name with multiple strategies."""
+        results = []
+        
+        try:
+            # Strategy 1: Exact match on full name
+            query1 = """
+            SELECT Title, department, publication_date, advisor1, advisor2 
+            FROM theses 
+            WHERE advisor1 = ? OR advisor2 = ? OR advisor3 = ?
+            LIMIT ?
+            """
+            results.extend(self.execute_query(query1, (advisor_name, advisor_name, advisor_name, limit)))
             
-            # Fallback for basic stats
+            # Strategy 2: Partial match
+            if len(results) < limit:
+                query2 = """
+                SELECT Title, department, publication_date, advisor1, advisor2 
+                FROM theses 
+                WHERE advisor1 LIKE ? OR advisor2 LIKE ? OR advisor3 LIKE ? 
+                LIMIT ?
+                """
+                results.extend(self.execute_query(query2, (f"%{advisor_name}%", f"%{advisor_name}%", f"%{advisor_name}%", limit)))
+            
+            # Strategy 3: Try with parts of the name (for first/last name searches)
+            if len(results) < limit and ' ' in advisor_name:
+                name_parts = advisor_name.split()
+                for part in name_parts:
+                    if len(part) > 2:  # Skip very short name parts
+                        query3 = """
+                        SELECT Title, department, publication_date, advisor1, advisor2 
+                        FROM theses 
+                        WHERE advisor1 LIKE ? OR advisor2 LIKE ? OR advisor3 LIKE ? 
+                        LIMIT ?
+                        """
+                        part_results = self.execute_query(query3, (f"%{part}%", f"%{part}%", f"%{part}%", limit - len(results)))
+                        results.extend(part_results)
+                        
+                        if len(results) >= limit:
+                            break
+            
+            return results[:limit]  # Ensure we don't exceed the limit
+        except Exception as e:
+            logger.error(f"Error in advisor search: {e}")
+            return []
+    
+    def search_by_author(self, first_name: str = None, last_name: str = None, limit: int = 25) -> List[Dict[str, Any]]:
+        """Search for theses by author name."""
+        try:
+            if first_name and last_name:
+                query = """
+                SELECT Title, author1_fname, author1_lname, department, publication_date
+                FROM theses 
+                WHERE author1_fname = ? AND author1_lname = ? 
+                LIMIT ?
+                """
+                results = self.execute_query(query, (first_name, last_name, limit))
+                
+                # If exact match fails, try LIKE operators
+                if not results:
+                    query = """
+                    SELECT Title, author1_fname, author1_lname, department, publication_date
+                    FROM theses 
+                    WHERE author1_fname LIKE ? AND author1_lname LIKE ? 
+                    LIMIT ?
+                    """
+                    results = self.execute_query(query, (f"%{first_name}%", f"%{last_name}%", limit))
+                
+                return results
+            elif last_name:
+                query = """
+                SELECT Title, author1_fname, author1_lname, department, publication_date
+                FROM theses 
+                WHERE author1_lname LIKE ? 
+                LIMIT ?
+                """
+                return self.execute_query(query, (f"%{last_name}%", limit))
+            elif first_name:
+                query = """
+                SELECT Title, author1_fname, author1_lname, department, publication_date
+                FROM theses 
+                WHERE author1_fname LIKE ? 
+                LIMIT ?
+                """
+                return self.execute_query(query, (f"%{first_name}%", limit))
+            return []
+        except Exception as e:
+            logger.error(f"Error in author search: {e}")
+            return []
+    
+    def search_by_department(self, department: str, limit: int = 25) -> List[Dict[str, Any]]:
+        """Search for theses by department."""
+        try:
+            query = """
+            SELECT Title, department, publication_date, author1_fname, author1_lname
+            FROM theses 
+            WHERE department LIKE ? 
+            LIMIT ?
+            """
+            return self.execute_query(query, (f"%{department}%", limit))
+        except Exception as e:
+            logger.error(f"Error in department search: {e}")
+            return []
+    
+    def search_by_keyword(self, keyword: str, limit: int = 25) -> List[Dict[str, Any]]:
+        """Search for theses by keyword in title or abstract."""
+        try:
+            # First try full-text search if available
             try:
-                cursor = self.conn.cursor()
-                cursor.execute("SELECT COUNT(*) FROM theses")
-                row_count = cursor.fetchone()[0]
+                fts_query = """
+                SELECT t.Title, t.department, t.publication_date, t.author1_fname, t.author1_lname
+                FROM theses t
+                JOIN theses_fts fts ON t.rowid = fts.rowid
+                WHERE theses_fts MATCH ?
+                LIMIT ?
+                """
+                results = self.execute_query(fts_query, (keyword, limit))
+                if results:
+                    return results
+            except Exception as fts_error:
+                logger.warning(f"Full-text search failed, falling back to LIKE: {fts_error}")
+            
+            # Fall back to regular search
+            query = """
+            SELECT Title, department, publication_date, author1_fname, author1_lname
+            FROM theses 
+            WHERE Title LIKE ? OR abstract LIKE ? OR keywords LIKE ?
+            LIMIT ?
+            """
+            return self.execute_query(query, (f"%{keyword}%", f"%{keyword}%", f"%{keyword}%", limit))
+        except Exception as e:
+            logger.error(f"Error in keyword search: {e}")
+            return []
+    
+    def search_by_exact_title(self, title: str) -> List[Dict[str, Any]]:
+        """
+        Search for thesis by exact title.
+        
+        Args:
+            title: The exact title to search for
+            
+        Returns:
+            List of matching records (usually just one)
+        """
+        try:
+            # Try exact match first
+            query = """
+            SELECT * FROM theses 
+            WHERE Title = ?
+            LIMIT 5
+            """
+            results = self.execute_query(query, (title,))
+            
+            # If no exact match, try with LIKE for case insensitivity
+            if not results:
+                query = """
+                SELECT * FROM theses 
+                WHERE Title LIKE ?
+                LIMIT 5
+                """
+                results = self.execute_query(query, (title,))
                 
-                columns = self.get_columns()
-                column_count = len(columns)
+            # If still no results, try with partial match
+            if not results:
+                # Try partial match with the first 50 chars of the title
+                partial_title = title[:min(50, len(title))]
+                query = """
+                SELECT * FROM theses 
+                WHERE Title LIKE ?
+                LIMIT 10
+                """
+                results = self.execute_query(query, (f"%{partial_title}%",))
                 
-                return {
-                    "row_count": row_count,
-                    "column_count": column_count,
-                    "columns": columns,
-                }
-            except Exception as e2:
-                logger.error(f"Error getting basic table stats: {e2}")
-                return {
-                    "row_count": "unknown",
-                    "column_count": len(self.get_columns()),
-                    "columns": self.get_columns(),
-                }
+            return results
+        except Exception as e:
+            logger.error(f"Error in exact title search: {e}")
+            return []
+    
+    def search_all_columns(self, search_term: str, limit: int = 50) -> List[Dict[str, Any]]:
+        """
+        Search across all text columns for a term (comprehensive search).
+        
+        Args:
+            search_term: Term to search for
+            limit: Maximum number of results to return
+            
+        Returns:
+            List of matching records
+        """
+        if not self.loaded:
+            self.load_data()
+            
+        # Get all columns
+        columns = self.get_columns()
+        text_columns = [col for col in columns if col not in ['rowid', 'publication_date']]
+            
+        try:
+            # Try full-text search first if available
+            try:
+                fts_query = """
+                SELECT t.*
+                FROM theses t
+                JOIN theses_fts fts ON t.rowid = fts.rowid
+                WHERE theses_fts MATCH ?
+                LIMIT ?
+                """
+                results = self.execute_query(fts_query, (search_term, limit))
+                if results:
+                    return results
+            except Exception as fts_error:
+                logger.warning(f"Full-text search failed, falling back to LIKE: {fts_error}")
+                
+            # Build a query that searches across all text columns
+            where_clauses = []
+            params = []
+            
+            for col in text_columns:
+                where_clauses.append(f'"{col}" LIKE ?')
+                params.append(f"%{search_term}%")
+                
+            query = f"""
+            SELECT * FROM theses 
+            WHERE {" OR ".join(where_clauses)}
+            LIMIT {limit}
+            """
+            
+            return self.execute_query(query, tuple(params))
+        except Exception as e:
+            logger.error(f"Error in all-columns search: {e}")
+            return []
 
 ################################################################################
 # RAG System
@@ -356,215 +644,401 @@ class ThesisRAGSystem:
         self.data_manager = data_manager
         self.model = model
         
-    def generate_retrieval_prompt(self, question: str) -> str:
+    def determine_query_strategy(self, question: str) -> Tuple[str, List[Dict[str, Any]]]:
         """
-        Generate a system prompt for the retrieval step.
+        Determine the best query strategy based on the question and execute it.
         
         Args:
-            question: User's question about the thesis data
+            question: User's question
             
         Returns:
-            System prompt for retrieval
+            Tuple of (query_type, query_results)
         """
-        columns = self.data_manager.get_columns()
-        table_stats = self.data_manager.get_table_stats()
+        # Step 1: Check if this is an exact title search
+        exact_title_results = self._check_for_exact_title_search(question)
+        if exact_title_results:
+            return "exact_title", exact_title_results
         
-        system_prompt = f"""You are a data retrieval assistant tasked with generating a SQL query to answer a user's question about thesis data.
-
-Available columns in the 'theses' table:
-{', '.join(columns)}
-
-Dataset statistics:
-- Total theses: {table_stats.get('row_count', 'unknown')}
-- Column count: {table_stats.get('column_count', 'unknown')}
-
-Based on the user's question, generate a SQL query that will retrieve the relevant information. The query should:
-1. Select only columns necessary to answer the question
-2. Include appropriate WHERE clauses to filter results
-3. Keep the result set small (use LIMIT 10-20 if appropriate)
-4. Format as simple raw SQL without any explanation
-5. Use double quotes around column names, not square brackets
-
-Return ONLY the SQL query, nothing else.
-"""
-        return system_prompt
+        # Step 2: Use LLM to analyze the question and determine query types to try
+        query_analysis_prompt = """You are a database query analyzer for a thesis database.
         
-    def generate_answer_prompt(self, question: str, query_results: List[Dict[str, Any]]) -> str:
+        Analyze this question and determine which query types would be most appropriate to try.
+        The database contains information about theses including authors, advisors, departments, titles, etc.
+        
+        Return a JSON object with the following structure:
+        {
+            "possible_query_types": ["advisor", "author", "department", "topic", "general"],
+            "query_priority": ["primary_type", "secondary_type", ...],
+            "entities": {
+                "person_names": ["full name 1", "full name 2"],
+                "keywords": ["keyword1", "keyword2"]
+            }
+        }
+        
+        Include only the JSON in your response, no other text.
         """
-        Generate a system prompt for the answer generation step.
         
-        Args:
-            question: User's question about the thesis data
-            query_results: Results from the SQL query
-            
-        Returns:
-            System prompt for answer generation
-        """
-        # Format query results for the prompt
-        result_str = ""
-        if query_results:
-            columns = list(query_results[0].keys())
-            result_str += f"Columns: {', '.join(columns)}\n\n"
-            
-            # Format each row
-            for i, row in enumerate(query_results[:20]):  # Limit to first 20 results to keep prompt size manageable
-                result_str += f"Row {i+1}:\n"
-                for col, val in row.items():
-                    # Truncate long text values
-                    if isinstance(val, str) and len(val) > 200:
-                        val = val[:200] + "..."
-                    result_str += f"  {col}: {val}\n"
-                result_str += "\n"
-            
-            # Note if results were truncated
-            if len(query_results) > 20:
-                result_str += f"[Showing 20 of {len(query_results)} results]\n"
-        else:
-            result_str = "No results found for this query."
+        response = run_llm(query_analysis_prompt, question)
         
-        system_prompt = f"""You are a knowledgeable research assistant tasked with answering questions about thesis data from a university repository.
-
-The user asked: "{question}"
-
-Here are the query results from the database:
-
-{result_str}
-
-Using the information provided above, please answer the user's question. If the data doesn't contain enough information to give a complete answer, acknowledge the limitations and provide the best answer possible based on the available data. Do not make up information not present in the provided results.
-"""
-        return system_prompt
-        
-    def answer_question(self, question: str) -> str:
-        """
-        Answer a question about the thesis data using the RAG approach with SQL.
-        
-        Args:
-            question: User's question about the thesis data
-            
-        Returns:
-            Answer to the question
-        """
-        # Step 1: Generate a SQL query for the question
-        retrieval_prompt = self.generate_retrieval_prompt(question)
-        sql_query = run_llm(retrieval_prompt, question, self.model)
-        
-        # Clean up the SQL query (remove markdown formatting if present)
-        sql_query = sql_query.replace('```sql', '').replace('```', '').strip()
-        logger.info(f"Generated SQL query: {sql_query}")
-        
-        # Step 2: Execute the SQL query
+        # Extract JSON from the response
         try:
-            query_results = self.data_manager.execute_query(sql_query)
-            logger.info(f"Query returned {len(query_results)} results")
+            json_match = re.search(r'({.*})', response, re.DOTALL)
+            if json_match:
+                import json
+                query_info = json.loads(json_match.group(1))
+            else:
+                # Default if no JSON found
+                query_info = {
+                    "possible_query_types": ["advisor", "author", "topic", "general"],
+                    "query_priority": ["general"],
+                    "entities": {
+                        "person_names": [],
+                        "keywords": []
+                    }
+                }
         except Exception as e:
-            logger.error(f"Error executing SQL query: {e}")
-            
-            # Fallback to simpler approach based on keywords
-            logger.info("Falling back to keyword-based approach")
-            fallback_results = self._fallback_retrieval(question)
-            query_results = fallback_results
+            logger.error(f"Error parsing query analysis: {e}")
+            # Provide default values on error
+            query_info = {
+                "possible_query_types": ["advisor", "author", "topic", "general"],
+                "query_priority": ["general"],
+                "entities": {
+                    "person_names": [],
+                    "keywords": []
+                }
+            }
         
-        # Step 3: Generate an answer using the query results
-        if not query_results:
-            # Try the fallback method if no results from SQL
-            if 'fallback' not in locals():
-                fallback_results = self._fallback_retrieval(question)
-                query_results = fallback_results
-            
-            if not query_results:
-                return "I couldn't find relevant data to answer your question. Please check if your question relates to the thesis dataset or try reformulating it."
+        # Get query priorities
+        query_priority = query_info.get("query_priority", ["general"])
+        person_names = query_info.get("entities", {}).get("person_names", [])
+        keywords = query_info.get("entities", {}).get("keywords", [])
         
-        answer_prompt = self.generate_answer_prompt(question, query_results)
-        answer = run_llm(answer_prompt, question, self.model)
-        return answer
-    
-    def _fallback_retrieval(self, question: str) -> List[Dict[str, Any]]:
-        """
-        Fallback method for retrieving data when SQL query fails.
+        # Extract names from the question if LLM didn't find any
+        if not person_names:
+            name_matches = re.findall(r'([A-Z][a-z]+ [A-Z][a-z]+)', question)
+            person_names.extend(name_matches)
         
-        Args:
-            question: User's question about the thesis data
-            
-        Returns:
-            List of relevant records
-        """
-        # Extract potential keywords from the question
-        keywords_prompt = """Extract the 3-5 most important search keywords from this question. Return only the keywords separated by commas, no explanation:"""
-        keywords_response = run_llm(keywords_prompt, question, self.model)
-        keywords = [k.strip() for k in keywords_response.split(',')]
+        # Extract possible title fragments (sequences of capitalized words)
+        title_fragments = re.findall(r'([A-Z][a-z]+(?: [A-Z][a-z]+){2,})', question)
+        keywords.extend(title_fragments)
         
-        logger.info(f"Extracted keywords: {keywords}")
+        # Extract other potential keywords from the question if LLM didn't find enough
+        if len(keywords) < 3:
+            potential_keywords = [word for word in question.split() if len(word) > 4 and word[0].isupper()]
+            keywords.extend(potential_keywords)
         
-        # Determine potential columns to search based on common patterns
-        search_columns = ['Title', 'author1_lname', 'author1_fname', 'department', 'abstract']
+        logger.info(f"Query analysis: priorities={query_priority}, names={person_names}, keywords={keywords}")
         
-        # Search for each keyword in relevant columns
+        # Try each query type in priority order
         all_results = []
-        for keyword in keywords:
-            if not keyword:
-                continue
-                
-            for column in search_columns:
-                # Skip columns that don't exist
-                if column not in self.data_manager.get_columns():
-                    continue
-                    
-                results = self.data_manager.search_column(column, keyword, limit=5)
-                all_results.extend(results)
+        successful_query_type = "general"
         
-        # Remove duplicates (based on same Title if available, otherwise full record)
+        for query_type in query_priority:
+            results = []
+            
+            if query_type == "advisor":
+                # Try each name as an advisor
+                for name in person_names:
+                    advisor_results = self.data_manager.search_by_advisor(name)
+                    if advisor_results:
+                        results.extend(advisor_results)
+                        successful_query_type = "advisor"
+                        logger.info(f"Found {len(advisor_results)} results for advisor: {name}")
+            
+            elif query_type == "author":
+                # Try each name as an author
+                for name in person_names:
+                    parts = name.split()
+                    if len(parts) >= 2:
+                        author_results = self.data_manager.search_by_author(parts[0], parts[1])
+                        if author_results:
+                            results.extend(author_results)
+                            successful_query_type = "author"
+                            logger.info(f"Found {len(author_results)} results for author: {name}")
+            
+            elif query_type == "department":
+                # Try department search with keywords
+                for keyword in keywords:
+                    dept_results = self.data_manager.search_by_department(keyword)
+                    if dept_results:
+                        results.extend(dept_results)
+                        successful_query_type = "department"
+                        logger.info(f"Found {len(dept_results)} results for department: {keyword}")
+            
+            elif query_type == "topic" or query_type == "general":
+                # Try keyword search
+                for keyword in keywords:
+                    keyword_results = self.data_manager.search_by_keyword(keyword)
+                    if keyword_results:
+                        results.extend(keyword_results)
+                        successful_query_type = query_type
+                        logger.info(f"Found {len(keyword_results)} results for keyword: {keyword}")
+            
+            # If we found reasonable results, add them but continue searching
+            if results:
+                all_results.extend(results)
+                # Only break if we found a lot of results
+                if len(all_results) > 20:
+                    break
+        
+        # If we still don't have many results, try the comprehensive all-columns search
+        if len(all_results) < 10:
+            # Combine all potential search terms
+            all_search_terms = person_names + keywords
+            
+            for search_term in all_search_terms:
+                if len(search_term) > 3:  # Skip very short terms
+                    # Try comprehensive search
+                    comprehensive_results = self.data_manager.search_all_columns(search_term)
+                    if comprehensive_results:
+                        all_results.extend(comprehensive_results)
+                        successful_query_type = "comprehensive"
+                        logger.info(f"All-columns search found {len(comprehensive_results)} results for: {search_term}")
+                        
+                        # If we have enough results, stop
+                        if len(all_results) > 30:
+                            break
+        
+        # If still no results, use a fallback approach
+        if not all_results:
+            all_results = self._fallback_retrieval(question)
+            successful_query_type = "fallback"
+        
+        # Remove duplicates
         unique_results = []
         seen_titles = set()
         
         for result in all_results:
-            result_title = result.get('Title', str(result))
-            if result_title not in seen_titles:
+            title = result.get('Title', '')
+            if title and title not in seen_titles:
                 unique_results.append(result)
-                seen_titles.add(result_title)
+                seen_titles.add(title)
+    
+        return successful_query_type, unique_results
+       
+    def _check_for_exact_title_search(self, question: str) -> List[Dict[str, Any]]:
+            """
+            Check if the question is asking about a specific thesis title.
+            
+            Args:
+                question: User's question
+                
+            Returns:
+                List of matching records if it's asking about a specific title, empty list otherwise
+            """
+            # Use patterns to detect if user is asking about a specific thesis
+            title_patterns = [
+                r'thesis (titled|called|named) ["\'](.*?)["\']',
+                r'information (on|about) ["\'](.*?)["\']',
+                r'find ["\'](.*?)["\']',
+                r'looking for ["\'](.*?)["\']'
+            ]
+            
+            for pattern in title_patterns:
+                matches = re.search(pattern, question, re.IGNORECASE)
+                if matches and len(matches.groups()) > 1:
+                    title = matches.group(2)
+                    logger.info(f"Detected possible title search: {title}")
+                    
+                    results = self.data_manager.search_by_exact_title(title)
+                    if results:
+                        return results
+            
+            return []
         
-        return unique_results[:20]  # Limit to top 20 results
-
-################################################################################
-# Interactive CLI
-################################################################################
-
-def interactive_cli():
-    """Run an interactive command-line interface for the RAG system."""
-    print("Thesis RAG System - Interactive CLI")
-    print("-----------------------------------")
-    
-    data_manager = ThesisDataManager()
-    success = data_manager.load_data()
-    
-    if not success:
-        print("Failed to load data. Please check the file path and try again.")
-        return
-    
-    table_stats = data_manager.get_table_stats()
-    print(f"Loaded dataset with {table_stats.get('row_count', 'unknown')} rows and {table_stats.get('column_count', 'unknown')} columns.")
-    
-    rag_system = ThesisRAGSystem(data_manager)
-    
-    print("\nYou can now ask questions about the thesis data. Type 'exit' to quit.")
-    
-    while True:
-        user_input = input("\nQuestion: ").strip()
+    def _fallback_retrieval(self, question: str) -> List[Dict[str, Any]]:
+        """
+        Fallback retrieval strategy when main strategies fail.
         
-        if user_input.lower() in ('exit', 'quit'):
-            print("Goodbye!")
-            break
+        Args:
+            question: User's question
+            
+        Returns:
+            List of potentially relevant theses
+        """
+        # Extract the most important words from the question
+        stop_words = {"the", "a", "an", "in", "of", "for", "about", "with", "by", "to", "what", "who", "how", "when", "where", "which", "thesis", "theses", "dissertation"}
+        words = [word.strip(',.?!:;()[]{}') for word in question.lower().split()]
+        keywords = [word for word in words if word not in stop_words and len(word) > 3]
         
-        if not user_input:
-            continue
+        results = []
+        # Try each keyword individually
+        for keyword in keywords:
+            keyword_results = self.data_manager.search_all_columns(keyword, limit=10)
+            if keyword_results:
+                results.extend(keyword_results)
+                if len(results) >= 30:
+                    break
         
-        print("Thinking...")
-        answer = rag_system.answer_question(user_input)
-        print("\nAnswer:")
-        print(answer)
+        # If that didn't work, get some recent theses as a last resort
+        if not results:
+            try:
+                query = """
+                SELECT Title, author1_fname, author1_lname, department, publication_date, abstract
+                FROM theses 
+                ORDER BY publication_date DESC
+                LIMIT 20
+                """
+                results = self.data_manager.execute_query(query)
+            except Exception as e:
+                logger.error(f"Error in fallback retrieval: {e}")
+        
+        return results
+    
+    def answer_question(self, question: str) -> str:
+        """
+        Answer a question about theses.
+        
+        Args:
+            question: User's question
+            
+        Returns:
+            Generated answer
+        """
+        if not self.data_manager.loaded:
+            success = self.data_manager.load_data()
+            if not success:
+                return "I apologize, but I was unable to load the thesis database. Please try again later."
+        
+        # Get relevant theses based on the question
+        query_type, relevant_theses = self.determine_query_strategy(question)
+        
+        # If we couldn't find any relevant theses
+        if not relevant_theses:
+            return "I couldn't find any theses matching your query. Could you please rephrase your question or provide more details?"
+        
+        # Truncate number of results to avoid context length issues
+        max_results = 20
+        if len(relevant_theses) > max_results:
+            logger.info(f"Truncating results from {len(relevant_theses)} to {max_results}")
+            relevant_theses = relevant_theses[:max_results]
+        
+        # Format retrieved theses for the LLM
+        context = self._format_theses_for_context(relevant_theses, query_type)
+        
+        # Generate an answer using the LLM
+        system_prompt = """You are a helpful academic assistant answering questions about university theses.
+        
+        I will provide you with relevant thesis information from a database based on the user's question.
+        Use this information to give a thorough and accurate answer.
+        
+        Your response should:
+        1. Directly answer the user's question based on the data provided
+        2. Structure your answer in a clear, informative way
+        3. Mention specific thesis titles, authors, and other relevant details
+        4. Be honest if the data doesn't contain enough information to answer
+        5. Don't make up information that isn't in the data
+        
+        You are speaking directly to the user who asked the question.
+        """
+        
+        user_prompt = f"""
+        Question: {question}
+        
+        Here is the thesis data from our database:
+        {context}
+        """
+        
+        response = run_llm(system_prompt, user_prompt, model=self.model)
+        return response
+    
+    def _format_theses_for_context(self, theses: List[Dict[str, Any]], query_type: str) -> str:
+        """
+        Format retrieved theses for use in LLM context.
+        
+        Args:
+            theses: List of thesis records
+            query_type: Type of query that retrieved these theses
+            
+        Returns:
+            Formatted thesis information
+        """
+        result = f"[Found {len(theses)} relevant theses]\n\n"
+        
+        # Include different fields based on query type for better answers
+        for i, thesis in enumerate(theses, 1):
+            result += f"Thesis {i}:\n"
+            
+            # Always include core fields
+            title = thesis.get('Title', 'Unknown title')
+            department = thesis.get('department', 'Unknown department')
+            
+            result += f"Title: {title}\n"
+            result += f"Department: {department}\n"
+            
+            # Include author information if available
+            first_name = thesis.get('author1_fname', '')
+            last_name = thesis.get('author1_lname', '')
+            if first_name or last_name:
+                result += f"Author: {first_name} {last_name}\n"
+            
+            # Include publication date if available
+            pub_date = thesis.get('publication_date', '')
+            if pub_date:
+                result += f"Publication date: {pub_date}\n"
+            
+            # Include advisor information if available and relevant
+            advisor1 = thesis.get('advisor1', '')
+            advisor2 = thesis.get('advisor2', '')
+            if advisor1 and (query_type == 'advisor' or i <= 5):
+                result += f"Primary advisor: {advisor1}\n"
+            if advisor2 and (query_type == 'advisor' or i <= 5):
+                result += f"Secondary advisor: {advisor2}\n"
+            
+            # Include abstract for the first few results or if it seems particularly relevant
+            abstract = thesis.get('abstract', '')
+            if abstract and (i <= 3 or query_type in ['exact_title', 'comprehensive']):
+                # Truncate very long abstracts
+                if len(abstract) > 500:
+                    abstract = abstract[:497] + "..."
+                result += f"Abstract: {abstract}\n"
+            
+            # Include degree and URI if available
+            degree = thesis.get('degree', '')
+            if degree:
+                result += f"Degree: {degree}\n"
+            
+            uri = thesis.get('uri', '')
+            if uri:
+                result += f"URI: {uri}\n"
+            
+            result += "\n"
+        
+        return result
 
 ################################################################################
 # Main function
 ################################################################################
 
+def main():
+    """Main function to initialize and run the system."""
+    # Initialize data manager
+    data_manager = ThesisDataManager()
+    success = data_manager.load_data()
+    
+    if not success:
+        logger.error("Failed to load data. Exiting.")
+        return
+    
+    # Initialize RAG system
+    rag_system = ThesisRAGSystem(data_manager)
+    
+    # Simple CLI for testing
+    print("Welcome to the Thesis Search System!")
+    print("Type 'exit' to quit.")
+    
+    while True:
+        query = input("\nEnter your question: ")
+        if query.lower() in ['exit', 'quit', 'q']:
+            break
+        
+        start_time = datetime.datetime.now()
+        answer = rag_system.answer_question(query)
+        end_time = datetime.datetime.now()
+        
+        print("\nAnswer:")
+        print(answer)
+        print(f"\nResponse time: {(end_time - start_time).total_seconds():.2f} seconds")
+
 if __name__ == "__main__":
-    interactive_cli()
+    main()
