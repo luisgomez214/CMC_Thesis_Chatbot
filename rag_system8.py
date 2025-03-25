@@ -33,7 +33,6 @@ def run_llm(system: str, user: str, model: str = DEFAULT_MODEL, seed: Optional[i
         logger.error(f"LLM error: {e}")
         return f"Error: {str(e)}"
 
-
 def analyze_query_type(question: str) -> Dict[str, Any]:
     """Analyze query to determine search strategy"""
     # Add award-related keywords to detect
@@ -44,9 +43,22 @@ def analyze_query_type(question: str) -> Dict[str, Any]:
             "query_type": "award",
             "entities": [e.strip() for e in question.split() if len(e) > 3],
             "columns_needed": ["Title", "department", "publication_date", "author1_fname", "author1_lname", "award", "abstract"]
+        }
+    
+    system_prompt = """You are a query analyzer for a thesis database. 
+Determine what kind of information the user is looking for.
+
+Output a JSON object with:
+{
+    "query_type": "advisor", "author", "department", "topic", "year", or "general",
+    "entities": [list of relevant names, terms, or years mentioned],
+    "columns_needed": [list of likely needed columns, keep this minimal],
+    "is_exact_title_search": true/false,
+    "exact_title": "full title if user is looking for a specific thesis" 
 }
 
 Include only the JSON in your response."""
+    
     response = run_llm(system_prompt, question)
     try:
         json_match = re.search(r'({.*})', response, re.DOTALL)
@@ -54,6 +66,7 @@ Include only the JSON in your response."""
             return json.loads(json_match.group(1))
     except Exception as e:
         logger.error(f"Query analysis parsing error: {e}")
+    
     if "advisor" in question.lower():
         return {
             "query_type": "advisor",
@@ -232,7 +245,6 @@ class ThesisDataManager:
             logger.error(f"Error getting departments: {e}")
             return []
 
-    # Specialized search functions (ordered by publication_date DESC)
     def search_by_advisor(self, advisor_name: str, limit: int = 25) -> List[Dict[str, Any]]:
         """Search for theses by advisor name"""
         results = []
@@ -393,7 +405,6 @@ class ThesisDataManager:
             logger.error(f"All-columns search error: {e}")
             return []
 
-# Add this new function to the ThesisDataManager class
     def search_by_award(self, award_term: str = None, limit: int = 25) -> List[Dict[str, Any]]:
         """Search for theses that have received awards"""
         try:
@@ -438,8 +449,7 @@ Return a JSON with:
     "confidence": 0-100 (how confident you are in this assessment)
 }
 
-Include only the JSON in your response.
-"""
+Include only the JSON in your response."""
         response = run_llm(title_analysis_prompt, question)
         try:
             json_match = re.search(r'({.*})', response, re.DOTALL)
@@ -495,12 +505,11 @@ Return a JSON object with:
     "query_priority": ["primary_type", "secondary_type", ...],
     "entities": {
         "person_names": ["full name 1", "full name 2"],
-        "keywords": ["keyword1", "keyword2"]
+        "keywords": ["keyword1", "keyword2"],
         "award_terms": ["prize", "award", "recognition", "honor"]
     }
 }
-Include only the JSON in your response.
-"""
+Include only the JSON in your response."""
         response = run_llm(query_analysis_prompt, question)
         try:
             json_match = re.search(r'({.*})', response, re.DOTALL)
@@ -554,14 +563,11 @@ Include only the JSON in your response.
                     if keyword_results:
                         results.extend(keyword_results)
                         successful_query_type = query_type
-# Add this inside the for-loop in determine_query_strategy where you check different query types
             elif query_type == "award":
                 award_terms = query_info.get("entities", {}).get("award_terms", [])
                 if not award_terms:
-                    # If no specific award terms, search for all awarded theses
                     award_results = self.data_manager.search_by_award()
                 else:
-                    # If specific award terms, search for those
                     for term in award_terms:
                         award_specific_results = self.data_manager.search_by_award(term)
                         if award_specific_results:
@@ -638,15 +644,16 @@ Include only the JSON in your response.
             except Exception as e:
                 logger.error(f"Fallback retrieval error: {e}")
         return results
-
+    
     def _format_theses_for_context(self, theses: List[Dict[str, Any]], query_type: str) -> str:
-        """Format retrieved theses in a more conversational and appealing manner."""
+        """Format retrieved theses in a more conversational Markdown manner."""
         lines = []
         if not theses:
             return "No theses found."
-        lines.append("<h3>Relevant Theses Found</h3>")
-        lines.append("<hr>")
-
+        
+        lines.append("## Relevant Theses Found")
+        lines.append("---")
+    
         for idx, thesis in enumerate(theses):
             title = thesis.get('Title', 'Unknown title')
             department = thesis.get('department', 'Unknown department')
@@ -657,38 +664,38 @@ Include only the JSON in your response.
             advisor1 = thesis.get('advisor1', '')
             advisor2 = thesis.get('advisor2', '')
             abstract = thesis.get('abstract', '')
-
+    
             if abstract and len(abstract) > 500:
                 abstract = abstract[:497] + "..."
-
-            lines.append(f"<div class='thesis-entry'>")
-            lines.append(f"<h4>Thesis: <strong>{title}</strong></h4>")
-            lines.append("<ul>")
-            lines.append(f"<li><strong>Author:</strong> {author}</li>")
-            lines.append(f"<li><strong>Department:</strong> {department}</li>")
-            lines.append(f"<li><strong>Year:</strong> {pub_date}</li>")
-
+    
+            lines.append(f"### {title}")
+            lines.append("")
+            lines.append(f"- **Author:** {author}")
+            lines.append(f"- **Department:** {department}")
+            lines.append(f"- **Year:** {pub_date}")
+    
             if advisor1:
-                lines.append(f"<li><strong>Primary Advisor:</strong> {advisor1}</li>")
+                lines.append(f"- **Primary Advisor:** {advisor1}")
             if advisor2:
-                lines.append(f"<li><strong>Secondary Advisor:</strong> {advisor2}</li>")
-
-            lines.append("</ul>")
-
+                lines.append(f"- **Secondary Advisor:** {advisor2}")
+    
             if abstract:
-                lines.append(f"<p><strong>Abstract:</strong> {abstract}</p>")
-
-            lines.append("</div>")
-
-            if idx < len(theses) - 1:
-                lines.append("<hr>")
-
-                # Add this inside the _format_theses_for_context method, where you create the list entries for each thesis
+                lines.append("")
+                lines.append("**Abstract:**")
+                lines.append(abstract)
+            
+            # Optionally include award information if available
             award = thesis.get('award', '')
             if award:
-                lines.append(f"<li><strong>Award:</strong> {award}</li>")
-
+                lines.append("")
+                lines.append(f"**Award:** {award}")
+    
+            if idx < len(theses) - 1:
+                lines.append("\n---\n")
+    
         return "\n".join(lines)
+    
+
 
     def answer_question(self, question: str, conversation_history: str = "") -> str:
         """Answer a question about theses, taking previous conversation into account."""
@@ -730,7 +737,6 @@ Here is the thesis data from our database:
 """
         return run_llm(system_prompt, user_prompt, model=self.model)
 
-# Command-line interface for testing the system.
 def main():
     """Main function to initialize and run the system from the terminal."""
     data_manager = ThesisDataManager()

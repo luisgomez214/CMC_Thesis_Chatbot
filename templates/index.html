@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Claremont McKenna Thesis Search System</title>
+
+    <!-- Google Fonts: Open Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -11,6 +15,7 @@
         <img src="{{ url_for('static', filename='CMC_logo.jpg') }}" alt="CMC Logo">
         <h1>Thesis Search System</h1>
     </header>
+    
     <main>
         {% for message, category in get_flashed_messages(with_categories=True) %}
             <div class="alert {{ category }}">{{ message }}</div>
@@ -22,7 +27,6 @@
         </form>
     </main>
 
-    <!-- Footer at the bottom of the page -->
     <footer>
         <p>
             I am a RAG (Retrieval Augmented Generation) system filled with information about the 

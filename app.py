@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 import logging
 from datetime import datetime
-from rag_system7 import ThesisDataManager, ThesisRAGSystem, run_llm
+from rag_system8 import ThesisDataManager, ThesisRAGSystem, run_llm
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Required for session management
@@ -47,5 +47,5 @@ if __name__ == "__main__":
         app.logger.info("LLM warmed up.")
     else:
         app.logger.error("Failed to preload data.")
-    app.run(debug=True, port=5018)
+    app.run(debug=True, port=5028)
 

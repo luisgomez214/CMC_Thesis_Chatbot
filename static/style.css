@@ -1,34 +1,103 @@
+/* style.css */
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Open Sans', Arial, sans-serif;
     background-color: #74001c; /* Maroon */
-    color: #e0a80f; /* Gold */
+    color: #e0a80f;           /* Gold */
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;         /* Increase line-height for better readability */
 }
+
+/* Header styling */
 header {
     background: white;
     color: black;
-    padding: 11px 21px;
-    text-align: center;
-}
-main {
     padding: 20px;
     text-align: center;
 }
+
+/* Main content area */
+main {
+    max-width: 800px;         /* Constrain width for better reading */
+    margin: 30px auto;        /* Center the main content horizontally */
+    padding: 20px;
+    text-align: left;         /* Left-align the main text for readability */
+}
+
+/* Logo */
 img {
     height: 100px;
 }
+
+/* Form elements */
 input, button {
     padding: 10px;
     margin: 5px;
 }
+
+/* Alert messages */
 .alert {
     color: red;
+    margin-bottom: 1em;
 }
 
+/* Question & Answer containers */
+.question-container,
+.answer-container {
+    margin-bottom: 2em;
+}
+
+.question-container h2,
+.answer-container h2 {
+    margin-bottom: 0.5em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Spacing for paragraph text inside answer content */
+.answer-content p {
+    margin-bottom: 1em;
+}
+
+/* A bit of spacing before the back link */
+.back-link {
+    margin-top: 2em;
+    display: inline-block;
+    background-color: #e0a80f;
+    color: #74001c;
+    padding: 10px 15px;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    background-color: #c9970e; /* Slight hover effect */
+}
+
+/* Footer styling */
 footer {
     margin-top: 2rem;
     text-align: center;
 }
+
 footer p {
-    color: #e0a80f; /* or another color if your background is dark */
+    color: #e0a80f; /* Gold on maroon background */
+    margin-bottom: 1em;
 }
 
+
+/* Additional styles for Markdown rendering */
+.answer-content h1 { font-size: 1.8em; color: #e0a80f; margin-bottom: 0.5em; }
+.answer-content h2 { font-size: 1.6em; color: #e0a80f; margin-top: 1em; margin-bottom: 0.5em; }
+.answer-content h3 { font-size: 1.4em; color: #e0a80f; margin-top: 1em; margin-bottom: 0.5em; }
+.answer-content ul { margin-left: 20px; margin-bottom: 1em; }
+.answer-content ol { margin-left: 20px; margin-bottom: 1em; }
+.answer-content li { margin-bottom: 0.5em; }
+.answer-content strong { color: #e0a80f; }
+.answer-content hr {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(224,168,15,0), rgba(224,168,15,0.75), rgba(224,168,15,0));
+    margin: 1em 0;
+}
