@@ -2,9 +2,7 @@ In recent years, there has been an increase of interest in artificial intelligen
 large language models (LLM), and its capabilities. AI is the field that develops intelligent 
 machines, and LLM is a type of AI that is focused on understanding and communicating with 
 humans. Innovations such as ChatGPT, Apple Intelligence, or any of the many other language 
-models show that artificial intelligence is dominating almost every market.
-
-With the rise of AI comes opportunities and issues. For starters, people who do not keep up 
+models show that artificial intelligence is dominating almost every market.With the rise of AI comes opportunities and issues. For starters, people who do not keep up 
 with current technology trends may not fully understand the capabilities of LLM. They may 
 understand the basics, like how to use GPT-4 ChatGPT for school or work. However, there is 
 much that can be learned and done with LLM that will help companies. This is something that 
