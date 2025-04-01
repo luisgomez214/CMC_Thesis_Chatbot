@@ -14,13 +14,9 @@ companies and developers charge so much is because their services address issues
 have, and the solutions to these issues are not common knowledge. The training data that LLMs 
 are based on is often out of date. AI models like ChatGPT, Groq, and Claude only know up until 
 the time they were last updated. This means that if the data is only up until 2024, it will 
-not know or answer information that happened afterward.
-
-These developers implement AI's LLM by updating it with the information or data they need. 
+not know or answer information that happened afterward. These developers implement AI's LLM by updating it with the information or data they need. 
 Doing so allows for the data to be customizable while also reducing hallucinations. This 
-means that the AI can be case-specific while also increasing its accuracy. 
-
-For example, an AI-based startup may decide to create an app that helps patients in healthcare. 
+means that the AI can be case-specific while also increasing its accuracy. For example, an AI-based startup may decide to create an app that helps patients in healthcare. 
 The app is an interactive chatbot that allows users to ask specific questions about their 
 medical information. In theory, this is revolutionary. If done correctly, it can replace the 
 jobs of pharmacists and receptionists, saving companies money in the long run. Essentially, 
