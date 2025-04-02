@@ -12,7 +12,7 @@
 </head>
 <body>
     <header>
-        <img src="{{ url_for('static', filename='CMC_logo.jpg') }}" alt="CMC Logo">
+        <img src="{{ url_for('static', filename='CMC_logo.jpg') }}" alt="CMC Logo" class="logo">
         <h1>Thesis Search System</h1>
     </header>
     
@@ -22,7 +22,7 @@
         {% endfor %}
 
         <form action="{{ url_for('query') }}" method="post">
-            <input type="text" name="question" placeholder="Enter your thesis query" required>
+            <textarea name="question" placeholder="Ask me about CMC theses..." class="large-search-bar" required></textarea>
             <button type="submit">Search</button>
         </form>
     </main>
@@ -30,11 +30,10 @@
     <footer>
         <p>
             I am a RAG (Retrieval Augmented Generation) system filled with information about the 
-            Claremont McKenna College theses database. In other words, I'm a theses chatbot, 
-            and I specialize in CMC theses. Ask me anything about these theses, authors, departments, 
+            Claremont McKenna College theses database. In other words, I'm a theses chatbot, and 
+            I specialize in CMC theses. Ask me anything about these theses, authors, departments, 
             or research topics!
         </p>
     </footer>
 </body>
 </html>
-

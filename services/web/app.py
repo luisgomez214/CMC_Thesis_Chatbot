@@ -1,10 +1,15 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask_session import Session
 import logging
 from datetime import datetime
+import json
+
 from rag_system8 import ThesisDataManager, ThesisRAGSystem, run_llm
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Required for session management
+app.secret_key = "your_secret_key"  # Replace with strong secret key
+app.config['SESSION_TYPE'] = 'filesystem'
+Session(app)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -14,39 +19,35 @@ rag_system = ThesisRAGSystem(data_manager)
 
 @app.route('/')
 def index():
-    print("🚀 index route hit")
+    session.pop('conversation', None)  # clear conversation on homepage
     return render_template('index.html')
 
 @app.route('/query', methods=['POST'])
 def query():
-    question = request.form.get('question')
-    if not question:
-        flash("Please enter a question.", "error")
-        return redirect(url_for('index'))
-    
-    # Retrieve conversation history from the session; initialize if not present.
-    conversation = session.get('conversation', '')
-    
-    start_time = datetime.now()
-    # Pass conversation history into the answer function.
-    answer = rag_system.answer_question(question, conversation_history=conversation)
-    end_time = datetime.now()
-    
-    # Update conversation history (simple concatenation example)
-    conversation += f"User: {question}\nAssistant: {answer}\n"
-    session['conversation'] = conversation
-    
-    response_time = (end_time - start_time).total_seconds()
-    return render_template('results.html', answer=answer, response_time=response_time, question=question)
+    question = request.form['question']
+
+    if 'conversation' not in session:
+        session['conversation'] = []
+
+    session['conversation'].append({"role": "user", "content": question})
+    conversation_history = "\n".join(
+        [f"{msg['role'].capitalize()}: {msg['content']}" for msg in session['conversation']]
+    )
+
+    answer = rag_system.answer_question(question, conversation_history=conversation_history)
+
+    session['conversation'].append({"role": "assistant", "content": answer})
+
+    return render_template('results.html', question=question, answer=answer, conversation=session['conversation'])
+
 
 if __name__ == "__main__":
-    # Preload the data before starting the server
     if data_manager.load_data():
         app.logger.info("Data preloaded successfully!")
-        # Optional: Warm up the LLM with a dummy query
         dummy = run_llm("You are a helpful assistant.", "Hello")
         app.logger.info("LLM warmed up.")
     else:
         app.logger.error("Failed to preload data.")
-    app.run(debug=True, port=5029, host='0.0.0.0')
+    app.run(debug=True, port=5015, host='0.0.0.0')
+    
 

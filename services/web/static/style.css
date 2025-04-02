@@ -1,103 +1,338 @@
-/* style.css */
+/* Modernized style.css */
+
+:root {
+  --primary: #74001c;      /* Maroon */
+  --secondary: #e0a80f;    /* Gold */
+  --accent: #b5003b;       /* Lighter maroon for hover effects */
+  --light-bg: #f8f9fa;
+  --dark-text: #212529;
+  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --transition: all 0.3s ease;
+}
 
 body {
-    font-family: 'Open Sans', Arial, sans-serif;
-    background-color: #74001c; /* Maroon */
-    color: #e0a80f;           /* Gold */
-    margin: 0;
-    padding: 0;
-    line-height: 1.6;         /* Increase line-height for better readability */
+  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--primary);
+  color: var(--secondary);
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 /* Header styling */
 header {
-    background: white;
-    color: black;
-    padding: 20px;
-    text-align: center;
+  background: white;
+  color: var(--dark-text);
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+header h1 {
+  margin: 0.5rem 0;
+  font-weight: 600;
+  letter-spacing: -0.5px;
 }
 
 /* Main content area */
 main {
-    max-width: 800px;         /* Constrain width for better reading */
-    margin: 30px auto;        /* Center the main content horizontally */
-    padding: 20px;
-    text-align: left;         /* Left-align the main text for readability */
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 20px;
+  text-align: left;
+  flex-grow: 1;
 }
 
-/* Logo */
-img {
-    height: 100px;
+.large-search-bar {
+  width: 100%;
+  padding: 15px;
+  font-size: 18px;
+  border: none;
+  border-radius: 12px;
+  resize: vertical;
+  min-height: 50px;
+  line-height: 1.4;
+  overflow-y: auto;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
 }
 
-/* Form elements */
-input, button {
-    padding: 10px;
-    margin: 5px;
-}
-
-/* Alert messages */
-.alert {
-    color: red;
-    margin-bottom: 1em;
-}
-
-/* Question & Answer containers */
-.question-container,
-.answer-container {
-    margin-bottom: 2em;
-}
-
-.question-container h2,
-.answer-container h2 {
-    margin-bottom: 0.5em;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* Spacing for paragraph text inside answer content */
-.answer-content p {
-    margin-bottom: 1em;
-}
-
-/* A bit of spacing before the back link */
-.back-link {
-    margin-top: 2em;
-    display: inline-block;
-    background-color: #e0a80f;
-    color: #74001c;
-    padding: 10px 15px;
-    border-radius: 4px;
-    text-decoration: none;
-}
-
-.back-link:hover {
-    background-color: #c9970e; /* Slight hover effect */
+.large-search-bar:focus {
+  outline: none;
+  box-shadow: 0 3px 15px rgba(224, 168, 15, 0.25);
+  border: 2px solid var(--secondary);
 }
 
 /* Footer styling */
 footer {
-    margin-top: 2rem;
-    text-align: center;
+  background-color: rgba(0, 0, 0, 0.1);
+  color: white;
+  text-align: center;
+  padding: 20px;
+  margin-top: auto;
+  backdrop-filter: blur(5px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-footer p {
-    color: #e0a80f; /* Gold on maroon background */
-    margin-bottom: 1em;
+.logo {
+  height: 70px;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.1));
+  transition: var(--transition);
 }
 
+.logo:hover {
+  transform: scale(1.05);
+}
 
-/* Additional styles for Markdown rendering */
-.answer-content h1 { font-size: 1.8em; color: #e0a80f; margin-bottom: 0.5em; }
-.answer-content h2 { font-size: 1.6em; color: #e0a80f; margin-top: 1em; margin-bottom: 0.5em; }
-.answer-content h3 { font-size: 1.4em; color: #e0a80f; margin-top: 1em; margin-bottom: 0.5em; }
-.answer-content ul { margin-left: 20px; margin-bottom: 1em; }
-.answer-content ol { margin-left: 20px; margin-bottom: 1em; }
-.answer-content li { margin-bottom: 0.5em; }
-.answer-content strong { color: #e0a80f; }
-.answer-content hr {
-    border: 0;
-    height: 1px;
-    background-image: linear-gradient(to right, rgba(224,168,15,0), rgba(224,168,15,0.75), rgba(224,168,15,0));
-    margin: 1em 0;
+button {
+  padding: 12px 24px;
+  font-size: 1em;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  background-color: var(--secondary);
+  color: var(--primary);
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 15px;
+}
+
+button:hover {
+  background-color: #c9970e;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+.chat-history {
+  margin-bottom: 2em;
+  background-color: white;
+  padding: 25px;
+  border-radius: 16px;
+  max-width: 700px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+  box-shadow: var(--card-shadow);
+}
+
+.chat-history h2 {
+  font-weight: 600;
+  color: var(--dark-text);
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.chat-history h2:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(to right, var(--primary), var(--secondary));
+  border-radius: 3px;
+}
+
+.user-msg, .bot-msg {
+  margin: 20px 0;
+  padding: 18px;
+  border-radius: 16px;
+  font-size: 16px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.user-msg {
+  background-color: var(--secondary);
+  color: var(--primary);
+  font-weight: 600;
+  border-left: none;
+  box-shadow: 0 3px 8px rgba(224, 168, 15, 0.2);
+  margin-left: 40px;
+  position: relative;
+}
+
+.user-msg:before {
+  content: '👤';
+  position: absolute;
+  left: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px;
+}
+
+.bot-msg {
+  background-color: #f8f9fa;
+  color: var(--dark-text);
+  padding: 16px;
+  border-radius: 16px;
+  margin: 16px 0;
+  margin-right: 40px;
+  max-width: 100%;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  box-sizing: border-box;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+.bot-msg:before {
+  content: '🤖';
+  position: absolute;
+  right: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px;
+}
+
+/* This will ensure all content inside bot messages wraps properly */
+.bot-msg * {
+  max-width: 100%;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Fix for pre element in bot messages to ensure wrapping */
+.bot-msg pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 0;
+  padding: 12px;
+  background-color: #f1f3f5;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+}
+
+.markdown {
+  padding: 16px;
+  background-color: #f8f9fa;
+  color: var(--dark-text);
+  border-radius: 12px;
+  margin-top: 8px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+/* Markdown elements */
+.markdown h1, .markdown h2 {
+  font-weight: 700;
+  margin-top: 1.2em;
+  margin-bottom: 0.7em;
+  color: var(--primary);
+}
+
+.markdown ul {
+  padding-left: 1.5em;
+}
+
+.markdown li {
+  margin-bottom: 0.7em;
+  max-width: 100%;
+  word-wrap: break-word;
+}
+
+.markdown a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.markdown a:hover {
+  border-bottom: 1px solid var(--accent);
+}
+
+.back-link {
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.back-link a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 8px 16px;
+  background-color: var(--accent);
+  border-radius: 8px;
+  transition: var(--transition);
+  display: inline-block;
+}
+
+.back-link a:hover {
+  background-color: var(--secondary);
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Alert messages */
+.alert {
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  font-weight: 500;
+  animation: slideIn 0.4s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  main {
+    padding: 15px;
+  }
+  
+  .chat-history {
+    padding: 16px;
+  }
+  
+  .user-msg, .bot-msg {
+    padding: 14px;
+    margin-left: 25px;
+    margin-right: 25px;
+  }
+  
+  .user-msg:before, .bot-msg:before {
+    font-size: 18px;
+    left: -25px;
+  }
+  
+  .bot-msg:before {
+    right: -25px;
+    left: auto;
+  }
+}
+
+/* Subtle hover effects */
+.chat-history:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
 }

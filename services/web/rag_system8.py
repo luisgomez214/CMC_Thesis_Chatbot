@@ -434,6 +434,7 @@ class ThesisRAGSystem:
     def __init__(self, data_manager: ThesisDataManager, model: str = DEFAULT_MODEL):
         self.data_manager = data_manager
         self.model = model
+        self.latest_thesis_list = []
             
     def determine_query_strategy(self, question: str) -> Tuple[str, List[Dict[str, Any]]]:
         """Determine best query strategy based on question and execute it"""
@@ -699,6 +700,17 @@ Include only the JSON in your response."""
 
     def answer_question(self, question: str, conversation_history: str = "") -> str:
         """Answer a question about theses, taking previous conversation into account."""
+        if re.search(r"\b(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth)\b thesis", question.lower()):
+            position_words = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth"]
+            index = position_words.index([w for w in position_words if w in question.lower()][0])
+            thesis_list = self.latest_thesis_list
+            if 0 <= index < len(thesis_list):
+                selected = thesis_list[index]
+                return f"Here's what the **{position_words[index]} thesis** is about:\n\n" + self._format_theses_for_context([selected], "follow-up")
+            else:
+                return "I couldn't find that thesis position from the last response. Try rephrasing or asking again."
+                
+
         if not self.data_manager.loaded:
             if not self.data_manager.load_data():
                 return "I apologize, but I was unable to load the thesis database. Please try again later."
@@ -716,17 +728,21 @@ Include only the JSON in your response."""
             relevant_theses = relevant_theses[:max_results]
         context = self._format_theses_for_context(relevant_theses, query_type)
         system_prompt = """You are a helpful academic assistant answering questions about university theses.
-I will provide thesis information from a database based on the user's question.
-
-Your response should:
-1. Directly answer the user's question based on the data provided.
-2. Structure your answer clearly and informatively.
-3. Mention specific thesis titles, authors, and relevant details.
-4. Be honest if the data doesn't contain enough information.
-5. Don't make up information that isn't in the data.
-
-You are speaking directly to the user who asked the question.
-"""
+        I will provide thesis information from a database based on the user's question.
+        
+        Your response should:
+        1. Directly answer the user's question based on the data provided.
+        2. Structure your answer clearly and informatively.
+        3. Mention specific thesis titles, authors, and relevant details.
+        4. Be honest if the data doesn't contain enough information.
+        5. Pay special attention to award-related information:
+           - If a thesis has received an award, highlight this prominently
+           - Include details about the award name, significance, and context
+           - If multiple theses in a department or year have won awards, note this trend
+        6. Don't make up information that isn't in the data.
+        
+        You are speaking directly to the user who asked the question.
+        """    
         if conversation_history:
             system_prompt += "\nConversation History:\n" + conversation_history + "\n"
         user_prompt = f"""
@@ -735,6 +751,7 @@ Question: {question}
 Here is the thesis data from our database:
 {context}
 """
+        self.latest_thesis_list = relevant_theses
         return run_llm(system_prompt, user_prompt, model=self.model)
 
 def main():

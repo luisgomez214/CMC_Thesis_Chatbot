@@ -4,42 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Query Results</title>
-    
+
     <!-- Google Fonts: Open Sans -->
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
-    
-    <!-- Add Markdown rendering library -->
+
+    <!-- Markdown rendering library -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <header>
-        <img src="{{ url_for('static', filename='CMC_logo.jpg') }}" alt="CMC Logo">
+        <img src="{{ url_for('static', filename='CMC_logo.jpg') }}" alt="CMC Logo" class="logo">
         <h1>Query Results</h1>
     </header>
+
     <main>
-        <div class="question-container">
-            <h2>Question:</h2>
-            <p>{{ question }}</p>
+        <div class="chat-history">
+            <h2>Conversation:</h2>
+            {% for msg in conversation %}
+                {% if msg.role == 'user' %}
+                    <div class="user-msg"><strong>You:</strong> {{ msg.content }}</div>
+                {% elif msg.role == 'assistant' %}
+                    <div class="bot-msg">
+                        <strong>CMCBot:</strong>
+                        <div class="markdown" data-raw="{{ msg.content | tojson | safe }}"></div>
+                        <pre>{{ msg.content }}</pre>
+                    </div>
+                {% endif %}
+            {% endfor %}
         </div>
-        
-        <div class="answer-container">
-            <h2>Answer:</h2>
-            <div id="answer-content" class="answer-content"></div>
-        </div>
-        
+
         <div class="back-link">
-            <a href="{{ url_for('index') }}">Ask another question</a>
+            <a href="{{ url_for('index') }}">Home</a>
         </div>
+
+        <form action="{{ url_for('query') }}" method="post" style="margin-top: 2em;">
+            <textarea name="question" placeholder="Ask me about CMC theses..." class="large-search-bar" required></textarea>
+            <button type="submit">Ask</button>
+        </form>
     </main>
-    
+
     <script>
-        // Render Markdown to HTML
-        document.addEventListener('DOMContentLoaded', function() {
-            const answerContent = document.getElementById('answer-content');
-            const rawAnswer = `{{ answer }}`;
-            answerContent.innerHTML = marked.parse(rawAnswer);
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.markdown').forEach(function (el) {
+                const raw = el.getAttribute('data-raw');
+                if (raw) {
+                    try {
+                        const parsed = JSON.parse(raw);
+                        el.innerHTML = marked.parse(parsed);
+                    } catch (e) {
+                        el.innerHTML = marked.parse(raw);
+                    }
+                }
+            });
         });
     </script>
 </body>
