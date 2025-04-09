@@ -29,15 +29,33 @@ def query():
     if 'conversation' not in session:
         session['conversation'] = []
 
+    # Add user message to conversation history
     session['conversation'].append({"role": "user", "content": question})
+    
+    # Format conversation history properly
     conversation_history = "\n".join(
         [f"{msg['role'].capitalize()}: {msg['content']}" for msg in session['conversation']]
     )
 
-    answer = rag_system.answer_question(question, conversation_history=conversation_history)
+    # Ensure data is loaded before answering
+    if not data_manager.loaded:
+        data_manager.load_data()
+        
+    # Get answer from RAG system
+    try:
+        answer = rag_system.answer_question(question, conversation_history=conversation_history)
+        if not answer or answer.strip() == "":
+            answer = "I apologize, but I couldn't generate a response. Please try again or rephrase your question."
+    except Exception as e:
+        app.logger.error(f"Error generating answer: {e}")
+        answer = "I encountered an error while processing your question. Please try again."
 
+    # Add assistant response to conversation history
     session['conversation'].append({"role": "assistant", "content": answer})
-
+    
+    # Save conversation to session
+    session.modified = True
+    
     return render_template('results.html', question=question, answer=answer, conversation=session['conversation'])
 
 
@@ -48,6 +66,6 @@ if __name__ == "__main__":
         app.logger.info("LLM warmed up.")
     else:
         app.logger.error("Failed to preload data.")
-    app.run(debug=True, port=5015, host='0.0.0.0')
+    app.run(debug=True, port=5022, host='0.0.0.0')
     
 

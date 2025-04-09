@@ -21,10 +21,12 @@
             <div class="alert {{ category }}">{{ message }}</div>
         {% endfor %}
 
-        <form action="{{ url_for('query') }}" method="post">
-            <textarea name="question" placeholder="Ask me about CMC theses..." class="large-search-bar" required></textarea>
-            <button type="submit">Search</button>
-        </form>
+        <div class="chat-history">
+            <form action="{{ url_for('query') }}" method="post">
+                <textarea name="question" placeholder="Ask me about CMC theses..." class="large-search-bar" required></textarea>
+                <button type="submit">Ask</button>
+            </form>
+        </div>
     </main>
 
     <footer>
@@ -34,6 +36,9 @@
             I specialize in CMC theses. Ask me anything about these theses, authors, departments, 
             or research topics!
         </p>
+        <div class="footer-links">
+            <a href="https://github.com/luisgomez214/Thesis" target="_blank">View on GitHub</a>
+        </div>
     </footer>
 </body>
 </html>
