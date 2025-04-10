@@ -1,9 +1,9 @@
 services:
   web:
     build: ./services/web
-    command: python app.py --host=0.0.0.0
+    command: python app.py --host=0.0.0.0 --port=5029
     ports:
-      - "1321:5029"         # Local port 1321 → Flask port 5029
+      - "5029:5029"         # Local port 1321 → Flask port 5029
     volumes:
       - ./services/web:/usr/src/app
     env_file:

@@ -66,6 +66,6 @@ if __name__ == "__main__":
         app.logger.info("LLM warmed up.")
     else:
         app.logger.error("Failed to preload data.")
-    app.run(debug=True, port=5022, host='0.0.0.0')
+    app.run(debug=True, port=5029, host='0.0.0.0')
     
 

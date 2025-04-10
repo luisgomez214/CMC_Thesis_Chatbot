@@ -1,0 +1,622 @@
+Apr 09 05:41:13 ip-172-31-84-204.ec2.internal systemd[1]: Starting nginx.service - The nginx HTTP and reverse proxy server...
+░░ Subject: A start job for unit nginx.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ A start job for unit nginx.service has begun execution.
+░░ 
+░░ The job identifier is 902611.
+Apr 09 05:41:14 ip-172-31-84-204.ec2.internal nginx[705510]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+Apr 09 05:41:14 ip-172-31-84-204.ec2.internal nginx[705510]: nginx: configuration file /etc/nginx/nginx.conf test is successful
+Apr 09 05:41:14 ip-172-31-84-204.ec2.internal nginx[705551]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 05:41:14 ip-172-31-84-204.ec2.internal nginx[705551]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 05:41:14 ip-172-31-84-204.ec2.internal nginx[705551]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 05:41:14 ip-172-31-84-204.ec2.internal nginx[705551]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 05:41:15 ip-172-31-84-204.ec2.internal nginx[705551]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 05:41:15 ip-172-31-84-204.ec2.internal nginx[705551]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 05:41:15 ip-172-31-84-204.ec2.internal nginx[705551]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 05:41:15 ip-172-31-84-204.ec2.internal nginx[705551]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 05:41:16 ip-172-31-84-204.ec2.internal nginx[705551]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 05:41:16 ip-172-31-84-204.ec2.internal nginx[705551]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 05:41:16 ip-172-31-84-204.ec2.internal nginx[705551]: nginx: [emerg] still could not bind()
+Apr 09 05:41:16 ip-172-31-84-204.ec2.internal systemd[1]: nginx.service: Control process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ An ExecStart= process belonging to unit nginx.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Apr 09 05:41:16 ip-172-31-84-204.ec2.internal systemd[1]: nginx.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ The unit nginx.service has entered the 'failed' state with result 'exit-code'.
+Apr 09 05:41:16 ip-172-31-84-204.ec2.internal systemd[1]: Failed to start nginx.service - The nginx HTTP and reverse proxy server.
+░░ Subject: A start job for unit nginx.service has failed
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ A start job for unit nginx.service has finished with a failure.
+░░ 
+░░ The job identifier is 902611 and the job result is failed.
+Apr 09 05:42:01 ip-172-31-84-204.ec2.internal systemd[1]: Starting nginx.service - The nginx HTTP and reverse proxy server...
+░░ Subject: A start job for unit nginx.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ A start job for unit nginx.service has begun execution.
+░░ 
+░░ The job identifier is 902835.
+Apr 09 05:42:01 ip-172-31-84-204.ec2.internal nginx[729346]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+Apr 09 05:42:01 ip-172-31-84-204.ec2.internal nginx[729346]: nginx: configuration file /etc/nginx/nginx.conf test is successful
+Apr 09 05:42:01 ip-172-31-84-204.ec2.internal nginx[729347]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 05:42:01 ip-172-31-84-204.ec2.internal nginx[729347]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 05:42:01 ip-172-31-84-204.ec2.internal nginx[729347]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 05:42:01 ip-172-31-84-204.ec2.internal nginx[729347]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 05:42:02 ip-172-31-84-204.ec2.internal nginx[729347]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 05:42:02 ip-172-31-84-204.ec2.internal nginx[729347]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 05:42:02 ip-172-31-84-204.ec2.internal nginx[729347]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 05:42:02 ip-172-31-84-204.ec2.internal nginx[729347]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 05:42:03 ip-172-31-84-204.ec2.internal nginx[729347]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 05:42:03 ip-172-31-84-204.ec2.internal nginx[729347]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 05:42:03 ip-172-31-84-204.ec2.internal nginx[729347]: nginx: [emerg] still could not bind()
+Apr 09 05:42:03 ip-172-31-84-204.ec2.internal systemd[1]: nginx.service: Control process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ An ExecStart= process belonging to unit nginx.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Apr 09 05:42:03 ip-172-31-84-204.ec2.internal systemd[1]: nginx.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ The unit nginx.service has entered the 'failed' state with result 'exit-code'.
+Apr 09 05:42:03 ip-172-31-84-204.ec2.internal systemd[1]: Failed to start nginx.service - The nginx HTTP and reverse proxy server.
+░░ Subject: A start job for unit nginx.service has failed
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ A start job for unit nginx.service has finished with a failure.
+░░ 
+░░ The job identifier is 902835 and the job result is failed.
+Apr 09 05:51:17 ip-172-31-84-204.ec2.internal systemd[1]: Starting nginx.service - The nginx HTTP and reverse proxy server...
+░░ Subject: A start job for unit nginx.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ A start job for unit nginx.service has begun execution.
+░░ 
+░░ The job identifier is 903758.
+Apr 09 05:51:17 ip-172-31-84-204.ec2.internal nginx[730958]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+Apr 09 05:51:17 ip-172-31-84-204.ec2.internal nginx[730958]: nginx: configuration file /etc/nginx/nginx.conf test is successful
+Apr 09 05:51:17 ip-172-31-84-204.ec2.internal nginx[730959]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 05:51:17 ip-172-31-84-204.ec2.internal nginx[730959]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 05:51:17 ip-172-31-84-204.ec2.internal nginx[730959]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 05:51:18 ip-172-31-84-204.ec2.internal nginx[730959]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 05:51:18 ip-172-31-84-204.ec2.internal nginx[730959]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 05:51:18 ip-172-31-84-204.ec2.internal nginx[730959]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 05:51:18 ip-172-31-84-204.ec2.internal nginx[730959]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 05:51:18 ip-172-31-84-204.ec2.internal nginx[730959]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 05:51:18 ip-172-31-84-204.ec2.internal nginx[730959]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 05:51:19 ip-172-31-84-204.ec2.internal nginx[730959]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 05:51:19 ip-172-31-84-204.ec2.internal nginx[730959]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 05:51:19 ip-172-31-84-204.ec2.internal nginx[730959]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 05:51:19 ip-172-31-84-204.ec2.internal nginx[730959]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 05:51:19 ip-172-31-84-204.ec2.internal nginx[730959]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 05:51:19 ip-172-31-84-204.ec2.internal nginx[730959]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 05:51:20 ip-172-31-84-204.ec2.internal nginx[730959]: nginx: [emerg] still could not bind()
+Apr 09 05:51:20 ip-172-31-84-204.ec2.internal systemd[1]: nginx.service: Control process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ An ExecStart= process belonging to unit nginx.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Apr 09 05:51:20 ip-172-31-84-204.ec2.internal systemd[1]: nginx.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ The unit nginx.service has entered the 'failed' state with result 'exit-code'.
+Apr 09 05:51:20 ip-172-31-84-204.ec2.internal systemd[1]: Failed to start nginx.service - The nginx HTTP and reverse proxy server.
+░░ Subject: A start job for unit nginx.service has failed
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ A start job for unit nginx.service has finished with a failure.
+░░ 
+░░ The job identifier is 903758 and the job result is failed.
+Apr 09 05:51:25 ip-172-31-84-204.ec2.internal systemd[1]: Starting nginx.service - The nginx HTTP and reverse proxy server...
+░░ Subject: A start job for unit nginx.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ A start job for unit nginx.service has begun execution.
+░░ 
+░░ The job identifier is 903836.
+Apr 09 05:51:25 ip-172-31-84-204.ec2.internal nginx[730968]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+Apr 09 05:51:25 ip-172-31-84-204.ec2.internal nginx[730968]: nginx: configuration file /etc/nginx/nginx.conf test is successful
+Apr 09 05:51:25 ip-172-31-84-204.ec2.internal nginx[730969]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 05:51:25 ip-172-31-84-204.ec2.internal nginx[730969]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 05:51:25 ip-172-31-84-204.ec2.internal nginx[730969]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 05:51:26 ip-172-31-84-204.ec2.internal nginx[730969]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 05:51:26 ip-172-31-84-204.ec2.internal nginx[730969]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 05:51:26 ip-172-31-84-204.ec2.internal nginx[730969]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 05:51:26 ip-172-31-84-204.ec2.internal nginx[730969]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 05:51:26 ip-172-31-84-204.ec2.internal nginx[730969]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 05:51:26 ip-172-31-84-204.ec2.internal nginx[730969]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 05:51:27 ip-172-31-84-204.ec2.internal nginx[730969]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 05:51:27 ip-172-31-84-204.ec2.internal nginx[730969]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 05:51:27 ip-172-31-84-204.ec2.internal nginx[730969]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 05:51:27 ip-172-31-84-204.ec2.internal nginx[730969]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 05:51:27 ip-172-31-84-204.ec2.internal nginx[730969]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 05:51:27 ip-172-31-84-204.ec2.internal nginx[730969]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 05:51:28 ip-172-31-84-204.ec2.internal nginx[730969]: nginx: [emerg] still could not bind()
+Apr 09 05:51:28 ip-172-31-84-204.ec2.internal systemd[1]: nginx.service: Control process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ An ExecStart= process belonging to unit nginx.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Apr 09 05:51:28 ip-172-31-84-204.ec2.internal systemd[1]: nginx.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ The unit nginx.service has entered the 'failed' state with result 'exit-code'.
+Apr 09 05:51:28 ip-172-31-84-204.ec2.internal systemd[1]: Failed to start nginx.service - The nginx HTTP and reverse proxy server.
+░░ Subject: A start job for unit nginx.service has failed
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ A start job for unit nginx.service has finished with a failure.
+░░ 
+░░ The job identifier is 903836 and the job result is failed.
+Apr 09 06:00:27 ip-172-31-84-204.ec2.internal systemd[1]: Starting nginx.service - The nginx HTTP and reverse proxy server...
+░░ Subject: A start job for unit nginx.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ A start job for unit nginx.service has begun execution.
+░░ 
+░░ The job identifier is 906619.
+Apr 09 06:00:27 ip-172-31-84-204.ec2.internal nginx[735926]: nginx: [warn] conflicting server name "cmcthesischatbot.com" on 0.0.0.0:80, ignored
+Apr 09 06:00:27 ip-172-31-84-204.ec2.internal nginx[735926]: nginx: [warn] conflicting server name "www.cmcthesischatbot.com" on 0.0.0.0:80, ignored
+Apr 09 06:00:27 ip-172-31-84-204.ec2.internal nginx[735926]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+Apr 09 06:00:27 ip-172-31-84-204.ec2.internal nginx[735926]: nginx: configuration file /etc/nginx/nginx.conf test is successful
+Apr 09 06:00:27 ip-172-31-84-204.ec2.internal nginx[735927]: nginx: [warn] conflicting server name "cmcthesischatbot.com" on 0.0.0.0:80, ignored
+Apr 09 06:00:27 ip-172-31-84-204.ec2.internal nginx[735927]: nginx: [warn] conflicting server name "www.cmcthesischatbot.com" on 0.0.0.0:80, ignored
+Apr 09 06:00:27 ip-172-31-84-204.ec2.internal nginx[735927]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:00:27 ip-172-31-84-204.ec2.internal nginx[735927]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:00:27 ip-172-31-84-204.ec2.internal nginx[735927]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:00:27 ip-172-31-84-204.ec2.internal nginx[735927]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:00:27 ip-172-31-84-204.ec2.internal nginx[735927]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:00:27 ip-172-31-84-204.ec2.internal nginx[735927]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:00:28 ip-172-31-84-204.ec2.internal nginx[735927]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:00:28 ip-172-31-84-204.ec2.internal nginx[735927]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:00:28 ip-172-31-84-204.ec2.internal nginx[735927]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:00:28 ip-172-31-84-204.ec2.internal nginx[735927]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:00:28 ip-172-31-84-204.ec2.internal nginx[735927]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:00:28 ip-172-31-84-204.ec2.internal nginx[735927]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:00:29 ip-172-31-84-204.ec2.internal nginx[735927]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:00:29 ip-172-31-84-204.ec2.internal nginx[735927]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:00:29 ip-172-31-84-204.ec2.internal nginx[735927]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:00:29 ip-172-31-84-204.ec2.internal nginx[735927]: nginx: [emerg] still could not bind()
+Apr 09 06:00:29 ip-172-31-84-204.ec2.internal systemd[1]: nginx.service: Control process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ An ExecStart= process belonging to unit nginx.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Apr 09 06:00:29 ip-172-31-84-204.ec2.internal systemd[1]: nginx.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ The unit nginx.service has entered the 'failed' state with result 'exit-code'.
+Apr 09 06:00:29 ip-172-31-84-204.ec2.internal systemd[1]: Failed to start nginx.service - The nginx HTTP and reverse proxy server.
+░░ Subject: A start job for unit nginx.service has failed
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ A start job for unit nginx.service has finished with a failure.
+░░ 
+░░ The job identifier is 906619 and the job result is failed.
+Apr 09 06:03:40 ip-172-31-84-204.ec2.internal systemd[1]: Starting nginx.service - The nginx HTTP and reverse proxy server...
+░░ Subject: A start job for unit nginx.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ A start job for unit nginx.service has begun execution.
+░░ 
+░░ The job identifier is 906929.
+Apr 09 06:03:40 ip-172-31-84-204.ec2.internal nginx[736368]: nginx: [warn] conflicting server name "cmcthesischatbot.com" on 0.0.0.0:80, ignored
+Apr 09 06:03:40 ip-172-31-84-204.ec2.internal nginx[736368]: nginx: [warn] conflicting server name "www.cmcthesischatbot.com" on 0.0.0.0:80, ignored
+Apr 09 06:03:40 ip-172-31-84-204.ec2.internal nginx[736368]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+Apr 09 06:03:40 ip-172-31-84-204.ec2.internal nginx[736368]: nginx: configuration file /etc/nginx/nginx.conf test is successful
+Apr 09 06:03:40 ip-172-31-84-204.ec2.internal nginx[736369]: nginx: [warn] conflicting server name "cmcthesischatbot.com" on 0.0.0.0:80, ignored
+Apr 09 06:03:40 ip-172-31-84-204.ec2.internal nginx[736369]: nginx: [warn] conflicting server name "www.cmcthesischatbot.com" on 0.0.0.0:80, ignored
+Apr 09 06:03:40 ip-172-31-84-204.ec2.internal nginx[736369]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:03:40 ip-172-31-84-204.ec2.internal nginx[736369]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:03:40 ip-172-31-84-204.ec2.internal nginx[736369]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:03:41 ip-172-31-84-204.ec2.internal nginx[736369]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:03:41 ip-172-31-84-204.ec2.internal nginx[736369]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:03:41 ip-172-31-84-204.ec2.internal nginx[736369]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:03:41 ip-172-31-84-204.ec2.internal nginx[736369]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:03:41 ip-172-31-84-204.ec2.internal nginx[736369]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:03:41 ip-172-31-84-204.ec2.internal nginx[736369]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:03:42 ip-172-31-84-204.ec2.internal nginx[736369]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:03:42 ip-172-31-84-204.ec2.internal nginx[736369]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:03:42 ip-172-31-84-204.ec2.internal nginx[736369]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:03:42 ip-172-31-84-204.ec2.internal nginx[736369]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:03:42 ip-172-31-84-204.ec2.internal nginx[736369]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:03:42 ip-172-31-84-204.ec2.internal nginx[736369]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:03:43 ip-172-31-84-204.ec2.internal nginx[736369]: nginx: [emerg] still could not bind()
+Apr 09 06:03:43 ip-172-31-84-204.ec2.internal systemd[1]: nginx.service: Control process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ An ExecStart= process belonging to unit nginx.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Apr 09 06:03:43 ip-172-31-84-204.ec2.internal systemd[1]: nginx.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ The unit nginx.service has entered the 'failed' state with result 'exit-code'.
+Apr 09 06:03:43 ip-172-31-84-204.ec2.internal systemd[1]: Failed to start nginx.service - The nginx HTTP and reverse proxy server.
+░░ Subject: A start job for unit nginx.service has failed
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ A start job for unit nginx.service has finished with a failure.
+░░ 
+░░ The job identifier is 906929 and the job result is failed.
+Apr 09 06:10:30 ip-172-31-84-204.ec2.internal systemd[1]: Starting nginx.service - The nginx HTTP and reverse proxy server...
+░░ Subject: A start job for unit nginx.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ A start job for unit nginx.service has begun execution.
+░░ 
+░░ The job identifier is 907376.
+Apr 09 06:10:30 ip-172-31-84-204.ec2.internal nginx[736636]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+Apr 09 06:10:30 ip-172-31-84-204.ec2.internal nginx[736636]: nginx: configuration file /etc/nginx/nginx.conf test is successful
+Apr 09 06:10:30 ip-172-31-84-204.ec2.internal nginx[736637]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:10:30 ip-172-31-84-204.ec2.internal nginx[736637]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:10:30 ip-172-31-84-204.ec2.internal nginx[736637]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:10:31 ip-172-31-84-204.ec2.internal nginx[736637]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:10:31 ip-172-31-84-204.ec2.internal nginx[736637]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:10:31 ip-172-31-84-204.ec2.internal nginx[736637]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:10:31 ip-172-31-84-204.ec2.internal nginx[736637]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:10:31 ip-172-31-84-204.ec2.internal nginx[736637]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:10:31 ip-172-31-84-204.ec2.internal nginx[736637]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:10:32 ip-172-31-84-204.ec2.internal nginx[736637]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:10:32 ip-172-31-84-204.ec2.internal nginx[736637]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:10:32 ip-172-31-84-204.ec2.internal nginx[736637]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:10:32 ip-172-31-84-204.ec2.internal nginx[736637]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:10:32 ip-172-31-84-204.ec2.internal nginx[736637]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:10:32 ip-172-31-84-204.ec2.internal nginx[736637]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:10:33 ip-172-31-84-204.ec2.internal nginx[736637]: nginx: [emerg] still could not bind()
+Apr 09 06:10:33 ip-172-31-84-204.ec2.internal systemd[1]: nginx.service: Control process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ An ExecStart= process belonging to unit nginx.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Apr 09 06:10:33 ip-172-31-84-204.ec2.internal systemd[1]: nginx.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ The unit nginx.service has entered the 'failed' state with result 'exit-code'.
+Apr 09 06:10:33 ip-172-31-84-204.ec2.internal systemd[1]: Failed to start nginx.service - The nginx HTTP and reverse proxy server.
+░░ Subject: A start job for unit nginx.service has failed
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ A start job for unit nginx.service has finished with a failure.
+░░ 
+░░ The job identifier is 907376 and the job result is failed.
+Apr 09 06:13:57 ip-172-31-84-204.ec2.internal systemd[1]: Starting nginx.service - The nginx HTTP and reverse proxy server...
+░░ Subject: A start job for unit nginx.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ A start job for unit nginx.service has begun execution.
+░░ 
+░░ The job identifier is 907761.
+Apr 09 06:13:57 ip-172-31-84-204.ec2.internal nginx[737423]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+Apr 09 06:13:57 ip-172-31-84-204.ec2.internal nginx[737423]: nginx: configuration file /etc/nginx/nginx.conf test is successful
+Apr 09 06:13:57 ip-172-31-84-204.ec2.internal nginx[737442]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:13:57 ip-172-31-84-204.ec2.internal nginx[737442]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:13:57 ip-172-31-84-204.ec2.internal nginx[737442]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:13:57 ip-172-31-84-204.ec2.internal nginx[737442]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:13:57 ip-172-31-84-204.ec2.internal nginx[737442]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:13:57 ip-172-31-84-204.ec2.internal nginx[737442]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:13:58 ip-172-31-84-204.ec2.internal nginx[737442]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:13:58 ip-172-31-84-204.ec2.internal nginx[737442]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:13:58 ip-172-31-84-204.ec2.internal nginx[737442]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:13:58 ip-172-31-84-204.ec2.internal nginx[737442]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:13:58 ip-172-31-84-204.ec2.internal nginx[737442]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:13:58 ip-172-31-84-204.ec2.internal nginx[737442]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:13:59 ip-172-31-84-204.ec2.internal nginx[737442]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:13:59 ip-172-31-84-204.ec2.internal nginx[737442]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:13:59 ip-172-31-84-204.ec2.internal nginx[737442]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:13:59 ip-172-31-84-204.ec2.internal nginx[737442]: nginx: [emerg] still could not bind()
+Apr 09 06:13:59 ip-172-31-84-204.ec2.internal systemd[1]: nginx.service: Control process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ An ExecStart= process belonging to unit nginx.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Apr 09 06:13:59 ip-172-31-84-204.ec2.internal systemd[1]: nginx.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ The unit nginx.service has entered the 'failed' state with result 'exit-code'.
+Apr 09 06:13:59 ip-172-31-84-204.ec2.internal systemd[1]: Failed to start nginx.service - The nginx HTTP and reverse proxy server.
+░░ Subject: A start job for unit nginx.service has failed
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ A start job for unit nginx.service has finished with a failure.
+░░ 
+░░ The job identifier is 907761 and the job result is failed.
+Apr 09 06:24:07 ip-172-31-84-204.ec2.internal systemd[1]: Starting nginx.service - The nginx HTTP and reverse proxy server...
+░░ Subject: A start job for unit nginx.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ A start job for unit nginx.service has begun execution.
+░░ 
+░░ The job identifier is 908512.
+Apr 09 06:24:07 ip-172-31-84-204.ec2.internal nginx[738031]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+Apr 09 06:24:07 ip-172-31-84-204.ec2.internal nginx[738031]: nginx: configuration file /etc/nginx/nginx.conf test is successful
+Apr 09 06:24:07 ip-172-31-84-204.ec2.internal nginx[738032]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:24:07 ip-172-31-84-204.ec2.internal nginx[738032]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:24:07 ip-172-31-84-204.ec2.internal nginx[738032]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:24:08 ip-172-31-84-204.ec2.internal nginx[738032]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:24:08 ip-172-31-84-204.ec2.internal nginx[738032]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:24:08 ip-172-31-84-204.ec2.internal nginx[738032]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:24:08 ip-172-31-84-204.ec2.internal nginx[738032]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:24:08 ip-172-31-84-204.ec2.internal nginx[738032]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:24:08 ip-172-31-84-204.ec2.internal nginx[738032]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:24:09 ip-172-31-84-204.ec2.internal nginx[738032]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:24:09 ip-172-31-84-204.ec2.internal nginx[738032]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:24:09 ip-172-31-84-204.ec2.internal nginx[738032]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:24:09 ip-172-31-84-204.ec2.internal nginx[738032]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:24:09 ip-172-31-84-204.ec2.internal nginx[738032]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:24:09 ip-172-31-84-204.ec2.internal nginx[738032]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:24:10 ip-172-31-84-204.ec2.internal nginx[738032]: nginx: [emerg] still could not bind()
+Apr 09 06:24:10 ip-172-31-84-204.ec2.internal systemd[1]: nginx.service: Control process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ An ExecStart= process belonging to unit nginx.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Apr 09 06:24:10 ip-172-31-84-204.ec2.internal systemd[1]: nginx.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ The unit nginx.service has entered the 'failed' state with result 'exit-code'.
+Apr 09 06:24:10 ip-172-31-84-204.ec2.internal systemd[1]: Failed to start nginx.service - The nginx HTTP and reverse proxy server.
+░░ Subject: A start job for unit nginx.service has failed
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ A start job for unit nginx.service has finished with a failure.
+░░ 
+░░ The job identifier is 908512 and the job result is failed.
+Apr 09 06:27:01 ip-172-31-84-204.ec2.internal systemd[1]: Starting nginx.service - The nginx HTTP and reverse proxy server...
+░░ Subject: A start job for unit nginx.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ A start job for unit nginx.service has begun execution.
+░░ 
+░░ The job identifier is 908823.
+Apr 09 06:27:02 ip-172-31-84-204.ec2.internal nginx[738788]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+Apr 09 06:27:02 ip-172-31-84-204.ec2.internal nginx[738788]: nginx: configuration file /etc/nginx/nginx.conf test is successful
+Apr 09 06:27:02 ip-172-31-84-204.ec2.internal nginx[738790]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:27:02 ip-172-31-84-204.ec2.internal nginx[738790]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:27:02 ip-172-31-84-204.ec2.internal nginx[738790]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:27:02 ip-172-31-84-204.ec2.internal nginx[738790]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:27:02 ip-172-31-84-204.ec2.internal nginx[738790]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:27:02 ip-172-31-84-204.ec2.internal nginx[738790]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:27:03 ip-172-31-84-204.ec2.internal nginx[738790]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:27:03 ip-172-31-84-204.ec2.internal nginx[738790]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:27:03 ip-172-31-84-204.ec2.internal nginx[738790]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:27:03 ip-172-31-84-204.ec2.internal nginx[738790]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:27:03 ip-172-31-84-204.ec2.internal nginx[738790]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:27:03 ip-172-31-84-204.ec2.internal nginx[738790]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:27:04 ip-172-31-84-204.ec2.internal nginx[738790]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:27:04 ip-172-31-84-204.ec2.internal nginx[738790]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:27:04 ip-172-31-84-204.ec2.internal nginx[738790]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:27:04 ip-172-31-84-204.ec2.internal nginx[738790]: nginx: [emerg] still could not bind()
+Apr 09 06:27:04 ip-172-31-84-204.ec2.internal systemd[1]: nginx.service: Control process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ An ExecStart= process belonging to unit nginx.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Apr 09 06:27:04 ip-172-31-84-204.ec2.internal systemd[1]: nginx.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ The unit nginx.service has entered the 'failed' state with result 'exit-code'.
+Apr 09 06:27:04 ip-172-31-84-204.ec2.internal systemd[1]: Failed to start nginx.service - The nginx HTTP and reverse proxy server.
+░░ Subject: A start job for unit nginx.service has failed
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ A start job for unit nginx.service has finished with a failure.
+░░ 
+░░ The job identifier is 908823 and the job result is failed.
+Apr 09 06:32:32 ip-172-31-84-204.ec2.internal systemd[1]: Starting nginx.service - The nginx HTTP and reverse proxy server...
+░░ Subject: A start job for unit nginx.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ A start job for unit nginx.service has begun execution.
+░░ 
+░░ The job identifier is 909199.
+Apr 09 06:32:32 ip-172-31-84-204.ec2.internal nginx[739522]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+Apr 09 06:32:32 ip-172-31-84-204.ec2.internal nginx[739522]: nginx: configuration file /etc/nginx/nginx.conf test is successful
+Apr 09 06:32:32 ip-172-31-84-204.ec2.internal nginx[739523]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:32:32 ip-172-31-84-204.ec2.internal nginx[739523]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:32:32 ip-172-31-84-204.ec2.internal nginx[739523]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:32:33 ip-172-31-84-204.ec2.internal nginx[739523]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:32:33 ip-172-31-84-204.ec2.internal nginx[739523]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:32:33 ip-172-31-84-204.ec2.internal nginx[739523]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:32:33 ip-172-31-84-204.ec2.internal nginx[739523]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:32:33 ip-172-31-84-204.ec2.internal nginx[739523]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:32:33 ip-172-31-84-204.ec2.internal nginx[739523]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:32:34 ip-172-31-84-204.ec2.internal nginx[739523]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:32:34 ip-172-31-84-204.ec2.internal nginx[739523]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:32:34 ip-172-31-84-204.ec2.internal nginx[739523]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:32:34 ip-172-31-84-204.ec2.internal nginx[739523]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:32:34 ip-172-31-84-204.ec2.internal nginx[739523]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:32:34 ip-172-31-84-204.ec2.internal nginx[739523]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:32:35 ip-172-31-84-204.ec2.internal nginx[739523]: nginx: [emerg] still could not bind()
+Apr 09 06:32:35 ip-172-31-84-204.ec2.internal systemd[1]: nginx.service: Control process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ An ExecStart= process belonging to unit nginx.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Apr 09 06:32:35 ip-172-31-84-204.ec2.internal systemd[1]: nginx.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ The unit nginx.service has entered the 'failed' state with result 'exit-code'.
+Apr 09 06:32:35 ip-172-31-84-204.ec2.internal systemd[1]: Failed to start nginx.service - The nginx HTTP and reverse proxy server.
+░░ Subject: A start job for unit nginx.service has failed
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ A start job for unit nginx.service has finished with a failure.
+░░ 
+░░ The job identifier is 909199 and the job result is failed.
+Apr 09 06:32:41 ip-172-31-84-204.ec2.internal systemd[1]: Starting nginx.service - The nginx HTTP and reverse proxy server...
+░░ Subject: A start job for unit nginx.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ A start job for unit nginx.service has begun execution.
+░░ 
+░░ The job identifier is 909351.
+Apr 09 06:32:41 ip-172-31-84-204.ec2.internal nginx[739534]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+Apr 09 06:32:41 ip-172-31-84-204.ec2.internal nginx[739534]: nginx: configuration file /etc/nginx/nginx.conf test is successful
+Apr 09 06:32:41 ip-172-31-84-204.ec2.internal nginx[739546]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:32:41 ip-172-31-84-204.ec2.internal nginx[739546]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:32:41 ip-172-31-84-204.ec2.internal nginx[739546]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:32:42 ip-172-31-84-204.ec2.internal nginx[739546]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:32:42 ip-172-31-84-204.ec2.internal nginx[739546]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:32:42 ip-172-31-84-204.ec2.internal nginx[739546]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:32:42 ip-172-31-84-204.ec2.internal nginx[739546]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:32:42 ip-172-31-84-204.ec2.internal nginx[739546]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:32:42 ip-172-31-84-204.ec2.internal nginx[739546]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:32:43 ip-172-31-84-204.ec2.internal nginx[739546]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:32:43 ip-172-31-84-204.ec2.internal nginx[739546]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:32:43 ip-172-31-84-204.ec2.internal nginx[739546]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:32:43 ip-172-31-84-204.ec2.internal nginx[739546]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:32:43 ip-172-31-84-204.ec2.internal nginx[739546]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:32:43 ip-172-31-84-204.ec2.internal nginx[739546]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:32:44 ip-172-31-84-204.ec2.internal nginx[739546]: nginx: [emerg] still could not bind()
+Apr 09 06:32:44 ip-172-31-84-204.ec2.internal systemd[1]: nginx.service: Control process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ An ExecStart= process belonging to unit nginx.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Apr 09 06:32:44 ip-172-31-84-204.ec2.internal systemd[1]: nginx.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ The unit nginx.service has entered the 'failed' state with result 'exit-code'.
+Apr 09 06:32:44 ip-172-31-84-204.ec2.internal systemd[1]: Failed to start nginx.service - The nginx HTTP and reverse proxy server.
+░░ Subject: A start job for unit nginx.service has failed
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ A start job for unit nginx.service has finished with a failure.
+░░ 
+░░ The job identifier is 909351 and the job result is failed.
+Apr 09 06:32:52 ip-172-31-84-204.ec2.internal systemd[1]: Starting nginx.service - The nginx HTTP and reverse proxy server...
+░░ Subject: A start job for unit nginx.service has begun execution
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ A start job for unit nginx.service has begun execution.
+░░ 
+░░ The job identifier is 909430.
+Apr 09 06:32:52 ip-172-31-84-204.ec2.internal nginx[739607]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+Apr 09 06:32:52 ip-172-31-84-204.ec2.internal nginx[739607]: nginx: configuration file /etc/nginx/nginx.conf test is successful
+Apr 09 06:32:52 ip-172-31-84-204.ec2.internal nginx[739608]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:32:53 ip-172-31-84-204.ec2.internal nginx[739608]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:32:53 ip-172-31-84-204.ec2.internal nginx[739608]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:32:53 ip-172-31-84-204.ec2.internal nginx[739608]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:32:53 ip-172-31-84-204.ec2.internal nginx[739608]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:32:53 ip-172-31-84-204.ec2.internal nginx[739608]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:32:53 ip-172-31-84-204.ec2.internal nginx[739608]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:32:53 ip-172-31-84-204.ec2.internal nginx[739608]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:32:54 ip-172-31-84-204.ec2.internal nginx[739608]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:32:54 ip-172-31-84-204.ec2.internal nginx[739608]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:32:54 ip-172-31-84-204.ec2.internal nginx[739608]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:32:54 ip-172-31-84-204.ec2.internal nginx[739608]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:32:55 ip-172-31-84-204.ec2.internal nginx[739608]: nginx: [emerg] bind() to 0.0.0.0:80 failed (98: Address already in use)
+Apr 09 06:32:55 ip-172-31-84-204.ec2.internal nginx[739608]: nginx: [emerg] bind() to 0.0.0.0:443 failed (98: Address already in use)
+Apr 09 06:32:55 ip-172-31-84-204.ec2.internal nginx[739608]: nginx: [emerg] bind() to [::]:80 failed (98: Address already in use)
+Apr 09 06:32:55 ip-172-31-84-204.ec2.internal nginx[739608]: nginx: [emerg] still could not bind()
+Apr 09 06:32:55 ip-172-31-84-204.ec2.internal systemd[1]: nginx.service: Control process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ An ExecStart= process belonging to unit nginx.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Apr 09 06:32:55 ip-172-31-84-204.ec2.internal systemd[1]: nginx.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ The unit nginx.service has entered the 'failed' state with result 'exit-code'.
+Apr 09 06:32:55 ip-172-31-84-204.ec2.internal systemd[1]: Failed to start nginx.service - The nginx HTTP and reverse proxy server.
+░░ Subject: A start job for unit nginx.service has failed
+░░ Defined-By: systemd
+░░ Support: https://lists.freedesktop.org/mailman/listinfo/systemd-devel
+░░ 
+░░ A start job for unit nginx.service has finished with a failure.
+░░ 
+░░ The job identifier is 909430 and the job result is failed.
