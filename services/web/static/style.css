@@ -1,35 +1,47 @@
-/* Modernized style.css */
+/* -------------------------
+   Modernized "Thesis Chatbot" UI
+------------------------- */
 
+/* 1. Root Variables */
 :root {
-  --primary: #74001c;      /* Maroon */
+  /* Brand Colors */
+  --primary: #74001c;      /* Deep maroon */
   --secondary: #e0a80f;    /* Gold */
-  --accent: #b5003b;       /* Lighter maroon for hover effects */
-  --light-bg: #f8f9fa;
-  --dark-text: #212529;
+  --accent: #b5003b;       /* Bright accent maroon */
+  
+  /* Additional Colors */
+  --light-bg: #f8f9fa;     /* Light gray background */
+  --dark-text: #212529;    /* Dark text color */
+  --dark-grey: #4a4a4a;    /* Dark grey for text box */
+  --white: #ffffff;
+  
+  /* Shadows & Transitions */
   --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --bubble-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   --transition: all 0.3s ease;
 }
 
+/* 2. Global Body Style */
 body {
-  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background-color: var(--primary);
-  color: var(--secondary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   margin: 0;
   padding: 0;
   line-height: 1.6;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  /* Subtle gradient background */
+  background: linear-gradient(120deg, var(--primary) 0%, #9e1b34 100%);
+  color: var(--secondary);
 }
 
-/* Header styling */
+/* 3. Header */
 header {
-  background: white;
-  color: var(--dark-text);
-  padding: 20px;
   text-align: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  position: relative;
+  padding: 20px;
+  background: var(--white);
+  color: var(--dark-text);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 header h1 {
@@ -38,117 +50,46 @@ header h1 {
   letter-spacing: -0.5px;
 }
 
-/* Main content area */
-main {
-  max-width: 800px;
-  margin: 30px auto;
-  padding: 20px;
-  text-align: left;
-  flex-grow: 1;
-}
-
-.large-search-bar {
-  width: 100%;
-  padding: 15px;
-  font-size: 18px;
-  border: none;
-  border-radius: 12px;
-  resize: vertical;
-  min-height: 50px;
-  line-height: 1.4;
-  overflow-y: auto;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease;
-  box-sizing: border-box;
-  max-width: 100%;
-}
-
-.large-search-bar:focus {
-  outline: none;
-  box-shadow: 0 3px 15px rgba(224, 168, 15, 0.25);
-  border: 2px solid var(--secondary);
-}
-
-/* Footer styling */
-footer {
-  background-color: rgba(0, 0, 0, 0.1);
-  color: white;
-  text-align: center;
-  padding: 20px;
-  margin-top: auto;
-  backdrop-filter: blur(5px);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.footer-links {
-  margin-top: 10px;
-}
-
-.footer-links a {
-  color: var(--secondary);
-  text-decoration: none;
-  font-weight: 600;
-  transition: var(--transition);
-}
-
-.footer-links a:hover {
-  color: white;
-  text-decoration: underline;
-}
-
 .logo {
-  height: 70px;
-  margin-bottom: 10px;
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.1));
+  max-height: 80px;
   transition: var(--transition);
 }
 
 .logo:hover {
-  transform: scale(1.05);
+  transform: scale(1.03);
 }
 
-button {
-  padding: 12px 24px;
-  font-size: 1em;
-  font-weight: 600;
-  border: none;
-  border-radius: 12px;
-  background-color: var(--secondary);
-  color: var(--primary);
-  cursor: pointer;
-  transition: var(--transition);
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-  margin-top: 15px;
-}
-
-button:hover {
-  background-color: #c9970e;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-}
-
-button:active {
-  transform: translateY(1px);
-}
-
-.chat-history {
-  margin-bottom: 2em;
-  background-color: white;
-  padding: 25px;
-  border-radius: 16px;
-  max-width: 700px;
+/* 4. Main Content Wrapper */
+main {
+  max-width: 800px;
   width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  box-sizing: border-box;
+  margin: 30px auto;
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 5. Chat History Card */
+.chat-history {
+  width: 100%;
+  max-width: 700px;
+  background: var(--white);
+  border-radius: 16px;
   box-shadow: var(--card-shadow);
+  padding: 25px;
+  margin-bottom: 1.5em;
+  box-sizing: border-box;
+  min-height: 400px;
 }
 
 .chat-history h2 {
-  font-weight: 600;
-  color: var(--dark-text);
+  text-align: center;
   margin-top: 0;
   margin-bottom: 1.5rem;
+  font-weight: 600;
+  color: var(--dark-text);
   position: relative;
   padding-bottom: 10px;
 }
@@ -157,23 +98,115 @@ button:active {
   content: '';
   position: absolute;
   bottom: 0;
-  left: 0;
-  width: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
   height: 3px;
   background: linear-gradient(to right, var(--primary), var(--secondary));
   border-radius: 3px;
 }
 
-.user-msg, .bot-msg {
-  margin: 20px 0;
-  padding: 18px;
+/* 6. No Conversation Text */
+.chat-history p {
+  color: #777;
+  text-align: center;
+  font-style: italic;
+}
+
+/* 7. Message Bubbles */
+.user-msg,
+.bot-msg {
+  position: relative;
+  max-width: 85%;
+  margin: 12px 0;
+  padding: 14px 18px;
   border-radius: 16px;
   font-size: 16px;
   line-height: 1.6;
+  background: #ececec;
+  color: var(--dark-text);
+  box-shadow: var(--bubble-shadow);
+  animation: fadeIn 0.3s ease-in-out;
   white-space: pre-wrap;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* User bubble on the right */
+.user-msg {
+  margin-left: auto;
+  background: var(--secondary);
+  color: var(--dark-text);
+}
+
+.user-msg:before {
+  content: '👤 ';
+  font-size: 18px;
+  margin-right: 2px;
+}
+
+/* Bot bubble on the left */
+.bot-msg {
+  margin-right: auto;
+  background: var(--light-bg);
+  color: var(--dark-text);
+}
+
+.bot-msg:before {
+  content: '🤖 ';
+  font-size: 18px;
+  margin-right: 2px;
+}
+
+/* 8. Additional styling for <pre> inside bot messages */
+.bot-msg pre {
+  background: #f1f3f5;
+  padding: 12px;
+  border-radius: 8px;
+  margin: 0.5em 0 0 0;
+  max-width: 100%;
+  overflow-x: auto;
+  font-family: "Courier New", monospace;
+}
+
+/* 9. Chat Form / Textarea */
+.large-search-bar {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  font-size: 16px;
+  border: none;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+  background-color: var(--dark-grey);
+  color: var(--white);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.large-search-bar:focus {
+  outline: none;
+  box-shadow: 0 3px 15px rgba(224, 168, 15, 0.25);
+  border: 2px solid var(--secondary);
+}
+
+/* 10. Form Button (Ask) */
+form button {
+  padding: 12px 20px;
+  background-color: var(--secondary);
+  border: none;
+  border-radius: 12px;
+  color: var(--dark-text);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+form button:hover {
+  background-color: #c8a000;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(224, 168, 15, 0.3);
 }
 
 @keyframes fadeIn {
@@ -181,184 +214,53 @@ button:active {
   to { opacity: 1; transform: translateY(0); }
 }
 
-.user-msg {
-  background-color: var(--secondary);
-  color: var(--primary);
-  font-weight: 600;
-  border-left: none;
-  box-shadow: 0 3px 8px rgba(224, 168, 15, 0.2);
-  margin-left: 40px;
-  position: relative;
+/* 11. Home Box (Button Only) */
+.home-box {
+  margin: 0 auto 1em;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 700px;
 }
 
-.user-msg:before {
-  content: '👤';
-  position: absolute;
-  left: -40px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 24px;
-}
-
-.bot-msg {
-  background-color: #f8f9fa;
-  color: var(--dark-text);
-  padding: 16px;
-  border-radius: 16px;
-  margin: 0;
-  margin-right: 40px;
-  max-width: 100%;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  white-space: pre-wrap;
-  box-sizing: border-box;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
-  position: relative;
-}
-
-.bot-msg:before {
-  content: '🤖';
-  position: absolute;
-  right: -40px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 24px;
-}
-
-/* This will ensure all content inside bot messages wraps properly */
-.bot-msg * {
-  max-width: 100%;
-  word-break: break-word;
-  overflow-wrap: break-word;
-}
-
-/* Fix for pre element in bot messages to ensure wrapping */
-.bot-msg pre {
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  max-width: 100%;
-  overflow-x: auto;
-  margin: 0;
-  padding: 12px;
-  background-color: #f1f3f5;
-  border-radius: 8px;
-  font-family: 'Courier New', monospace;
-}
-
-.markdown {
-  padding: 16px;
-  background-color: #f8f9fa;
-  color: var(--dark-text);
-  border-radius: 12px;
-  margin-top: 8px;
-  white-space: pre-wrap;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  box-sizing: border-box;
-  max-width: 100%;
-}
-
-/* Markdown elements */
-.markdown h1, .markdown h2 {
-  font-weight: 700;
-  margin-top: 1.2em;
-  margin-bottom: 0.7em;
-  color: var(--primary);
-}
-
-.markdown ul {
-  padding-left: 1.5em;
-}
-
-.markdown li {
-  margin-bottom: 0.7em;
-  max-width: 100%;
-  word-wrap: break-word;
-}
-
-.markdown a {
-  color: var(--accent);
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.2s ease;
-}
-
-.markdown a:hover {
-  border-bottom: 1px solid var(--accent);
-}
-
-.back-link {
-  margin: 1.5rem 0;
+.home-box a {
+  display: block;
+  width: 100%;
+  padding: 12px 0;
+  background-color: #600000; /* Dark red */
+  color: var(--white);
   text-align: center;
-}
-
-.back-link a {
-  color: white;
   text-decoration: none;
   font-weight: 600;
-  padding: 8px 16px;
-  background-color: var(--accent);
-  border-radius: 8px;
-  transition: var(--transition);
-  display: inline-block;
-}
-
-.back-link a:hover {
-  background-color: var(--secondary);
-  transform: translateY(-2px);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Alert messages */
-.alert {
-  padding: 12px 16px;
-  margin-bottom: 20px;
   border-radius: 12px;
-  font-weight: 500;
-  animation: slideIn 0.4s ease;
+  transition: var(--transition);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
 }
 
-@keyframes slideIn {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
+.home-box a:hover {
+  background-color: #a31c23;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
 }
 
-/* Responsive adjustments */
+/* 12. Footer */
+footer {
+  text-align: center;
+  padding: 20px;
+  margin-top: auto;
+  color: var(--white);
+}
+
+/* 13. Media Queries for Mobile */
 @media (max-width: 600px) {
-  main {
-    padding: 15px;
-  }
-  
-  .chat-history {
+  .chat-history,
+  .home-box {
     padding: 16px;
   }
   
-  .user-msg, .bot-msg {
-    padding: 14px;
-    margin-left: 25px;
-    margin-right: 25px;
+  .user-msg,
+  .bot-msg {
+    max-width: 100%;
   }
-  
-  .user-msg:before, .bot-msg:before {
-    font-size: 18px;
-    left: -25px;
-  }
-  
-  .bot-msg:before {
-    right: -25px;
-    left: auto;
-  }
-}
-
-/* Subtle hover effects */
-.chat-history:hover {
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-}
-
-.bot-msg-header {
-  font-weight: 700;
-  color: var(--primary);
-  margin-bottom: 10px;
-  font-size: 16px;
 }
 

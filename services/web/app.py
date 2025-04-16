@@ -7,7 +7,7 @@ import json
 from rag_system8 import ThesisDataManager, ThesisRAGSystem, run_llm
 
 app = Flask(__name__)
-app.secret_key = "your_secret_key"  # Replace with strong secret key
+app.secret_key = "your_secret_key"  # Replace with a strong secret key
 app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
 
@@ -17,47 +17,33 @@ logging.basicConfig(level=logging.INFO)
 data_manager = ThesisDataManager()
 rag_system = ThesisRAGSystem(data_manager)
 
-@app.route('/')
-def index():
-    session.pop('conversation', None)  # clear conversation on homepage
-    return render_template('index.html')
-
-@app.route('/query', methods=['POST'])
-def query():
-    question = request.form['question']
-
+@app.route('/', methods=['GET', 'POST'])
+def chat():
+    # Initialize conversation in session if it doesn't exist
     if 'conversation' not in session:
         session['conversation'] = []
 
-    # Add user message to conversation history
-    session['conversation'].append({"role": "user", "content": question})
-    
-    # Format conversation history properly
-    conversation_history = "\n".join(
-        [f"{msg['role'].capitalize()}: {msg['content']}" for msg in session['conversation']]
-    )
-
-    # Ensure data is loaded before answering
-    if not data_manager.loaded:
-        data_manager.load_data()
+    if request.method == 'POST':
+        question = request.form.get('question')
+        conversation = session.get('conversation', [])
         
-    # Get answer from RAG system
-    try:
-        answer = rag_system.answer_question(question, conversation_history=conversation_history)
-        if not answer or answer.strip() == "":
-            answer = "I apologize, but I couldn't generate a response. Please try again or rephrase your question."
-    except Exception as e:
-        app.logger.error(f"Error generating answer: {e}")
-        answer = "I encountered an error while processing your question. Please try again."
+        # Process the question with your RAG system (ensure it returns an answer string)
+        answer = rag_system.answer_question(question)
+        
+        conversation.append({'role': 'user', 'content': question})
+        conversation.append({'role': 'assistant', 'content': answer})
+        session['conversation'] = conversation
+        
+        # Append the anchor so that after a new question it scrolls to the bottom
+        return redirect(url_for('chat') + "#conversation-end")
+    else:
+        conversation = session.get('conversation', [])
+        return render_template('chat.html', conversation=conversation)
 
-    # Add assistant response to conversation history
-    session['conversation'].append({"role": "assistant", "content": answer})
-    
-    # Save conversation to session
-    session.modified = True
-    
-    return render_template('results.html', question=question, answer=answer, conversation=session['conversation'])
-
+@app.route('/clear_conversation')
+def clear_conversation():
+    session['conversation'] = []  # Clear the conversation history
+    return redirect(url_for('chat'))  # Redirect to the chat (home) route
 
 if __name__ == "__main__":
     if data_manager.load_data():
@@ -67,5 +53,4 @@ if __name__ == "__main__":
     else:
         app.logger.error("Failed to preload data.")
     app.run(debug=True, port=5029, host='0.0.0.0')
-    
 

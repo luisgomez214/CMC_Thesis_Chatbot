@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thesis Chatbot</title>
+
+  <!-- Google Fonts: Open Sans -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap"
+    rel="stylesheet"
+  />
+  <!-- Markdown rendering library -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- Your existing stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+</head>
+<body>
+  <header>
+    <!-- Logo now acts as a home button. Clicking it clears the conversation. -->
+    <a href="{{ url_for('clear_conversation') }}">
+      <img
+        src="{{ url_for('static', filename='CMC_logo.jpg') }}"
+        alt="CMC Logo"
+        class="logo"
+      />
+    </a>
+    <h1>Thesis Chatbot</h1>
+  </header>
+
+  <main>
+    <!-- White card containing the conversation and query form -->
+    <div class="chat-history">
+      <h2>Conversation:</h2>
+      {% if conversation %}
+        {% for msg in conversation %}
+          {% if msg.role == 'user' %}
+            <div class="user-msg"><strong>You:</strong> {{ msg.content }}</div>
+          {% elif msg.role == 'assistant' %}
+            <div class="bot-msg">
+              <div class="markdown-content">{{ msg.content }}</div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        <p>No conversation yet. Ask a question below!</p>
+      {% endif %}
+
+      <!-- Invisible anchor used to scroll to the bottom -->
+      <div id="conversation-end"></div>
+
+      <!-- Query form -->
+      <form action="{{ url_for('chat') }}" method="post">
+        <textarea
+          name="question"
+          placeholder="Ask me about CMC theses..."
+          class="large-search-bar"
+          required
+        ></textarea>
+        <button type="submit">Ask</button>
+      </form>
+    </div>
+    
+    <!-- Home button card - red background, same size as the chat-history card -->
+    <div class="home-box">
+      <a href="{{ url_for('clear_conversation') }}">Home</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-links">
+      <a href="https://github.com/luisgomez214/Thesis" target="_blank">View on GitHub</a>
+    </div>
+  </footer>
+
+  <script>
+    // Convert markdown content to HTML
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.markdown-content').forEach(function (el) {
+        const content = el.textContent;
+        el.innerHTML = marked.parse(content);
+      });
+      // No auto-scrolling on page load for GET requests;
+      // POST redirects now include the anchor so the browser will scroll down.
+    });
+  </script>
+</body>
+</html>
+

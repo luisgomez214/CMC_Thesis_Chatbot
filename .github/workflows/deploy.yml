@@ -24,7 +24,6 @@ jobs:
       - name: Install dependencies and EB CLI
         run: |
           python -m pip install --upgrade pip
-          pip install six==1.16.0 
           pip install awsebcli
           pip install -r requirements.txt
 
