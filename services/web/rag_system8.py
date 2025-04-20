@@ -48,8 +48,49 @@ QUERY_ANALYSIS_PROMPT = (
     "Include only the JSON in your response."
 )
 
+# Update the ADVISOR_SUGGESTION_PROMPT constant to be more comprehensive
+ADVISOR_SUGGESTION_PROMPT = (
+    "You are a helpful academic assistant specializing in thesis topic development.\n"
+    "Given the user's request, generate: \n"
+    "1. 5–7 specific and creative thesis ideas with detailed titles and topic descriptions\n"
+    "2. For EACH thesis idea, provide a comprehensive outline with these sections:\n"
+    "   - Introduction & Problem Statement\n"
+    "   - Literature Review\n"
+    "   - Methodology (with specific research methods)\n"
+    "   - Data Collection & Analysis Approach\n"
+    "   - Expected Results\n" 
+    "   - Implications & Significance\n"
+    "   - Timeline & Feasibility\n"
+    "3. Relevant disciplines and interdisciplinary connections\n"
+    "4. Advisor profile suggestions based on the topic (area of expertise)\n"
+    "Format each thesis idea as a structured, comprehensive outline suitable for academic planning."
+)
+
+TOPIC_ANALYSIS_PROMPT = (
+    "You are analyzing academic thesis topic requests.\n"
+    "Extract key information from this request to help generate relevant thesis ideas.\n"
+    "Return a JSON object with:\n"
+    "{\n"
+    '    "primary_domain": "the main academic field",\n'
+    '    "related_domains": ["other relevant fields"],\n'
+    '    "key_themes": ["important themes or concepts"],\n'
+    '    "research_approach": "potential research approach if mentioned"\n'
+    "}\n"
+    "Include only the JSON in your response."
+)
+
+REQUEST_TYPE_PROMPT = (
+    "You are analyzing user queries about academic theses.\n"
+    "Determine if this query is a request for thesis ideas, topics, or outlines.\n"
+    "Return a JSON object with:\n"
+    "{\n"
+    '    "is_thesis_idea_request": true/false,\n'
+    '    "confidence": percentage from 0-100\n'
+    "}\n"
+    "Include only the JSON in your response."
+)
+
 def run_llm(system: str, user: str, model: str = DEFAULT_MODEL, seed: Optional[int] = None) -> str:
-    # NOTE: The token check here is a character count approximation.
     combined = system + user
     if len(combined) > MAX_TOKENS:
         allowed = max(0, MAX_TOKENS - len(system))
@@ -67,6 +108,7 @@ def run_llm(system: str, user: str, model: str = DEFAULT_MODEL, seed: Optional[i
     except Exception as e:
         logger.error(f"LLM error: {e}")
         return "There was an error generating the response."
+
 
 def sanitize_query(text: str) -> str:
     return re.sub(r"[^\w\s]", "", text)
@@ -396,45 +438,89 @@ class ThesisDataManager:
         except Exception as e:
             logger.error(f"Award search error: {e}")
             return []
-
+    
     def search_by_department(self, department: str, limit: int = 25) -> List[Dict[str, Any]]:
-        """Search for theses by department"""
+        """Search for theses by department and return advisor names too"""
         try:
             return self.execute_query(
-                "SELECT Title, department, publication_date, author1_fname, author1_lname FROM theses WHERE department LIKE ? ORDER BY publication_date DESC LIMIT ?", 
+                """
+                SELECT Title,
+                       department,
+                       publication_date,
+                       advisor1,
+                       advisor2,
+                       advisor3,
+                       author1_fname,
+                       author1_lname
+                FROM theses
+                WHERE department LIKE ?
+                ORDER BY publication_date DESC
+                LIMIT ?
+                """,
                 (f"%{department}%", limit)
             )
         except Exception as e:
             logger.error(f"Department search error: {e}")
             return []
-    
+
     def search_by_keyword(self, keyword: str, limit: int = 25) -> List[Dict[str, Any]]:
-        """Search for theses by keyword with enhanced error handling"""
-        # Escape special characters (only allow alphanumerics and whitespace)
-        escaped_keyword = re.sub(r'[^\w\s]', '', keyword)
+        """Search the theses database for a keyword, returning up to *limit* rows.
+
+        First tries the FTS5 virtual table for fast full‑text search; if that fails
+        (e.g., FTS not available) we fall back to a standard LIKE query.
+        The result rows include advisor1/2/3 so downstream code can surface real
+        advisor names for thesis‑idea generation.
+        """
+        # Allow only alphanumerics + whitespace inside the MATCH query
+        escaped_keyword = re.sub(r"[^\w\s]", "", keyword)
+
+        # ---------- Fast FTS branch ----------
         try:
-            # Construct the FTS query string without parameters (avoiding MATCH parameter binding issues)
-            fts_query = (
-                f"SELECT t.Title, t.department, t.publication_date, t.author1_fname, t.author1_lname "
-                f"FROM theses t "
-                f"JOIN theses_fts fts ON t.rowid = fts.rowid "
-                f"WHERE theses_fts MATCH '{escaped_keyword}' "
-                f"ORDER BY t.publication_date DESC LIMIT {limit}"
-            )
+            fts_query = f"""
+                SELECT  t.Title,
+                        t.department,
+                        t.publication_date,
+                        t.advisor1,
+                        t.advisor2,
+                        t.advisor3,
+                        t.author1_fname,
+                        t.author1_lname
+                FROM    theses            AS t
+                JOIN    theses_fts        AS fts  ON t.rowid = fts.rowid
+                WHERE   theses_fts MATCH '{escaped_keyword}'
+                ORDER BY t.publication_date DESC
+                LIMIT   {limit}
+            """
             results = self.execute_query(fts_query)
             if results:
                 return results
         except Exception:
-            logger.warning("FTS search failed in search_by_keyword, falling back to LIKE")
-        
-        # Fallback using LIKE on multiple text fields
-        fallback_query = (
-            "SELECT Title, department, publication_date, author1_fname, author1_lname FROM theses "
-            "WHERE Title LIKE ? OR abstract LIKE ? OR keywords LIKE ? "
-            "ORDER BY publication_date DESC LIMIT ?"
+            logger.warning("FTS search failed in search_by_keyword – falling back to LIKE")
+
+        # ---------- Fallback LIKE branch ----------
+        fallback_query = """
+            SELECT  Title,
+                    department,
+                    publication_date,
+                    advisor1,
+                    advisor2,
+                    advisor3,
+                    author1_fname,
+                    author1_lname
+            FROM    theses
+            WHERE   Title    LIKE ?
+                OR  abstract LIKE ?
+                OR  keywords LIKE ?
+            ORDER BY publication_date DESC
+            LIMIT   ?
+        """
+        return self.execute_query(
+            fallback_query,
+            (f"%{keyword}%", f"%{keyword}%", f"%{keyword}%", limit)
         )
-        return self.execute_query(fallback_query, (f"%{keyword}%", f"%{keyword}%", f"%{keyword}%", limit))
-    
+        
+   
+
     def search_by_exact_title(self, title: str) -> List[Dict[str, Any]]:
         """Search for thesis by exact title"""
         try:
@@ -522,6 +608,160 @@ class ThesisRAGSystem:
         self.data_manager = data_manager
         self.model = model
         self.latest_thesis_list = []
+
+    # ------------------------------------------------------------------
+    # Helper ‑‑ thesis ideas + detailed outline + real advisors
+    # ------------------------------------------------------------------
+    def generate_thesis_help(self, topic_request: str) -> str:
+        """
+        Produce 5‑7 thesis ideas on the requested topic using LLM analysis.
+        For every idea include:
+          • Title
+          • Comprehensive section-by-section outline
+          • Advisor: <name picked from DB>   — or expertise description if none found
+        """
+        # --- 1. Analyze the topic request with LLM to extract domains and themes ---
+        topic_analysis = run_llm(TOPIC_ANALYSIS_PROMPT, topic_request, model=self.model)
+        
+        try:
+            # Extract the JSON from the response
+            json_match = re.search(r'({.*})', topic_analysis, re.DOTALL)
+            if json_match:
+                analysis = json.loads(json_match.group(1))
+            else:
+                # Fallback if JSON extraction fails
+                analysis = {
+                    "primary_domain": "",
+                    "related_domains": [],
+                    "key_themes": [],
+                    "research_approach": ""
+                }
+        except Exception as e:
+            logger.error(f"Error parsing topic analysis: {e}")
+            analysis = {
+                "primary_domain": "",
+                "related_domains": [],
+                "key_themes": [],
+                "research_approach": ""
+            }
+        
+        # Extract the primary domain and key themes
+        primary_domain = analysis.get("primary_domain", "")
+        key_themes = analysis.get("key_themes", [])
+        
+        # --- 2. Search for related advisors based on domain and themes ---
+        advisor_pool = []
+        
+        # First search by domain if available
+        if primary_domain:
+            domain_results = self.data_manager.search_by_department(primary_domain, limit=30)
+            for r in domain_results:
+                advisor_pool += [
+                    r.get("advisor1", ""), r.get("advisor2", ""), r.get("advisor3", "")
+                ]
+        
+        # Then search by key themes
+        for theme in key_themes:
+            if theme and len(theme) > 3:
+                rows = self.data_manager.search_by_keyword(theme, limit=20)
+                for r in rows:
+                    advisor_pool += [
+                        r.get("advisor1", ""), r.get("advisor2", ""), r.get("advisor3", "")
+                    ]
+        
+        # Also search for advisors using the entire request as context
+        general_results = self.data_manager.search_all_columns(topic_request, limit=30)
+        for r in general_results:
+            advisor_pool += [
+                r.get("advisor1", ""), r.get("advisor2", ""), r.get("advisor3", "")
+            ]
+
+        # Clean and deduplicate advisors
+        advisor_pool = [a.strip() for a in advisor_pool if a and a.strip()]
+        from collections import Counter
+        advisor_counter = Counter(advisor_pool)
+        top_advisors = [name for name, _ in advisor_counter.most_common(12) if name]
+
+
+        # --- 3. Get relevant thesis examples ---
+        relevant_examples = []
+        
+        # First try to get examples from the primary domain
+        if primary_domain:
+            domain_examples = self.data_manager.search_by_department(primary_domain, limit=5)
+            if domain_examples:
+                relevant_examples.extend(domain_examples)
+        
+        # Then add examples based on key themes
+        for theme in key_themes:
+            if theme and len(theme) > 3 and len(relevant_examples) < 8:
+                theme_examples = self.data_manager.search_by_keyword(theme, limit=3)
+                if theme_examples:
+                    relevant_examples.extend(theme_examples)
+        
+        # Format examples for context
+        examples_text = ""
+        if relevant_examples:
+            examples_text = "\n\nRelevant thesis examples from the database:\n"
+            seen_titles = set()
+            count = 0
+            
+            for thesis in relevant_examples:
+                title = thesis.get("Title", "")
+                if title and title not in seen_titles and count < 5:
+                    seen_titles.add(title)
+                    author = f"{thesis.get('author1_fname', '')} {thesis.get('author1_lname', '')}".strip()
+                    department = thesis.get("department", "")
+                    examples_text += f"- \"{title}\" by {author} ({department})\n"
+                    count += 1
+        
+        # --- 4. Build advisor context ---
+        if top_advisors:
+            advisor_block = (
+                "### Relevant advisors found in the thesis database:\n"
+                + "\n".join(f"- {name}" for name in top_advisors)
+            )
+            advisor_rule = (
+                "For **every** thesis idea below, finish with an **Advisor:** line "
+                "choosing a single name *only* from the list above. Match advisor expertise to the thesis topic."
+            )
+        else:
+            advisor_block = "*No specific advisors found in the database for this topic.*"
+            advisor_rule = (
+                "Since no specific advisors were found, add an "
+                "**Advisor Expertise Profile:** section describing the ideal expertise for each thesis idea."
+            )
+        
+        # --- 5. Compose final prompts ---
+        system_prompt = (
+            ADVISOR_SUGGESTION_PROMPT
+            + "\n\n"
+            + advisor_rule
+            + "\n\nFormat each thesis idea comprehensively with all required sections."
+        )
+        
+        user_prompt = (
+            f"User's thesis request: {topic_request}\n\n"
+            f"Topic analysis:\n"
+            f"- Primary domain: {primary_domain}\n"
+            f"- Key themes: {', '.join(key_themes)}\n\n"
+            f"{advisor_block}{examples_text}"
+        )
+
+        # Generate the ideas with detailed structure
+        ideas_text = run_llm(system_prompt, user_prompt, model=self.model)
+        
+        # --- 6. Add header context ---
+        header = (
+            f"# Thesis Ideas: {topic_request}\n\n"
+            f"**Domain:** {primary_domain}\n"
+            f"**Key Themes:** {', '.join(key_themes)}\n\n"
+            f"{advisor_block}\n\n"
+            f"---\n\n"
+        )
+        
+        return header + ideas_text   
+
 
     def determine_query_strategy(self, question: str) -> Tuple[str, List[Dict[str, Any]]]:
         """Determine best query strategy based on question and execute it"""
@@ -718,12 +958,41 @@ class ThesisRAGSystem:
 
     def answer_question(self, question: str, conversation_history: str = "") -> str:
         """Answer a question about theses, incorporating conversation history."""
+           
+        quick_check_terms = ["thesis idea", "thesis topic", "thesis outline", "brainstorm"]
+        if any(term in question.lower() for term in quick_check_terms):
+            return self.generate_thesis_help(question)
+        
+        # For less obvious cases, use LLM to analyze the request type
+        # We'll only do this if there's any mention of "thesis" to save API calls
+        if "thesis" in question.lower() or "dissertation" in question.lower():
+            request_analysis = run_llm(REQUEST_TYPE_PROMPT, question, model=self.model)
+            try:
+                json_match = re.search(r'({.*})', request_analysis, re.DOTALL)
+                if json_match:
+                    analysis = json.loads(json_match.group(1))
+                    if analysis.get("is_thesis_idea_request", False) and analysis.get("confidence", 0) > 70:
+                        return self.generate_thesis_help(question)
+            except Exception as e:
+                logger.error(f"Error parsing request analysis: {e}")
+        
+        # Continue with the existing code for other types of questions...
         # Handle co-advisor queries
         co_advisor_patterns = [
             r"who has co.?advised .* with ([A-Z][a-z]+ [A-Z][a-z]+)",
             r"who co.?advises with ([A-Z][a-z]+ [A-Z][a-z]+)",
             r"([A-Z][a-z]+ [A-Z][a-z]+)'s co.?advisors"
         ]
+
+        # ---------- Thesis brainstorming shortcut ----------
+        brainstorm_triggers = [
+            "thesis ideas", "thesis help", "brainstorm", "outline",
+            "topic suggestions", "what should i write my thesis on",
+            "give me ideas for my thesis", "suggest a thesis topic"
+        ]
+        if any(trigger in question.lower() for trigger in brainstorm_triggers):
+            return self.generate_thesis_help(question)
+
         for pattern in co_advisor_patterns:
             match = re.search(pattern, question, re.IGNORECASE)
             if match:

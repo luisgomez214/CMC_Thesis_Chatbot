@@ -26,14 +26,14 @@ def chat():
     if request.method == 'POST':
         question = request.form.get('question')
         conversation = session.get('conversation', [])
-        
+
         # Process the question with your RAG system (ensure it returns an answer string)
         answer = rag_system.answer_question(question)
-        
+
         conversation.append({'role': 'user', 'content': question})
         conversation.append({'role': 'assistant', 'content': answer})
         session['conversation'] = conversation
-        
+
         # Append the anchor so that after a new question it scrolls to the bottom
         return redirect(url_for('chat') + "#conversation-end")
     else:
@@ -53,4 +53,3 @@ if __name__ == "__main__":
     else:
         app.logger.error("Failed to preload data.")
     app.run(debug=True, port=5029, host='0.0.0.0')
-

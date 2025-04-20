@@ -1,44 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Claremont McKenna Thesis Search System</title>
-
-    <!-- Google Fonts: Open Sans -->
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thesis Chatbot</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
 </head>
 <body>
-    <header>
-        <img src="{{ url_for('static', filename='CMC_logo.jpg') }}" alt="CMC Logo" class="logo">
-        <h1>Thesis Chatbot</h1>
-    </header>
-    
-    <main>
-        {% for message, category in get_flashed_messages(with_categories=True) %}
-            <div class="alert {{ category }}">{{ message }}</div>
-        {% endfor %}
-
-        <div class="chat-history">
-            <form action="{{ url_for('query') }}" method="post">
-                <textarea name="question" placeholder="Ask me about CMC theses..." class="large-search-bar" required></textarea>
-                <button type="submit">Ask</button>
-            </form>
-        </div>
-    </main>
-
-    <footer>
-        <p>
-            I am a RAG (Retrieval Augmented Generation) system filled with information about the 
-            Claremont McKenna College theses database. In other words, I'm a theses chatbot, and 
-            I specialize in CMC theses. Ask me anything about these theses, authors, departments, 
-            or research topics!
-        </p>
-        <div class="footer-links">
-            <a href="https://github.com/luisgomez214/Thesis" target="_blank">View on GitHub</a>
-        </div>
-    </footer>
+  <header>
+    <a href="{{ url_for('clear') }}"><img src="{{ url_for('static','CMC_logo.jpg') }}" alt="CMC Logo" class="logo"/></a>
+    <h1>Thesis Chatbot</h1>
+  </header>
+  <main>
+    <div class="chat-history">
+      <h2>Ask a question about CMC theses</h2>
+      <form action="{{ url_for('ask') }}" method="post">
+        <textarea name="question" placeholder="Enter your thesis question…" required></textarea>
+        <button type="submit">Ask</button>
+      </form>
+    </div>
+  </main>
+  <footer>
+    <a href="https://github.com/luisgomez214/Thesis" target="_blank">View on GitHub</a>
+  </footer>
 </body>
 </html>
+

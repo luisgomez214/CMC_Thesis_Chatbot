@@ -1,70 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Query Results</title>
-
-    <!-- Google Fonts: Open Sans -->
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
-
-    <!-- Markdown rendering library -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Answer – Thesis Chatbot</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
-    <header>
-        <img src="{{ url_for('static', filename='CMC_logo.jpg') }}" alt="CMC Logo" class="logo">
-        <h1>Query Results</h1>
-    </header>
-
-    <main>
-        <div class="chat-history">
-            <h2>Conversation:</h2>
-            {% for msg in conversation %}
-                {% if msg.role == 'user' %}
-                    <div class="user-msg"><strong>You:</strong> {{ msg.content }}</div>
-                {% elif msg.role == 'assistant' %}
-                <div class="bot-msg">
-                    <div class="markdown-content">{{ msg.content }}</div>
-                </div>
-                
-                {% endif %}
-            {% endfor %}
-        </div>
-        <div class="chat-history">
-            <form action="{{ url_for('query') }}" method="post">
-                <textarea name="question" placeholder="Ask me about CMC theses..." class="large-search-bar" required></textarea>
-                <button type="submit">Ask</button>
-            </form>
-        </div>
-        
-        <div class="back-link">
-            <a href="{{ url_for('index') }}">Home</a>
-        </div>
-        
-
-   </main>
-
-    <footer>
-        <p>
-            I am a RAG (Retrieval Augmented Generation) system filled with information about the 
-            Claremont McKenna College theses database.
-        </p>
-        <div class="footer-links">
-            <a href="https://github.com/luisgomez214/Thesis" target="_blank">View on GitHub</a>
-        </div>
-    </footer>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Convert markdown content to HTML
-            document.querySelectorAll('.markdown-content').forEach(function(el) {
-                const content = el.textContent;
-                el.innerHTML = marked.parse(content);
-            });
-        });
-    </script>
+  <header>
+    <a href="{{ url_for('clear') }}"><img src="{{ url_for('static','CMC_logo.jpg') }}" alt="CMC Logo" class="logo"/></a>
+    <h1>Thesis Chatbot</h1>
+  </header>
+  <main>
+    <div class="chat-history">
+      <h2>Your question:</h2>
+      <div class="user-msg"><strong>You:</strong> {{ question }}</div>
+      <h2>Answer:</h2>
+      <div class="bot-msg"><div class="markdown-content">{{ answer }}</div></div>
+      <a href="{{ url_for('index') }}" class="button">Ask another question</a>
+    </div>
+  </main>
+  <footer>
+    <a href="https://github.com/luisgomez214/Thesis" target="_blank">View on GitHub</a>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.markdown-content').forEach(el => {
+        el.innerHTML = marked.parse(el.textContent);
+      });
+    });
+  </script>
 </body>
 </html>
+
