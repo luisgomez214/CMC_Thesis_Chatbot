@@ -38,12 +38,12 @@ jobs:
           aws-region:            us-east-1
 
       # 5) init EB for your app & platform
-      - name: Initialize Elastic Beanstalk
+      - name: Initialize Elastic Beanstalk
         run: |
-          # replace “Thesis” below with your actual EB application name
           eb init Thesis \
             --region us-east-1 \
-            --platform docker
+            --platform docker \
+            --bucket your‑existing‑bucket-name
 
       # 6) tell EB which environment to target
       - name: Select EB environment
