@@ -753,7 +753,6 @@ class ThesisRAGSystem:
         
         # --- 6. Add header context ---
         header = (
-            f"# Thesis Ideas: {topic_request}\n\n"
             f"**Domain:** {primary_domain}\n"
             f"**Key Themes:** {', '.join(key_themes)}\n\n"
             f"{advisor_block}\n\n"

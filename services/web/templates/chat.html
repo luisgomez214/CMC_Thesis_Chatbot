@@ -5,9 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Thesis Chatbot</title>
 
-  <!-- Google Fonts: Open Sans -->
+  <!-- Google Fonts: Inter and Poppins -->
   <link
-    href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <!-- Code font -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
     rel="stylesheet"
   />
   <!-- Markdown rendering library -->
@@ -38,7 +43,8 @@
             <div class="user-msg"><strong>You:</strong> {{ msg.content }}</div>
           {% elif msg.role == 'assistant' %}
             <div class="bot-msg">
-              <div class="markdown-content">{{ msg.content }}</div>
+              <div class="bot-text markdown-content">{{ msg.content }}</div>
+              <span class="bot-emoji">🤖</span>
             </div>
           {% endif %}
         {% endfor %}
@@ -86,4 +92,3 @@
   </script>
 </body>
 </html>
-

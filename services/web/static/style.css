@@ -1,5 +1,5 @@
 /* -------------------------
-   Modernized "Thesis Chatbot" UI
+   Modernized "Thesis Chatbot" UI - IMPROVED
 ------------------------- */
 
 /* 1. Root Variables */
@@ -47,7 +47,9 @@ header {
 header h1 {
   margin: 0.5rem 0;
   font-weight: 600;
+  font-size: 2.2rem;
   letter-spacing: -0.5px;
+  font-family: 'Poppins', sans-serif;
 }
 
 .logo {
@@ -89,6 +91,8 @@ main {
   margin-top: 0;
   margin-bottom: 1.5rem;
   font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.5rem;
   color: var(--dark-text);
   position: relative;
   padding-bottom: 10px;
@@ -111,6 +115,8 @@ main {
   color: #777;
   text-align: center;
   font-style: italic;
+  font-size: 1.1rem;
+  font-family: 'Inter', sans-serif;
 }
 
 /* 7. Message Bubbles */
@@ -130,6 +136,7 @@ main {
   white-space: pre-wrap;
   word-wrap: break-word;
   overflow-wrap: break-word;
+  font-family: 'Inter', sans-serif;
 }
 
 /* User bubble on the right */
@@ -137,12 +144,14 @@ main {
   margin-left: auto;
   background: var(--secondary);
   color: var(--dark-text);
+  display: flex;
+  align-items: center;
 }
 
 .user-msg:before {
-  content: '👤 ';
+  content: '👤';
   font-size: 18px;
-  margin-right: 2px;
+  margin-right: 8px;
 }
 
 /* Bot bubble on the left */
@@ -150,12 +159,18 @@ main {
   margin-right: auto;
   background: var(--light-bg);
   color: var(--dark-text);
+  display: flex;
+  align-items: center;
 }
 
-.bot-msg:before {
-  content: '🤖 ';
+.bot-msg .bot-text {
+  flex: 1;
+}
+
+.bot-msg .bot-emoji {
+  order: 2;
+  margin-left: 8px;
   font-size: 18px;
-  margin-right: 2px;
 }
 
 /* 8. Additional styling for <pre> inside bot messages */
@@ -166,7 +181,17 @@ main {
   margin: 0.5em 0 0 0;
   max-width: 100%;
   overflow-x: auto;
-  font-family: "Courier New", monospace;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 14px;
+}
+
+/* Code styling */
+.bot-msg code {
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  background: #f1f3f5;
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-size: 14px;
 }
 
 /* 9. Chat Form / Textarea */
@@ -183,6 +208,7 @@ main {
   color: var(--white);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease;
+  font-family: 'Inter', sans-serif;
 }
 
 .large-search-bar:focus {
@@ -193,14 +219,16 @@ main {
 
 /* 10. Form Button (Ask) */
 form button {
-  padding: 12px 20px;
+  padding: 12px 24px;
   background-color: var(--secondary);
   border: none;
   border-radius: 12px;
   color: var(--dark-text);
   font-weight: 600;
+  font-size: 16px;
   cursor: pointer;
   transition: var(--transition);
+  font-family: 'Poppins', sans-serif;
 }
 
 form button:hover {
@@ -235,6 +263,8 @@ form button:hover {
   border-radius: 12px;
   transition: var(--transition);
   box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
 }
 
 .home-box a:hover {
@@ -249,6 +279,7 @@ footer {
   padding: 20px;
   margin-top: auto;
   color: var(--white);
+  font-family: 'Inter', sans-serif;
 }
 
 /* 13. Media Queries for Mobile */
@@ -263,4 +294,3 @@ footer {
     max-width: 100%;
   }
 }
-
