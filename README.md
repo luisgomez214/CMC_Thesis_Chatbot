@@ -1,18 +1,18 @@
 ![deploy](https://github.com/luisgomez214/CMC_Thesis_Chatbot/actions/workflows/deploy.yml/badge.svg)
 
-# 🎓 CMC Thesis Chatbot
+# CMC Thesis Chatbot
 
 Welcome to the **CMC Thesis Chatbot** — a smart, interactive chatbot designed to help you explore senior theses from Claremont McKenna College using the power of a **Retrieval-Augmented Generation (RAG)** system backed by **Groq's LLM**.
 
 ---
 
-## 📚 Project Overview
+## Project Overview
 
 This project was built to help students, researchers, and faculty quickly **search**, **analyze**, and **brainstorm** based on Claremont McKenna College’s senior thesis archive (up to **Fall 2024**).
 
 ---
 
-## 📥 Data Collection & Preparation
+## Data Collection & Preparation
 
 - The thesis data was sourced directly from the [Claremont Colleges Library’s institutional repository](https://scholarship.claremont.edu).
 - I downloaded and **merged multiple CSV datasets** to create a comprehensive file of all CMC theses.
@@ -21,7 +21,7 @@ This project was built to help students, researchers, and faculty quickly **sear
 
 ---
 
-## 🧠 What is a RAG System?
+## What is a RAG System?
 
 RAG stands for **Retrieval-Augmented Generation**. It's an AI architecture that combines two powerful techniques:
 
@@ -32,7 +32,7 @@ This ensures the chatbot doesn’t just hallucinate information — it responds 
 
 ---
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 - **Python** for backend logic
 - **Flask** for the web server and routing
@@ -41,11 +41,11 @@ This ensures the chatbot doesn’t just hallucinate information — it responds 
 - **Docker + Docker Compose** for containerized deployment
 - **AWS EC2** for hosting
 - **Route 53** + **SSL Certificate Manager** to map a secure HTTPS domain:  
-  👉 https://cmcthesischatbot.com
+  https://cmcthesischatbot.com
 
 ---
 
-## 🚢 Deployment
+## Deployment
 
 ### Hosted on:
 
@@ -57,29 +57,28 @@ This ensures the chatbot doesn’t just hallucinate information — it responds 
 
 The deployment is automated using a GitHub Actions workflow defined in `.github/workflows/deploy.yml`.
 
-### What `deploy.yml` does:
 
 1. Checks out the repo on push to `main`
 2. Installs dependencies: Python, Docker, Docker Compose
 3. Builds the Docker container using `docker-compose build`
 4. Authenticates with AWS using GitHub secrets
-5. (Optional) Initializes the Elastic Beanstalk environment
+5. Initializes the Elastic Beanstalk environment
 6. Deploys the latest version using `eb deploy`
 
 ---
 
-## 💡 Features
+## Features
 
-✅ Search theses by title, author, advisor, department, or keywords  
-✅ Count queries like: _"How many theses in Government in 2020?"_  
-✅ Generate full thesis ideas with suggested CMC advisors  
-✅ Get summaries of specific thesis abstracts  
-✅ Ask for co-advisors for a professor  
-✅ Follow up on specific thesis results (e.g., _"What was the second one about?"_)
+1. Search theses by title, author, advisor, department, or keywords  
+2. Count queries like: _"How many theses in Government in 2020?"_  
+3. Generate full thesis ideas with suggested CMC advisors  
+4. Get summaries of specific thesis abstracts  
+5. Ask for co-advisors for a professor  
+6. Follow up on specific thesis results (e.g., _"What was the second one about?"_)
 
 ---
 
-## 🖼️ Demo
+## Demo
 
 > Add screenshots below to showcase your system's responses.
 
@@ -94,7 +93,7 @@ The deployment is automated using a GitHub Actions workflow defined in `.github/
 
 ---
 
-## 🧠 Improvements & Future Work
+## Improvements & Future Work
 
 - Handle edge cases more gracefully (e.g., typos, fuzzy matching)
 - Improve UI styling and add responsive design for mobile
@@ -108,16 +107,15 @@ The deployment is automated using a GitHub Actions workflow defined in `.github/
 
 ## 🔗 Live App
 
-👉 Visit the chatbot here: [cmcthesischatbot.com](https://cmcthesischatbot.com)
+Visit the chatbot here: [cmcthesischatbot.com](https://cmcthesischatbot.com)
 
 ---
 
 ## 🙏 Acknowledgments
 
-- Data from Claremont Colleges Library  
-- Hosted on AWS EC2 with custom domain via Route 53  
-- Powered by Groq's blazing-fast LLM
-
+1. Family (mom, grandma, grandpa, sister)
+2. Mike Izbicki
+3. CMC family
 ---
 
 
