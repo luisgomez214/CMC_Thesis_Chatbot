@@ -1,4 +1,8 @@
-# CMCThesisChatbot ![](https://github.com/luisgomez214/CMC_Thesis_Chatbot/workflows/tests/badge.svg)
+# CMC Thesis Chatbot
+
+![deploy](https://github.com/luisgomez214/CMC_Thesis_Chatbot/actions/workflows/deploy.yml/badge.svg)
+
+
 The purpose of this thesis is to show how to create a chatbot for whatever topic that anyone may be interested in by creating a RAG (Retrieval Augmented Generations) system.
 It is to be interpreted as a general guide.
 
