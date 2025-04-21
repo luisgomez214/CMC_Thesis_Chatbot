@@ -8,13 +8,14 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      # 1) get your code
+      # 1) check out the code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2) install Python & EB CLI & docker-compose
-      - name: Set up Python & Tools
+      # 2) set up Python, EB CLI & Docker Compose
+      - name: Set up Python & tools
         uses: actions/setup-python@v4
         with:
           python-version: '3.12'
@@ -25,11 +26,11 @@ jobs:
           pip install awsebcli
           sudo apt-get update && sudo apt-get install -y docker-compose
 
-      # 3) build your service to catch Dockerfile/compose errors early
+      # 3) make sure your containers build cleanly
       - name: Build Docker Compose services
         run: docker-compose build
 
-      # 4) configure AWS creds in the correct region
+      # 4) load AWS creds into env
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -37,19 +38,19 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region:            us-east-1
 
-      # 5) init EB for your app & platform
+      # 5) initialize EB (no --bucket flag!)
       - name: Initialize Elastic Beanstalk
         run: |
           eb init Thesis \
             --region us-east-1 \
             --platform docker \
-            --bucket your‑existing‑bucket-name
+            --verbose
 
-      # 6) tell EB which environment to target
+      # 6) point to your existing environment (must already exist)
       - name: Select EB environment
         run: eb use thesis-env
 
-      # 7) deploy
+      # 7) finally deploy
       - name: Deploy to Elastic Beanstalk
-        run: eb deploy
+        run: eb deploy --staged
 
