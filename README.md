@@ -1,67 +1,258 @@
-# CMC Thesis Chatbot
-
 ![deploy](https://github.com/luisgomez214/CMC_Thesis_Chatbot/actions/workflows/deploy.yml/badge.svg)
 
+# 🎓 CMC Thesis Chatbot
 
-The purpose of this thesis is to show how to create a chatbot for whatever topic that anyone may be interested in by creating a RAG (Retrieval Augmented Generations) system.
-It is to be interpreted as a general guide.
+Welcome to the **CMC Thesis Chatbot** — a smart, interactive chatbot designed to help you explore senior theses from Claremont McKenna College using the power of a **Retrieval-Augmented Generation (RAG)** system backed by **Groq's LLM**.
 
-**Background:**
+---
 
-In recent years, there has been an increase of interest in artificial intelligence (AI), large language models (LLM) and its capabilities.
-AI is the field that develops intelligent machines and LLM is a type of AI that is focused on understanding and communicating with humans.
-Innovations such as ChatGPT, Apple Intelligence, or any of the many other language models, artificial intelligence is dominating almost every market.
-With the rise of AI comes opportunities and issues.
-For starters, people who do not keep up with current technology trends may not fully understand the capabilities of LLM.
-They may understand the basics, how to use GPT-4 ChatGPT for school or work.
-However, there is much that can be learned and done with LLM that will help companies.
-This is something that many developers are aware about.
-This has given rise to many AI based startups whose goal is to help solve a problem using AI and LLM.
-These companies target other companies and the general public with the promise that their AI is revolutionary and will improve productivity.
+## 📚 Project Overview
 
-There are many benefits of using AI and they mainly revolve around time.
-AI allows for automation, reducing the time it takes to complete manual tasks that face the possibility of human error.
-Humans make mistakes, sometimes due to bad decision making or because of a simple mistake, LLM helps prevent these mistakes.
-Since the decisions made by LLM are data driven, you can ensure that it won't make uniformed decisions.
-They are also engaging, allowing for intuitive responses and usage.
-When chatting with a LLM, it feels like you are chatting with an actual human.
-However, this human is available 24/7, has scalability, and doesn't have any human limitations.
-There are many sectors where AI can be used and there is much technology to still be developed.
-This will only make our task more efficient.
+This project was built to help students, researchers, and faculty quickly **search**, **analyze**, and **brainstorm** based on Claremont McKenna College’s senior thesis archive (up to **Fall 2024**).
 
-Though there are many benefits of AI, it does come with its disadvantages.
-For starters, because the database is so large, it is bound to make mistakes.
-The LLM may not always interpret the text correctly or it may get confused and provide an incorrect answer, which can lead to people being misinformed.
-Another disadvantage is that it is reliant on the internet, so without it, it is useless unless run locally.
-Because the training data is based on the data found online, it can lead to bias.
-Since this technology can do the work for many humans, ethical concerns arise.
-Technology could potentially advance to the point that it is replacing our jobs.
-Not to mention the privacy concerns, security, and energy consumption that comes with AI use.
-Finally, there is also limited transparency, meaning that the AI can't explain how or why it made certain decisions.
-Though not all these issues may be solved, a RAG system can combat some of these concerns.
+---
 
-These services, applications, and software are costly.
-The reason these companies and developers charge so much is because their services address the issues that LLM have and the solutions to these issues are not common knowledge to many.
-The training data that the LLM is based off of is out of date.
-AI models like ChatGPT, Groq, and Claude, only know up until they were last updated.
-Meaning that if the data is only up until 2024, it will not know about nor answer over information that happened after.
-These developers implement the AI’s LLM by updating it with the information or data they need.
-Doing so allows for the data to be customizable while also reducing hallucinates.
-This means that the AI can be case specific while also increasing its accuracy.
-For example, an AI based startup may decide to create an app that can help patients in healthcare.
-The app is an interactive chatbot that allows the user to ask user specific questions about their medical information.
-This in theory is revolutionary as if it's done correctly, it can replace the jobs of pharmacists and receptionists, saving companies money in the long run.
-Essentially, AI is an investment.
+## 📥 Data Collection & Preparation
 
-**RAG:**
+- The thesis data was sourced directly from the [Claremont Colleges Library’s institutional repository](https://scholarship.claremont.edu).
+- I downloaded and **merged multiple CSV datasets** to create a comprehensive file of all CMC theses.
+- The data was cleaned to standardize column formats, remove duplicates, and fill missing entries.
+- I then loaded the cleaned data into a **SQLite database (`theses.db`)**, and built **indexes** and **FTS5 full-text search** tables to allow fast, flexible retrieval.
 
-A RAG system is an AI architecture that improves the system by specifying the database.
-The system first retrieves the correct information from a specific database based on the user prompt.
-It then generates an answer using a LLM.
-It is the same as giving ChatGPT your entire assignment and asking it questions regarding the assignment but at a larger, automated scale.
-By giving the LLM a specified database, it is able to focus on the data and provide better answers.
-If the training data for the LLM is outdated, this is a way of updating it.
-If the system and LLM are run locally, then you can avoid sending sensitive information to the API’s of the LLM.
-This is difficult to do as it would have to be developed without connecting to the internet and the API.
-A RAG system is a way that companies and the general public can use AI for their personal needs.
+---
+
+## 🧠 What is a RAG System?
+
+RAG stands for **Retrieval-Augmented Generation**. It's an AI architecture that combines two powerful techniques:
+
+1. **Retrieval**: Find relevant context (e.g. thesis titles, keywords, abstracts, advisors) from a structured database.
+2. **Augmented Generation**: Use a **Large Language Model (LLM)** — in this case, **Groq's LLM** — to generate intelligent, grounded answers using the retrieved data.
+
+This ensures the chatbot doesn’t just hallucinate information — it responds based on real thesis records.
+
+---
+
+## 🛠️ Technologies Used
+
+- **Python** for backend logic
+- **Flask** for the web server and routing
+- **SQLite** + **FTS5** for fast thesis queries
+- **Groq LLM API** for natural language understanding and generation
+- **Docker + Docker Compose** for containerized deployment
+- **AWS EC2** for hosting
+- **Route 53** + **SSL Certificate Manager** to map a secure HTTPS domain:  
+  👉 https://cmcthesischatbot.com
+
+---
+
+## 🚢 Deployment
+
+### Hosted on:
+
+- **AWS EC2** instance running Docker Compose
+- Custom domain (`cmcthesischatbot.com`) set up using **AWS Route 53**
+- HTTPS secured with **TLS certificates** via AWS
+
+### CI/CD
+
+The deployment is automated using a GitHub Actions workflow defined in `.github/workflows/deploy.yml`.
+
+### What `deploy.yml` does:
+
+1. Checks out the repo on push to `main`
+2. Installs dependencies: Python, Docker, Docker Compose
+3. Builds the Docker container using `docker-compose build`
+4. Authenticates with AWS using GitHub secrets
+5. (Optional) Initializes the Elastic Beanstalk environment
+6. Deploys the latest version using `eb deploy`
+
+---
+
+## 💡 Features
+
+✅ Search theses by title, author, advisor, department, or keywords  
+✅ Count queries like: _"How many theses in Government in 2020?"_  
+✅ Generate full thesis ideas with suggested CMC advisors  
+✅ Get summaries of specific thesis abstracts  
+✅ Ask for co-advisors for a professor  
+✅ Follow up on specific thesis results (e.g., _"What was the second one about?"_)
+
+---
+
+## 🖼️ Demo
+
+> Add screenshots below to showcase your system's responses.
+
+### Advisor Query
+![Advisor Screenshot](screenshots/advisor_query.png)
+
+### Departmental Thesis Ideas
+![Economics Screenshot](screenshots/economics_ideas.png)
+
+### Thesis Abstract Summary
+![Abstract Screenshot](screenshots/abstract_example.png)
+
+---
+
+## 🧠 Improvements & Future Work
+
+- Handle edge cases more gracefully (e.g., typos, fuzzy matching)
+- Improve UI styling and add responsive design for mobile
+- Expand scope to include other Claremont Colleges
+- Add login feature for personalized session history
+- Improve LLM prompting for more focused answers
+- Integrate BibTeX export or citations
+- Convert to production WSGI stack (e.g., NGINX + Gunicorn)
+
+---
+
+## 🔗 Live App
+
+👉 Visit the chatbot here: [cmcthesischatbot.com](https://cmcthesischatbot.com)
+
+---
+
+## 🙏 Acknowledgments
+
+- Data from Claremont Colleges Library  
+- Hosted on AWS EC2 with custom domain via Route 53  
+- Powered by Groq's blazing-fast LLM
+
+---
+
+[ec2-user@ip-172-31-84-204 web]$ ls
+Dockerfile  README.md  __pycache__  app.py  flask_session  merged_theses.csv  rag_system8.py  requirements.txt  static  templates  theses.db
+[ec2-user@ip-172-31-84-204 web]$ cd ..
+[ec2-user@ip-172-31-84-204 services]$ ls
+web
+[ec2-user@ip-172-31-84-204 services]$ cd ..
+[ec2-user@ip-172-31-84-204 Thesis]$ ls
+CMC_logo.jpg  Docker  README.md  __pycache__  docker-compose.yml  requirements.txt  services  venv
+[ec2-user@ip-172-31-84-204 Thesis]$ vim README.md 
+[ec2-user@ip-172-31-84-204 Thesis]$ cd services/web/
+[ec2-user@ip-172-31-84-204 web]$ ls
+Dockerfile  README.md  __pycache__  app.py  flask_session  merged_theses.csv  rag_system8.py  requirements.txt  static  templates  theses.db
+[ec2-user@ip-172-31-84-204 web]$ cat README.md 
+![deploy](https://github.com/luisgomez214/CMC_Thesis_Chatbot/actions/workflows/deploy.yml/badge.svg)
+
+# 🎓 CMC Thesis Chatbot
+
+Welcome to the **CMC Thesis Chatbot** — a smart, interactive chatbot designed to help you explore senior theses from Claremont McKenna College using the power of a **Retrieval-Augmented Generation (RAG)** system backed by **Groq's LLM**.
+
+---
+
+## 📚 Project Overview
+
+This project was built to help students, researchers, and faculty quickly **search**, **analyze**, and **brainstorm** based on Claremont McKenna College’s senior thesis archive (up to **Fall 2024**).
+
+---
+
+## 📥 Data Collection & Preparation
+
+- The thesis data was sourced directly from the [Claremont Colleges Library’s institutional repository](https://scholarship.claremont.edu).
+- I downloaded and **merged multiple CSV datasets** to create a comprehensive file of all CMC theses.
+- The data was cleaned to standardize column formats, remove duplicates, and fill missing entries.
+- I then loaded the cleaned data into a **SQLite database (`theses.db`)**, and built **indexes** and **FTS5 full-text search** tables to allow fast, flexible retrieval.
+
+---
+
+## 🧠 What is a RAG System?
+
+RAG stands for **Retrieval-Augmented Generation**. It's an AI architecture that combines two powerful techniques:
+
+1. **Retrieval**: Find relevant context (e.g. thesis titles, keywords, abstracts, advisors) from a structured database.
+2. **Augmented Generation**: Use a **Large Language Model (LLM)** — in this case, **Groq's LLM** — to generate intelligent, grounded answers using the retrieved data.
+
+This ensures the chatbot doesn’t just hallucinate information — it responds based on real thesis records.
+
+---
+
+## 🛠️ Technologies Used
+
+- **Python** for backend logic
+- **Flask** for the web server and routing
+- **SQLite** + **FTS5** for fast thesis queries
+- **Groq LLM API** for natural language understanding and generation
+- **Docker + Docker Compose** for containerized deployment
+- **AWS EC2** for hosting
+- **Route 53** + **SSL Certificate Manager** to map a secure HTTPS domain:  
+  👉 https://cmcthesischatbot.com
+
+---
+
+## 🚢 Deployment
+
+### Hosted on:
+
+- **AWS EC2** instance running Docker Compose
+- Custom domain (`cmcthesischatbot.com`) set up using **AWS Route 53**
+- HTTPS secured with **TLS certificates** via AWS
+
+### CI/CD
+
+The deployment is automated using a GitHub Actions workflow defined in `.github/workflows/deploy.yml`.
+
+### What `deploy.yml` does:
+
+1. Checks out the repo on push to `main`
+2. Installs dependencies: Python, Docker, Docker Compose
+3. Builds the Docker container using `docker-compose build`
+4. Authenticates with AWS using GitHub secrets
+5. (Optional) Initializes the Elastic Beanstalk environment
+6. Deploys the latest version using `eb deploy`
+
+---
+
+## 💡 Features
+
+✅ Search theses by title, author, advisor, department, or keywords  
+✅ Count queries like: _"How many theses in Government in 2020?"_  
+✅ Generate full thesis ideas with suggested CMC advisors  
+✅ Get summaries of specific thesis abstracts  
+✅ Ask for co-advisors for a professor  
+✅ Follow up on specific thesis results (e.g., _"What was the second one about?"_)
+
+---
+
+## 🖼️ Demo
+
+> Add screenshots below to showcase your system's responses.
+
+### Advisor Query
+![Advisor Screenshot](screenshots/advisor_query.png)
+
+### Departmental Thesis Ideas
+![Economics Screenshot](screenshots/economics_ideas.png)
+
+### Thesis Abstract Summary
+![Abstract Screenshot](screenshots/abstract_example.png)
+
+---
+
+## 🧠 Improvements & Future Work
+
+- Handle edge cases more gracefully (e.g., typos, fuzzy matching)
+- Improve UI styling and add responsive design for mobile
+- Expand scope to include other Claremont Colleges
+- Add login feature for personalized session history
+- Improve LLM prompting for more focused answers
+- Integrate BibTeX export or citations
+- Convert to production WSGI stack (e.g., NGINX + Gunicorn)
+
+---
+
+## 🔗 Live App
+
+👉 Visit the chatbot here: [cmcthesischatbot.com](https://cmcthesischatbot.com)
+
+---
+
+## 🙏 Acknowledgments
+
+- Data from Claremont Colleges Library  
+- Hosted on AWS EC2 with custom domain via Route 53  
+- Powered by Groq's blazing-fast LLM
+
+---
+
 
