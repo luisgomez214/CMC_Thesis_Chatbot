@@ -54,7 +54,7 @@ The system follows a cloud-native deployment approach:
 5. **Faculty Insights**: Discover advisor relationships and expertise areas
 6. **Contextual Follow-ups**: Reference previous search results in follow-up questions
 
-## Live Application
+## **Live Application**
 
 The CMC Thesis Chatbot is available at: [https://cmcthesischatbot.com](https://cmcthesischatbot.com)
 
@@ -64,10 +64,10 @@ The CMC Thesis Chatbot is available at: [https://cmcthesischatbot.com](https://c
 ![Screenshot of Outline](screenshots/outline1.png) ![Screenshot](screenshots/outline2.png)
 
 ### Advisor Search
-![Advisor Screenshot](screenshots/advisor .png)
+![Advisor Screenshot](screenshots/'advisor .png')
 
 ### Thesis Search
-![Thesis Search Screenshot](screenshots/thesis by search .png)
+![Thesis Search Screenshot](screenshots/'thesis by search .png')
 
 
 ## Comparison With CHATGPT4o
@@ -78,7 +78,7 @@ The CMC Thesis Chatbot is available at: [https://cmcthesischatbot.com](https://c
 Gives ideas not based on current thesis metadata. This could lead to repeated ideas.
 
 ### Advisor Search
-![Advisor Screenshot](screenshots/check2 .png)
+![Advisor Screenshot](screenshots/check2.png)
 Gives information over thesis/papers not in the metadata and from another source.
 
 
