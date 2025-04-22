@@ -64,10 +64,10 @@ The CMC Thesis Chatbot is available at: [https://cmcthesischatbot.com](https://c
 ![Screenshot of Outline](screenshots/outline1.png) ![Screenshot](screenshots/outline2.png)
 
 ### Advisor Search
-![Advisor Screenshot](screenshots/'advisor .png')
+![Advisor Screenshot](screenshots/advisor.png)
 
 ### Thesis Search
-![Thesis Search Screenshot](screenshots/'thesis by search .png')
+![Thesis Search Screenshot](screenshots/search.png)
 
 
 ## Comparison With CHATGPT4o
