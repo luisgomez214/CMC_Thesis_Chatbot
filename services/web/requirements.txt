@@ -2,4 +2,5 @@ flask
 pandas
 groq
 Flask-Session
+python-dotenv
 

@@ -1,121 +1,108 @@
 ![deploy](https://github.com/luisgomez214/CMC_Thesis_Chatbot/actions/workflows/deploy.yml/badge.svg)
 
+
 # CMC Thesis Chatbot
 
-Welcome to the **CMC Thesis Chatbot** — a smart, interactive chatbot designed to help you explore senior theses from Claremont McKenna College using the power of a **Retrieval-Augmented Generation (RAG)** system backed by **Groq's LLM**.
-
----
+A smart, interactive chatbot that leverages Retrieval-Augmented Generation (RAG) to help explore the rich archive of Claremont McKenna College senior theses.
 
 ## Project Overview
 
-This project was built to help students, researchers, and faculty quickly **search**, **analyze**, and **brainstorm** based on Claremont McKenna College’s senior thesis archive (up to **Fall 2024**).
+The CMC Thesis Chatbot serves as a comprehensive tool for students, researchers, and faculty to efficiently search, analyze, and brainstorm based on Claremont McKenna College's senior thesis repository (up to Fall 2024). Built as a senior thesis project, this RAG-powered system combines a structured database of thesis metadata with the natural language capabilities of Groq's LLM to deliver intelligent, contextually relevant responses.
 
----
+## Data Collection & Processing
 
-## Data Collection & Preparation
+- Data sourced directly from the [Claremont Colleges Library's institutional repository](https://scholarship.claremont.edu)
+- Library-provided CSV files merged and cleaned to create a comprehensive dataset
+- Organized in a SQLite database (`theses.db`) with optimized indexes and FTS5 full-text search capabilities
 
-- The thesis data was sourced directly from the [Claremont Colleges Library’s institutional repository](https://scholarship.claremont.edu).
-- I downloaded and **merged multiple CSV datasets** to create a comprehensive file of all CMC theses.
-- The data was cleaned to standardize column formats, remove duplicates, and fill missing entries.
-- I then loaded the cleaned data into a **SQLite database (`theses.db`)**, and built **indexes** and **FTS5 full-text search** tables to allow fast, flexible retrieval.
+## Technology Stack
 
----
+- **Backend**: Python for core logic and database interactions
+- **Web Framework**: Flask for server implementation and routing
+- **Database**: SQLite with FTS5 extension for performant full-text search
+- **AI/ML**: Groq LLM API for natural language understanding and generation
+- **Containerization**: Docker + Docker Compose for consistent deployment
+- **Hosting**: AWS EC2 for cloud infrastructure
+- **Domain & Security**: AWS Route 53 + SSL Certificate Manager for secure HTTPS access
 
-## What is a RAG System?
+## RAG System Architecture
 
-RAG stands for **Retrieval-Augmented Generation**. It's an AI architecture that combines two powerful techniques:
+The Retrieval-Augmented Generation approach ensures high-quality, factually grounded responses:
 
-1. **Retrieval**: Find relevant context (e.g. thesis titles, keywords, abstracts, advisors) from a structured database.
-2. **Augmented Generation**: Use a **Large Language Model (LLM)** — in this case, **Groq's LLM** — to generate intelligent, grounded answers using the retrieved data.
+1. **Retrieval Component**: Queries the database for relevant thesis information based on user input
+2. **Context Augmentation**: Enriches the prompt with retrieved metadata
+3. **Generation**: Leverages Groq's LLM to produce natural language responses based on the retrieved context
+4. **Response Formatting**: Structures information in a user-friendly format
 
-This ensures the chatbot doesn’t just hallucinate information — it responds based on real thesis records.
+This architecture minimizes hallucination by grounding the AI's responses in the actual thesis database.
 
----
+## Deployment Architecture
 
-## Technologies Used
+The system follows a cloud-native deployment approach:
 
-- **Python** for backend logic
-- **Flask** for the web server and routing
-- **SQLite** + **FTS5** for fast thesis queries
-- **Groq LLM API** for natural language understanding and generation
-- **Docker + Docker Compose** for containerized deployment
-- **AWS EC2** for hosting
-- **Route 53** + **SSL Certificate Manager** to map a secure HTTPS domain:  
-  https://cmcthesischatbot.com
+- **Production Environment**: AWS EC2 instance running Docker Compose
+- **Domain**: Custom domain (`cmcthesischatbot.com`) configured via AWS Route 53
+- **Security**: HTTPS secured with TLS certificates through AWS Certificate Manager
+- **CI/CD**: Automated deployment pipeline via GitHub Actions
 
----
+## Key Features
 
-## Deployment
+1. **Comprehensive Search**: Find theses by title, author, advisor, department, or keywords
+2. **Analytical Queries**: Process counting and statistical queries (e.g., "How many theses in Government in 2020?")
+3. **Thesis Ideation**: Generate thesis ideas with suggested CMC advisors based on topic or field
+4. **Abstract Analysis**: Summarize and analyze thesis abstracts
+5. **Faculty Insights**: Discover advisor relationships and expertise areas
+6. **Contextual Follow-ups**: Reference previous search results in follow-up questions
 
-### Hosted on:
+## Live Application
 
-- **AWS EC2** instance running Docker Compose
-- Custom domain (`cmcthesischatbot.com`) set up using **AWS Route 53**
-- HTTPS secured with **TLS certificates** via AWS
+The CMC Thesis Chatbot is available at: [https://cmcthesischatbot.com](https://cmcthesischatbot.com)
 
-### CI/CD
+## Interface Examples
 
-The deployment is automated using a GitHub Actions workflow defined in `.github/workflows/deploy.yml`.
+### Get Thesis Ideas / Outline
+![Screenshot of Outline](screenshots/outline1.png) ![Screenshot](screenshots/outline2.png)
+
+### Advisor Search
+![Advisor Screenshot](screenshots/advisor .png)
+
+### Thesis Search
+![Thesis Search Screenshot](screenshots/thesis by search .png)
 
 
-1. Checks out the repo on push to `main`
-2. Installs dependencies: Python, Docker, Docker Compose
-3. Builds the Docker container using `docker-compose build`
-4. Authenticates with AWS using GitHub secrets
-5. Initializes the Elastic Beanstalk environment
-6. Deploys the latest version using `eb deploy`
+## Comparison With CHATGPT4o
 
----
+### Get Thesis Ideas / Outline
+![Screenshot of Outline](screenshots/check1.png)
 
-## Features
+Gives ideas not based on current thesis metadata. This could lead to repeated ideas.
 
-1. Search theses by title, author, advisor, department, or keywords  
-2. Count queries like: _"How many theses in Government in 2020?"_  
-3. Generate full thesis ideas with suggested CMC advisors  
-4. Get summaries of specific thesis abstracts  
-5. Ask for co-advisors for a professor  
-6. Follow up on specific thesis results (e.g., _"What was the second one about?"_)
+### Advisor Search
+![Advisor Screenshot](screenshots/check2 .png)
+Gives information over thesis/papers not in the metadata and from another source.
 
----
 
-## Demo
+### Thesis Search
+![Thesis Search Screenshot](screenshots/check3.png)
+Both systems can summarize papers but ChatGPT cant have access to all thesis like my system.
+Adding the actual paper icontent to the metadata will ensure better summarize. 
 
-> Add screenshots below to showcase your system's responses.
 
-### Advisor Query
-![Advisor Screenshot](screenshots/advisor_query.png)
+## Future Development Roadmap
 
-### Departmental Thesis Ideas
-![Economics Screenshot](screenshots/economics_ideas.png)
+- Enhanced query handling with fuzzy matching and spell correction
+- Add more to metadata
+- Responsive UI design for improved mobile experience
+- Expansion to include theses from all Claremont Colleges
+- User authentication for personalized session history
+- Advanced LLM prompt engineering for more precise answers
+- Production-grade WSGI implementation (NGINX + Gunicorn)
 
-### Thesis Abstract Summary
-![Abstract Screenshot](screenshots/abstract_example.png)
+## Acknowledgments
 
----
-
-## Improvements & Future Work
-
-- Handle edge cases more gracefully (e.g., typos, fuzzy matching)
-- Improve UI styling and add responsive design for mobile
-- Expand scope to include other Claremont Colleges
-- Add login feature for personalized session history
-- Improve LLM prompting for more focused answers
-- Integrate BibTeX export or citations
-- Convert to production WSGI stack (e.g., NGINX + Gunicorn)
-
----
-
-## 🔗 Live App
-
-Visit the chatbot here: [cmcthesischatbot.com](https://cmcthesischatbot.com)
-
----
-
-## 🙏 Acknowledgments
-
-1. Family (mom, grandma, grandpa, sister)
-2. Mike Izbicki
-3. CMC family
----
-
+Special thanks to:
+1. My family (mom, grandma, grandpa, sister) for their unwavering support
+2. Professor Mike Izbicki for guidance and mentorship
+3. The CMC community for fostering an environment of academic excellence and innovation
+4. Claremont Colleges Library for providing access to the thesis repository data
 

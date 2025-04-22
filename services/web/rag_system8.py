@@ -9,6 +9,8 @@ from typing import List, Dict, Any, Optional, Tuple
 import groq
 import os
 import json
+from dotenv import load_dotenv
+load_dotenv(dotenv_path=".env.dev")
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')

@@ -4,3 +4,4 @@
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 services/web/flask_session/
+.env.dev
