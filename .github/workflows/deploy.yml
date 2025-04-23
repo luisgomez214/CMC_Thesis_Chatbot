@@ -30,10 +30,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      # 4. (Optional) Test your Python code
-      # - name: Run tests
-      #   run: pytest
-
       - name: Create .env.dev from GitHub Secrets
         run: |
           echo "GROQ_API_KEY=${{ secrets.GROQ_API_KEY }}" >> .env.dev

@@ -2,33 +2,28 @@
 
 # CMC Thesis Chatbot
 
-An interactive RAG-based chatbot that helps students, researchers, and faculty explore Claremont McKenna College senior theses.  
-[cmcthesischatbot.com](https://cmcthesischatbot.com)
-
----
+An interactive RAG-based chatbot that helps students, researchers, and faculty explore Claremont McKenna College senior theses. [cmcthesischatbot.com](https://cmcthesischatbot.com)
 
 ## Overview
 
 Built as a senior thesis project, this system combines Groq's LLM with a structured SQLite database to provide intelligent, thesis-specific answers. It supports search, analysis, and brainstorming based on metadata from CMC’s thesis archive (through Fall 2024).
  
 
-1. **Data Collection**  
+**Data Collection**  
    - CSVs sourced from [Scholarship@Claremont](https://scholarship.claremont.edu)  
    - Cleaned, merged, and indexed into `theses.db` with FTS5
 
-2. **Architecture (RAG)**  
+**Architecture (RAG)**  
    - **Retrieve**: Matches user query to thesis data (title, author, department, etc.)  
    - **Augment**: Adds metadata to the prompt  
    - **Generate**: Groq LLM crafts accurate, natural responses  
    - **Format**: Returns structured, markdown-friendly output
 (Specifically the LLM reads the prompt, makes SQL queries based on the prompt to run, and based on the outputs gives the user their answer)
 
-3. **Deployment**  
+**Deployment**  
    - Flask backend + Docker  
    - CI/CD with GitHub Actions  
    - Deployed on AWS EC2 with secure HTTPS via Route 53 + ACM
-
----
 
 ## Features
 
