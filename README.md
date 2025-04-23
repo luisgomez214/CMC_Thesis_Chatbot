@@ -1,6 +1,6 @@
-![deploy](https://github.com/luisgomez214/CMC_Thesis_Chatbot/actions/workflows/deploy.yml/badge.svg)
-
 # CMC Thesis Chatbot
+
+![deploy](https://github.com/luisgomez214/CMC_Thesis_Chatbot/actions/workflows/deploy.yml/badge.svg)
 
 An interactive RAG-based chatbot that helps students, researchers, and faculty explore Claremont McKenna College senior theses. [cmcthesischatbot.com](https://cmcthesischatbot.com)
 
@@ -33,33 +33,27 @@ Built as a senior thesis project, this system combines Groq's LLM with a structu
 -  Summarize or explain thesis based on abstracts  
 -  Explore advisor expertise  
 
-## Interface Examples
+## Evaluation With ChatGPT-4o
 
-**Get Thesis Ideas / Outline**
-![Screenshot of Outline](screenshots/outline1.png) ![Screenshot](screenshots/outline2.png)
-
-**Advisor Search**
-![Advisor Screenshot](screenshots/advisor.png)
-
-**Thesis Search**
-![Thesis Search Screenshot](screenshots/search.png)
-
-
-## Comparison With CHATGPT4o
-
-**Get Thesis Ideas / Outline**
-![Screenshot of Outline](screenshots/check1.png)
-
-Gives ideas not based on current thesis metadata. This could lead to repeated ideas.
+**Thesis Ideas / Outline**
+| CMC Thesis Chatbot | ChatGPT-4o |
+|--------------------|------------|
+| ![Outline 1](screenshots/Outline1.png) ![Outline 2](screenshots/Outline2.png) | ![ChatGPT Outline](screenshots/CheckOutline.png) |
+| *Generates ideas based on real thesis metadata and advisor matching.* | *Ideas not grounded in CMC thesis data — risks repetition and lacks specific advisor context.* |
 
 **Advisor Search**
-![Advisor Screenshot](screenshots/check2.png)
-Gives information over thesis/papers not in the metadata and from another source.
+| CMC Thesis Chatbot | ChatGPT-4o |
+|--------------------|------------|
+| ![Advisor](screenshots/Advisor.png) | ![ChatGPT Advisor](screenshots/CheckAdvisor.png) |
+| *Finds actual advisors from the thesis database based on query context.* | *Returns unrelated advisor info not present in the thesis metadata.* |
 
 **Thesis Search**
-![Thesis Search Screenshot](screenshots/check3.png)
-Both systems can summarize papers but ChatGPT cant have access to all thesis like my system.
-Adding the actual paper icontent to the metadata will ensure better summarize. 
+| CMC Thesis Chatbot | ChatGPT-4o |
+|--------------------|------------|
+| ![Thesis](screenshots/Thesis.png) | ![ChatGPT Thesis](screenshots/CheckThesis.png) |
+| *Searches and summarizes from actual theses in the CMC database.* | *Can summarize papers but lacks access to full CMC thesis archive.* |
+
+
 
 ## Future Development Roadmap
 
