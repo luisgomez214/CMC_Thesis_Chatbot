@@ -38,7 +38,7 @@ Built as a senior thesis project, this system combines Groq's LLM with a structu
 **Thesis Ideas / Outline**
 | CMC Thesis Chatbot | ChatGPT-4o |
 |--------------------|------------|
-| ![Outline 1](screenshots/Outline1.png) ![Outline 2](screenshots/Outline2.png) | ![ChatGPT Outline](screenshots/CheckOutline.png) |
+| ![Outline 1](screenshots/outline1.png) ![Outline 2](screenshots/outline2.png) | ![ChatGPT Outline](screenshots/CheckOutline.png) |
 | *Generates ideas based on real thesis metadata and advisor matching.* | *Ideas not grounded in CMC thesis data — risks repetition and lacks specific advisor context.* |
 
 **Advisor Search**
