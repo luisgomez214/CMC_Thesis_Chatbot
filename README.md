@@ -18,7 +18,7 @@ Built as a senior thesis project, this system combines Groq's LLM with a structu
    - **Augment**: Adds metadata to the prompt  
    - **Generate**: Groq LLM crafts accurate, natural responses  
    - **Format**: Returns structured, markdown-friendly output
-(Specifically the LLM reads the prompt, makes SQL queries based on the prompt to run, and based on the outputs gives the user their answer)
+   - (Specifically the LLM reads the prompt, makes SQL queries based on the prompt to run, and based on the outputs gives the user their answer)
 
 **Deployment**  
    - Flask backend + Docker  
@@ -50,7 +50,7 @@ Built as a senior thesis project, this system combines Groq's LLM with a structu
 **Thesis Search**
 | CMC Thesis Chatbot | ChatGPT-4o |
 |--------------------|------------|
-| ![Thesis](screenshots/thesis.png) | ![ChatGPT Thesis](screenshots/CheckThesis.png) |
+| ![Thesis](screenshots/Thesis.png) | ![ChatGPT Thesis](screenshots/CheckThesis.png) |
 | *Searches and summarizes from actual theses in the CMC database.* | *Can summarize papers but lacks access to full CMC thesis archive.* |
 
 
