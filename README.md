@@ -76,4 +76,3 @@ Special thanks to:
 2. Professor Mike Izbicki for guidance and mentorship  
 3. The CMC community for fostering an environment of academic excellence and innovation  
 4. Claremont Colleges Library for providing access to thesis repository data
-
