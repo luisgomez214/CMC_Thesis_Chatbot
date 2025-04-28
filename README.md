@@ -2,7 +2,8 @@
 
 ![deploy](https://github.com/luisgomez214/CMC_Thesis_Chatbot/actions/workflows/deploy.yml/badge.svg)
 
-An interactive RAG-based chatbot that helps students, researchers, and faculty explore Claremont McKenna College senior theses. [cmcthesischatbot.com](https://cmcthesischatbot.com)
+This GitHub repo is a senior thesis for Claremont McKenna College; it is a thesis about theses. The project is an interactive RAG-based chatbot that helps students, researchers, and faculty explore Claremont McKenna College senior theses. The goal was to create a domain-specific chatbot to show that it is possible to combat the limitations of AI, including hallucinations, outdated data, and lack of domain expertise. The website link is below:
+[CMCThesisChatbot](https://cmcthesischatbot.com)
 
 ## Overview
 
