@@ -67,7 +67,6 @@ This system combines Groq's LLM, llama3-8b-8192, with a structured SQLite databa
 - Expand metadata coverage
 - Responsive UI design for mobile devices
 - User authentication for session tracking
-- Production-grade deployment (NGINX + Gunicorn)
 
 ---
 
