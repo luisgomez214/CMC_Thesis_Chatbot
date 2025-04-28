@@ -61,7 +61,7 @@ This system combines Groq's LLM, llama3-8b-8192, with a structured SQLite databa
 
 ---
 
-## Future Development Roadmap
+## Future Development 
 
 - Enhanced query handling with fuzzy matching and spell correction
 - Expand metadata coverage
