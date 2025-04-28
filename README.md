@@ -7,7 +7,7 @@ This GitHub repo is a senior thesis for Claremont McKenna College; it is a thesi
 
 ## Overview
 
-Built as a senior thesis project, this system combines Groq's LLM with a structured SQLite database to provide intelligent, thesis-specific answers. It supports search, analysis, and brainstorming based on metadata from CMC’s thesis archive (through Fall 2024).
+This system combines Groq's LLM, llama3-8b-8192, with a structured SQLite database to provide intelligent, thesis-specific answers. It supports search, analysis, and brainstorming based on metadata from CMC’s thesis archive (through Fall 2024).
 
 **Data Collection**  
 - CSVs sourced from [Scholarship@Claremont](https://scholarship.claremont.edu)  
