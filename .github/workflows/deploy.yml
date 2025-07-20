@@ -35,7 +35,6 @@ jobs:
           echo "GROQ_API_KEY=${{ secrets.GROQ_API_KEY }}" >> .env.dev
           echo "DATABASE_PATH=${{ secrets.DATABASE_PATH }}" >> .env.dev
 
-
       # 5. Build your containers
       - name: Build Docker Compose services
         run: docker-compose build
