@@ -10,16 +10,77 @@ import groq
 import os
 import json
 from dotenv import load_dotenv
-load_dotenv(dotenv_path=".env.dev")
 
-# Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
+load_dotenv()  # don't hardcode path; Docker already injects env
 
-# LLM Configuration
-client = groq.Groq(api_key=os.environ.get("GROQ_API_KEY"))
-DEFAULT_MODEL = 'llama3-8b-8192'
-MAX_TOKENS = 6000
+logging.basicConfig(level=logging.INFO,
+                    format="%(asctime)s - rag_system8 - %(levelname)s - %(message)s")
+logger = logging.getLogger("rag_system8")
+
+client = groq.Groq(api_key=os.environ["GROQ_API_KEY"])
+
+# Your canonical model (already present)
+GROQ_CHAT_MODEL = os.getenv("GROQ_CHAT_MODEL", "llama-3.1-8b-instant")
+
+# ----- compatibility + limits -----
+# Default to earlier 8k context; override via env if you like.
+MAX_TOKENS = int(os.getenv("MAX_TOKENS", "8192"))
+
+def run_llm(prompt_or_messages, user_query=None, model=None, temperature=0.2):
+    """
+    Back-compat:
+      - run_llm(messages=[...], model=..., temperature=...)
+      - run_llm(prompt, user_query, model=..., temperature=...)
+    """
+    # Build messages based on the input style
+    if isinstance(prompt_or_messages, list):
+        messages = prompt_or_messages
+    else:
+        prompt = prompt_or_messages or system_prompt
+        messages = [
+            {"role": "system", "content": prompt},
+            {"role": "user", "content": (user_query or "").strip()},
+        ]
+
+    # Simple guard to avoid overlong inputs (character-based is fine here)
+    combined = "".join(m.get("content", "") for m in messages)
+    if len(combined) > MAX_TOKENS:   # extremely conservative; ok for now
+        messages[-1]["content"] = messages[-1]["content"][: MAX_TOKENS // 2]
+
+    resp = client.chat.completions.create(
+        model=(model or GROQ_CHAT_MODEL),
+        messages=messages,
+        temperature=temperature,
+    )
+    return resp.choices[0].message.content
+
+DEFAULT_MODEL = GROQ_CHAT_MODEL
+
+# (keep your prompt line too)
+system_prompt = os.getenv(
+    "SYSTEM_PROMPT",
+    "You are the CMC Thesis Chatbot. Answer using only the provided thesis context; "
+    "if the answer isn't in the context, say you don't know."
+)
+
+def run_llm(messages, model=None, temperature=0.2):
+    model = model or GROQ_CHAT_MODEL
+    resp = client.chat.completions.create(
+        model=model,
+        messages=messages,
+        temperature=temperature,
+    )
+    return resp.choices[0].message.content
+
+# If you want a manual test, guard it so it doesn't run during import
+if __name__ == "__main__":
+    print(run_llm([{"role": "user", "content": "ping"}]))
+
+#messages = [
+#    {"role": "system", "content": system_prompt},
+#    {"role": "user", "content": user_query},
+#]
+#answer = run_llm(messages)
 
 # Global prompt definitions
 TITLE_ANALYSIS_PROMPT = (
@@ -960,6 +1021,12 @@ class ThesisRAGSystem:
     def answer_question(self, question: str, conversation_history: str = "") -> str:
         """Answer a question about theses, incorporating conversation history."""
            
+        if not question:
+            # extra belt-and-suspenders check
+            return "Please enter a question."
+        q = question.strip()
+        qlow = q.lower()
+        # use qlow from here on
         quick_check_terms = ["thesis idea", "thesis topic", "thesis outline", "brainstorm"]
         if any(term in question.lower() for term in quick_check_terms):
             return self.generate_thesis_help(question)

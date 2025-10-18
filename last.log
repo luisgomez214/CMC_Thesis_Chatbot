@@ -1,0 +1,200 @@
+web-1  |     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+web-1  |   File "/usr/src/app/app.py", line 31, in chat
+web-1  |     answer = rag_system.answer_question(question)
+web-1  |   File "/usr/src/app/rag_system8.py", line 964, in answer_question
+web-1  |     if any(term in question.lower() for term in quick_check_terms):
+web-1  |   File "/usr/src/app/rag_system8.py", line 964, in <genexpr>
+web-1  |     if any(term in question.lower() for term in quick_check_terms):
+web-1  | AttributeError: 'NoneType' object has no attribute 'lower'
+web-1  | 2025-09-01 04:25:03,445 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 04:25:03] "GET / HTTP/1.0" 200 -
+web-1  | 2025-09-01 04:36:25,488 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 04:36:25] "[32mGET /clear_conversation HTTP/1.0[0m" 302 -
+web-1  | 2025-09-01 04:36:25,952 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 04:36:25] "GET / HTTP/1.0" 200 -
+web-1  | 2025-09-01 04:36:26,041 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 04:36:26] "[36mGET /static/style.css HTTP/1.0[0m" 304 -
+web-1  | 2025-09-01 04:36:26,044 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 04:36:26] "[36mGET /static/CMC_logo.jpg HTTP/1.0[0m" 304 -
+web-1  | 2025-09-01 04:36:30,832 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 400 Bad Request"
+web-1  | 2025-09-01 04:36:30,833 - rag_system8 - ERROR - LLM error: Error code: 400 - {'error': {'message': 'The model `llama3-8b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.', 'type': 'invalid_request_error', 'code': 'model_decommissioned'}}
+web-1  | 2025-09-01 04:36:30,907 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 400 Bad Request"
+web-1  | 2025-09-01 04:36:30,908 - rag_system8 - ERROR - LLM error: Error code: 400 - {'error': {'message': 'The model `llama3-8b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.', 'type': 'invalid_request_error', 'code': 'model_decommissioned'}}
+web-1  | 2025-09-01 04:36:30,908 - rag_system8 - INFO - Query analysis: priorities=['general'], names=[], keywords=[]
+web-1  | 2025-09-01 04:36:30,910 - rag_system8 - INFO - Query returned 10 results
+web-1  | 2025-09-01 04:36:30,910 - rag_system8 - INFO - Query returned 10 results
+web-1  | 2025-09-01 04:36:30,911 - rag_system8 - WARNING - Prompt truncated to meet token limit.
+web-1  | 2025-09-01 04:36:30,969 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 400 Bad Request"
+web-1  | 2025-09-01 04:36:30,969 - rag_system8 - ERROR - LLM error: Error code: 400 - {'error': {'message': 'The model `llama3-8b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.', 'type': 'invalid_request_error', 'code': 'model_decommissioned'}}
+web-1  | 2025-09-01 04:36:30,971 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 04:36:30] "[32mPOST / HTTP/1.0[0m" 302 -
+web-1  | 2025-09-01 04:36:31,089 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 04:36:31] "GET / HTTP/1.0" 200 -
+web-1  | 2025-09-01 04:36:31,162 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 04:36:31] "[36mGET /static/CMC_logo.jpg HTTP/1.0[0m" 304 -
+web-1  | 2025-09-01 04:36:31,163 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 04:36:31] "[36mGET /static/style.css HTTP/1.0[0m" 304 -
+web-1  | 2025-09-01 05:14:50,436 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 05:14:50] "GET / HTTP/1.0" 200 -
+web-1  | 2025-09-01 05:29:29,681 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 05:29:29] "GET / HTTP/1.0" 200 -
+web-1  | 2025-09-01 05:31:27,120 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 05:31:27] "GET / HTTP/1.0" 200 -
+web-1  | 2025-09-01 05:33:00,296 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 05:33:00] "GET / HTTP/1.0" 200 -
+web-1  | 2025-09-01 05:37:41,754 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 05:37:41] "GET / HTTP/1.0" 200 -
+web-1  | 2025-09-01 05:52:31,121 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 05:52:31] "[33mGET /.env HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 05:52:31,371 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 05:52:31] "[35m[1mPOST / HTTP/1.0[0m" 500 -
+web-1  | Traceback (most recent call last):
+web-1  |   File "/usr/local/lib/python3.10/site-packages/flask/app.py", line 1536, in __call__
+web-1  |     return self.wsgi_app(environ, start_response)
+web-1  |   File "/usr/local/lib/python3.10/site-packages/flask/app.py", line 1514, in wsgi_app
+web-1  |     response = self.handle_exception(e)
+web-1  |   File "/usr/local/lib/python3.10/site-packages/flask/app.py", line 1511, in wsgi_app
+web-1  |     response = self.full_dispatch_request()
+web-1  |   File "/usr/local/lib/python3.10/site-packages/flask/app.py", line 919, in full_dispatch_request
+web-1  |     rv = self.handle_user_exception(e)
+web-1  |   File "/usr/local/lib/python3.10/site-packages/flask/app.py", line 917, in full_dispatch_request
+web-1  |     rv = self.dispatch_request()
+web-1  |   File "/usr/local/lib/python3.10/site-packages/flask/app.py", line 902, in dispatch_request
+web-1  |     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+web-1  |   File "/usr/src/app/app.py", line 31, in chat
+web-1  |     answer = rag_system.answer_question(question)
+web-1  |   File "/usr/src/app/rag_system8.py", line 964, in answer_question
+web-1  |     if any(term in question.lower() for term in quick_check_terms):
+web-1  |   File "/usr/src/app/rag_system8.py", line 964, in <genexpr>
+web-1  |     if any(term in question.lower() for term in quick_check_terms):
+web-1  | AttributeError: 'NoneType' object has no attribute 'lower'
+web-1  | 2025-09-01 05:53:42,267 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 05:53:42] "[33mGET /favicon.ico HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:02:12,932 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:02:12] "GET / HTTP/1.0" 200 -
+web-1  | 2025-09-01 06:05:12,945 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:05:12] "GET / HTTP/1.0" 200 -
+web-1  | 2025-09-01 06:10:48,271 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:10:48] "GET / HTTP/1.0" 200 -
+web-1  | 2025-09-01 06:10:48,349 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:10:48] "GET /static/style.css HTTP/1.0" 200 -
+web-1  | 2025-09-01 06:10:48,380 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:10:48] "GET /static/CMC_logo.jpg HTTP/1.0" 200 -
+web-1  | 2025-09-01 06:11:30,798 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:30] "[33mPOST /hello.world?%ADd+allow_url_include%3d1+%ADd+auto_prepend_file%3dphp://input HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:31,078 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:31] "[35m[1mPOST /?%ADd+allow_url_include%3d1+%ADd+auto_prepend_file%3dphp://input HTTP/1.0[0m" 500 -
+web-1  | Traceback (most recent call last):
+web-1  |   File "/usr/local/lib/python3.10/site-packages/flask/app.py", line 1536, in __call__
+web-1  |     return self.wsgi_app(environ, start_response)
+web-1  |   File "/usr/local/lib/python3.10/site-packages/flask/app.py", line 1514, in wsgi_app
+web-1  |     response = self.handle_exception(e)
+web-1  |   File "/usr/local/lib/python3.10/site-packages/flask/app.py", line 1511, in wsgi_app
+web-1  |     response = self.full_dispatch_request()
+web-1  |   File "/usr/local/lib/python3.10/site-packages/flask/app.py", line 919, in full_dispatch_request
+web-1  |     rv = self.handle_user_exception(e)
+web-1  |   File "/usr/local/lib/python3.10/site-packages/flask/app.py", line 917, in full_dispatch_request
+web-1  |     rv = self.dispatch_request()
+web-1  |   File "/usr/local/lib/python3.10/site-packages/flask/app.py", line 902, in dispatch_request
+web-1  |     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+web-1  |   File "/usr/src/app/app.py", line 31, in chat
+web-1  |     answer = rag_system.answer_question(question)
+web-1  |   File "/usr/src/app/rag_system8.py", line 964, in answer_question
+web-1  |     if any(term in question.lower() for term in quick_check_terms):
+web-1  |   File "/usr/src/app/rag_system8.py", line 964, in <genexpr>
+web-1  |     if any(term in question.lower() for term in quick_check_terms):
+web-1  | AttributeError: 'NoneType' object has no attribute 'lower'
+web-1  | 2025-09-01 06:11:31,241 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:31] "GET / HTTP/1.0" 200 -
+web-1  | 2025-09-01 06:11:31,549 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:31] "[33mGET /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:31,812 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:31] "[33mGET /vendor/phpunit/phpunit/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:32,097 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:32] "[33mGET /vendor/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:32,406 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:32] "[33mGET /vendor/phpunit/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:32,718 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:32] "[33mGET /vendor/phpunit/phpunit/LICENSE/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:33,078 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:33] "[33mGET /vendor/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:33,455 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:33] "[33mGET /phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:33,820 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:33] "[33mGET /phpunit/phpunit/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:34,135 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:34] "[33mGET /phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:34,465 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:34] "[33mGET /phpunit/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:34,800 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:34] "[33mGET /lib/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:35,119 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:35] "[33mGET /lib/phpunit/phpunit/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:35,449 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:35] "[33mGET /lib/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:35,576 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:35] "GET / HTTP/1.0" 200 -
+web-1  | 2025-09-01 06:11:35,789 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:35] "GET /static/style.css HTTP/1.0" 200 -
+web-1  | 2025-09-01 06:11:35,802 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:35] "[33mGET /lib/phpunit/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:36,149 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:36] "[33mGET /lib/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:36,189 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:36] "GET /static/CMC_logo.jpg HTTP/1.0" 200 -
+web-1  | 2025-09-01 06:11:36,475 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:36] "[33mGET /laravel/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:36,799 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:36] "[33mGET /www/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:37,105 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:37] "[33mGET /ws/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:37,468 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:37] "[33mGET /yii/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:37,819 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:37] "[33mGET /zend/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:38,111 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:38] "[33mGET /ws/ec/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:38,405 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:38] "[33mGET /V2/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:38,733 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:38] "[33mGET /tests/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:39,011 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:39] "[33mGET /test/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:39,338 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:39] "[33mGET /testing/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:39,666 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:39] "[33mGET /api/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:39,955 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:39] "[33mGET /demo/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:40,161 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:40] "[33mGET /test/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:40,238 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:40] "[33mGET /cms/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:40,521 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:40] "[33mGET /crm/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:40,836 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:40] "[33mGET /admin/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:41,152 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:41] "[33mGET /backup/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:41,499 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:41] "[33mGET /blog/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:41,864 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:41] "[33mGET /workspace/drupal/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:42,224 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:42] "[33mGET /panel/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:42,514 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:42] "[33mGET /public/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:42,868 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:42] "[33mGET /apps/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:43,164 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:43] "[33mGET /app/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:43,442 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:43] "[33mGET /index.php?s=/index/\\think\\app/invokefunction&function=call_user_func_array&vars[0]=md5&vars[1][]=Hello HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:43,795 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:43] "[33mGET /public/index.php?s=/index/\\think\\app/invokefunction&function=call_user_func_array&vars[0]=md5&vars[1][]=Hello HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:44,099 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:44] "[33mGET /index.php?lang=../../../../../../../../usr/local/lib/php/pearcmd&+config-create+/&/<?echo(md5("hi"));?>+/tmp/index1.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:44,411 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:44] "[33mGET /index.php?lang=../../../../../../../../tmp/index1 HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:11:44,744 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:11:44] "[33mGET /containers/json HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:13:55,656 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:13:55] "GET / HTTP/1.0" 200 -
+web-1  | 2025-09-01 06:15:57,033 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:15:57] "[33mPOST /boaform/admin/formLogin HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:22:08,230 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:22:08] "[33mGET /wordpress/wp-admin/setup-config.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:23:16,975 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:23:16] "[33mGET /wp-admin/setup-config.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:23:32,122 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:23:32] "[33mGET /wordpress/wp-admin/setup-config.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:25:05,521 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:25:05] "[33mGET /wp-admin/setup-config.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:25:29,311 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:25:29] "[33mGET /wp-admin/setup-config.php HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 06:30:08,693 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:30:08] "GET / HTTP/1.0" 200 -
+web-1  | 2025-09-01 06:57:22,539 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 06:57:22] "GET / HTTP/1.0" 200 -
+web-1  | 2025-09-01 07:01:44,646 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 07:01:44] "GET / HTTP/1.0" 200 -
+web-1  | 2025-09-01 07:01:44,723 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 07:01:44] "[36mGET /static/style.css HTTP/1.0[0m" 304 -
+web-1  | 2025-09-01 07:01:45,050 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 07:01:45] "[36mGET /static/CMC_logo.jpg HTTP/1.0[0m" 304 -
+web-1  | 2025-09-01 07:01:47,625 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 07:01:47] "[32mGET /clear_conversation HTTP/1.0[0m" 302 -
+web-1  | 2025-09-01 07:01:47,690 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 07:01:47] "GET / HTTP/1.0" 200 -
+web-1  | 2025-09-01 07:01:47,763 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 07:01:47] "[36mGET /static/style.css HTTP/1.0[0m" 304 -
+web-1  | 2025-09-01 07:01:47,770 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 07:01:47] "[36mGET /static/CMC_logo.jpg HTTP/1.0[0m" 304 -
+web-1  | 2025-09-01 07:01:56,226 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 400 Bad Request"
+web-1  | 2025-09-01 07:01:56,226 - rag_system8 - ERROR - LLM error: Error code: 400 - {'error': {'message': 'The model `llama3-8b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.', 'type': 'invalid_request_error', 'code': 'model_decommissioned'}}
+web-1  | 2025-09-01 07:01:56,227 - rag_system8 - INFO - Query returned 0 results
+web-1  | 2025-09-01 07:01:56,246 - rag_system8 - INFO - Query returned 0 results
+web-1  | 2025-09-01 07:01:56,306 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 400 Bad Request"
+web-1  | 2025-09-01 07:01:56,307 - rag_system8 - ERROR - LLM error: Error code: 400 - {'error': {'message': 'The model `llama3-8b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.', 'type': 'invalid_request_error', 'code': 'model_decommissioned'}}
+web-1  | 2025-09-01 07:01:56,308 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 07:01:56] "[32mPOST / HTTP/1.0[0m" 302 -
+web-1  | 2025-09-01 07:01:56,373 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 07:01:56] "GET / HTTP/1.0" 200 -
+web-1  | 2025-09-01 07:01:56,453 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 07:01:56] "[36mGET /static/style.css HTTP/1.0[0m" 304 -
+web-1  | 2025-09-01 07:01:56,455 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 07:01:56] "[36mGET /static/CMC_logo.jpg HTTP/1.0[0m" 304 -
+web-1  | 2025-09-01 07:02:02,544 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 07:02:02] "GET / HTTP/1.0" 200 -
+web-1  | 2025-09-01 07:02:02,612 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 07:02:02] "[36mGET /static/style.css HTTP/1.0[0m" 304 -
+web-1  | 2025-09-01 07:02:02,614 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 07:02:02] "[36mGET /static/CMC_logo.jpg HTTP/1.0[0m" 304 -
+web-1  | 2025-09-01 07:02:08,552 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 400 Bad Request"
+web-1  | 2025-09-01 07:02:08,553 - rag_system8 - ERROR - LLM error: Error code: 400 - {'error': {'message': 'The model `llama3-8b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.', 'type': 'invalid_request_error', 'code': 'model_decommissioned'}}
+web-1  | 2025-09-01 07:02:08,610 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 400 Bad Request"
+web-1  | 2025-09-01 07:02:08,610 - rag_system8 - ERROR - LLM error: Error code: 400 - {'error': {'message': 'The model `llama3-8b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.', 'type': 'invalid_request_error', 'code': 'model_decommissioned'}}
+web-1  | 2025-09-01 07:02:08,611 - rag_system8 - INFO - Query analysis: priorities=['general'], names=[], keywords=[]
+web-1  | 2025-09-01 07:02:08,611 - rag_system8 - INFO - Query returned 10 results
+web-1  | 2025-09-01 07:02:08,612 - rag_system8 - INFO - Query returned 10 results
+web-1  | 2025-09-01 07:02:08,612 - rag_system8 - WARNING - Prompt truncated to meet token limit.
+web-1  | 2025-09-01 07:02:08,671 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 400 Bad Request"
+web-1  | 2025-09-01 07:02:08,672 - rag_system8 - ERROR - LLM error: Error code: 400 - {'error': {'message': 'The model `llama3-8b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.', 'type': 'invalid_request_error', 'code': 'model_decommissioned'}}
+web-1  | 2025-09-01 07:02:08,674 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 07:02:08] "[32mPOST / HTTP/1.0[0m" 302 -
+web-1  | 2025-09-01 07:02:08,738 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 07:02:08] "GET / HTTP/1.0" 200 -
+web-1  | 2025-09-01 07:02:09,029 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 07:02:09] "[36mGET /static/style.css HTTP/1.0[0m" 304 -
+web-1  | 2025-09-01 07:02:09,043 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 07:02:09] "[36mGET /static/CMC_logo.jpg HTTP/1.0[0m" 304 -
+web-1  | 2025-09-01 07:05:59,541 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 07:05:59] "GET / HTTP/1.0" 200 -
+web-1  | 2025-09-01 07:42:35,536 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 07:42:35] "GET / HTTP/1.0" 200 -
+web-1  | 2025-09-01 07:51:08,915 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 07:51:08] "GET / HTTP/1.0" 200 -
+web-1  | 2025-09-01 08:05:33,603 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 08:05:33] "[33mGET /global-protect/login.esp HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 08:14:16,505 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 08:14:16] "[33mGET /.env HTTP/1.0[0m" 404 -
+web-1  | 2025-09-01 08:14:17,076 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 08:14:17] "[35m[1mPOST / HTTP/1.0[0m" 500 -
+web-1  | Traceback (most recent call last):
+web-1  |   File "/usr/local/lib/python3.10/site-packages/flask/app.py", line 1536, in __call__
+web-1  |     return self.wsgi_app(environ, start_response)
+web-1  |   File "/usr/local/lib/python3.10/site-packages/flask/app.py", line 1514, in wsgi_app
+web-1  |     response = self.handle_exception(e)
+web-1  |   File "/usr/local/lib/python3.10/site-packages/flask/app.py", line 1511, in wsgi_app
+web-1  |     response = self.full_dispatch_request()
+web-1  |   File "/usr/local/lib/python3.10/site-packages/flask/app.py", line 919, in full_dispatch_request
+web-1  |     rv = self.handle_user_exception(e)
+web-1  |   File "/usr/local/lib/python3.10/site-packages/flask/app.py", line 917, in full_dispatch_request
+web-1  |     rv = self.dispatch_request()
+web-1  |   File "/usr/local/lib/python3.10/site-packages/flask/app.py", line 902, in dispatch_request
+web-1  |     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+web-1  |   File "/usr/src/app/app.py", line 31, in chat
+web-1  |     answer = rag_system.answer_question(question)
+web-1  |   File "/usr/src/app/rag_system8.py", line 964, in answer_question
+web-1  |     if any(term in question.lower() for term in quick_check_terms):
+web-1  |   File "/usr/src/app/rag_system8.py", line 964, in <genexpr>
+web-1  |     if any(term in question.lower() for term in quick_check_terms):
+web-1  | AttributeError: 'NoneType' object has no attribute 'lower'
+web-1  | 2025-09-01 08:27:21,676 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 08:27:21] "OPTIONS / HTTP/1.0" 200 -
+web-1  | 2025-09-01 08:28:01,164 - werkzeug - INFO - 172.19.0.1 - - [01/Sep/2025 08:28:01] "[33mGET /favicon.ico HTTP/1.0[0m" 404 -

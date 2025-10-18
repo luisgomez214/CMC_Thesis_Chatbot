@@ -9,20 +9,42 @@
 </head>
 <body>
   <header>
-    <a href="{{ url_for('clear') }}"><img src="{{ url_for('static','CMC_logo.jpg') }}" alt="CMC Logo" class="logo"/></a>
+    <a href="{{ url_for('clear') }}">
+      <img src="{{ url_for('static', filename='CMC_logo.jpg') }}" alt="CMC Logo" class="logo"/>
+    </a>
     <h1>Thesis Chatbot</h1>
   </header>
+
   <main>
-    <div class="chat-history">
+    {% if error %}
+      <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <section class="ask">
       <h2>Ask a question about CMC theses</h2>
-      <form action="{{ url_for('ask') }}" method="post">
-        <textarea name="question" placeholder="Enter your thesis question…" required></textarea>
+      <form action="{{ url_for('chat') }}" method="post">
+        <textarea name="question" placeholder="Enter your thesis question…" required>{{ user_question or '' }}</textarea>
         <button type="submit">Ask</button>
       </form>
-    </div>
-  </main>
+    </section>
+
+    {% if user_question %}
+      <div class="bubble user">
+        <strong>You:</strong>
+        <div>{{ user_question }}</div>
+      </div>
+    {% endif %}
+
+    {% if answer %}
+     <div class="bubble bot">
+        <strong>Answer:</strong>
+        <pre>{{ answer }}</pre>
+      </div>
+    {% endif %}
+
+
   <footer>
-    <a href="https://github.com/luisgomez214/Thesis" target="_blank">View on GitHub</a>
+    <a href="https://github.com/luisgomez214/Thesis" target="_blank" rel="noopener">View on GitHub</a>
   </footer>
 </body>
 </html>

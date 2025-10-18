@@ -294,3 +294,30 @@ footer {
     max-width: 100%;
   }
 }
+
+/* Layout + defaults */
+body { font-family: 'Open Sans', sans-serif; color: #111; }
+main { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.ask { margin-top: 8px; }
+
+/* Bubbles */
+.bubble { max-width: 900px; width: 90%; padding: 14px 16px; border-radius: 16px;
+          box-shadow: 0 6px 18px rgba(0,0,0,.08); line-height: 1.55;
+          overflow-wrap: anywhere; }
+.bubble.user { background: #fef3c7; color: #1f2937; border: 1px solid #fde68a; }
+.bubble.bot  { background: #1f2937; color: #f9fafb; border: 1px solid #111827; }
+
+/* Preserve line breaks but keep normal font */
+.bubble pre {
+  white-space: pre-wrap;      /* wrap long lines */
+  font-family: inherit;       /* not monospace */
+  margin: 8px 0 0;
+}
+
+/* Inputs */
+textarea { width: 320px; min-height: 56px; resize: vertical; padding: 8px; }
+
+/* Error box (make sure this style doesn't bleed into answers) */
+.error { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca;
+         padding: 10px 12px; border-radius: 12px; max-width: 900px; width: 90%; }
+
