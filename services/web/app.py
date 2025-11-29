@@ -8,16 +8,18 @@ from flask_cors import CORS
 app = Flask(__name__, static_folder="static", template_folder="templates")
 CORS(app)
 
-# services/web/app.py
-from rag_system8 import ThesisDataManager, ThesisRAGSystem
+# ✅ NEW BACKEND IMPORT (rag_system10.py)
+from rag_system10 import search_database, generate_answer
 
+# ---- Initialize RAG system safely (optional, left for future if you add history hooks) ----
 try:
-    data_manager = ThesisDataManager()              # uses that class’s defaults
-    rag_system = ThesisRAGSystem(data_manager)      # <-- pass it in
+    rag_system_ready = True
 except Exception as e:
-    rag_system = None
-    INIT_ERROR = f"Failed to initialize ThesisRAGSystem: {e}"
+    rag_system_ready = False
+    INIT_ERROR = f"Failed to initialize RAG system: {e}"
+
 # ---- Routes ----
+
 @app.route("/", methods=["GET", "POST"])
 def chat():
     if request.method == "GET":
@@ -29,36 +31,30 @@ def chat():
     if not question:
         return render_template("index.html", error="Please enter a question."), 400
 
-    if rag_system is None:
+    if not rag_system_ready:
         # Surface init error cleanly in the UI rather than crashing
         return render_template("index.html", error=globals().get("INIT_ERROR", "RAG system not initialized.")), 500
 
-    answer = rag_system.answer_question(question)
+    # ✅ Call new RAG system
+    intent, rows, parsed = search_database(question)
+    answer = generate_answer(question, intent, rows, parsed)
+
+    # Return to frontend UI
     return render_template("index.html", user_question=question, answer=answer)
 
 @app.get("/clear_conversation")
 def clear_conversation():
-    # If you track history in rag_system, clear it here (no-op is fine)
-    try:
-        if rag_system and hasattr(rag_system, "clear_history"):
-            rag_system.clear_history()
-    except Exception:
-        pass
+    # No history stored? That's fine, no-op
     return redirect(url_for("chat"))
 
 @app.get("/health")
 def health():
-    status = "ok" if rag_system is not None else "degraded"
+    status = "ok" if rag_system_ready else "degraded"
     return jsonify(status=status)
 
 @app.get("/clear")
 def clear():
-    # if you maintain history in rag_system, clear it here
-    try:
-        if rag_system and hasattr(rag_system, "clear_history"):
-            rag_system.clear_history()
-    except Exception:
-        pass
+    # Just reload UI
     return redirect(url_for("chat"))
 
 # ---- Entrypoint (supports: python app.py --host 0.0.0.0 --port 5029) ----
