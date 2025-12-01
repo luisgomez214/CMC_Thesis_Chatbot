@@ -1,13 +1,13 @@
-import sqlite3
+iimport sqlite3
 import logging
 from groq import Groq
 import json
 import os
 import re
-from collections import Counter, defaultdict
+from collections import defaultdict
 from datetime import datetime
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
@@ -52,16 +52,12 @@ Be smart about distinguishing person names from topics."""
         )
         
         result = response.choices[0].message.content.strip()
-        # Remove markdown code blocks if present
         result = re.sub(r'^```json\s*|\s*```$', '', result, flags=re.MULTILINE).strip()
-        
         parsed = json.loads(result)
-        logger.info(f"[LLM PARSE] {json.dumps(parsed, indent=2)}")
         return parsed
         
     except Exception as e:
         logger.error(f"LLM parsing failed: {e}")
-        # Fallback to simple extraction
         return {
             "intent": "search",
             "search_type": "general",
@@ -76,48 +72,6 @@ Be smart about distinguishing person names from topics."""
             "needs_generation": False
         }
 
-def debug_database():
-    """Debug helper to inspect database structure and content."""
-    try:
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
-        
-        # Get total count
-        cursor.execute("SELECT COUNT(*) FROM theses")
-        total = cursor.fetchone()[0]
-        logger.info(f"[DB DEBUG] Total theses in database: {total}")
-        
-        # Sample year formats
-        cursor.execute('SELECT DISTINCT "First published" FROM theses LIMIT 10')
-        years = cursor.fetchall()
-        logger.info(f"[DB DEBUG] Sample year formats: {[y[0] for y in years if y[0]]}")
-        
-        # Sample departments
-        cursor.execute('SELECT DISTINCT department FROM theses WHERE department IS NOT NULL LIMIT 10')
-        depts = cursor.fetchall()
-        logger.info(f"[DB DEBUG] Sample departments: {[d[0] for d in depts if d[0]]}")
-        
-        # Test economics search
-        cursor.execute('SELECT COUNT(*) FROM theses WHERE department LIKE ?', ('%Economics%',))
-        econ_count = cursor.fetchone()[0]
-        logger.info(f"[DB DEBUG] Economics theses count: {econ_count}")
-        
-        # Test 2020 search
-        cursor.execute('SELECT COUNT(*) FROM theses WHERE "First published" LIKE ?', ('%2020%',))
-        year_count = cursor.fetchone()[0]
-        logger.info(f"[DB DEBUG] 2020 theses count: {year_count}")
-        
-        # Test combined
-        cursor.execute('SELECT COUNT(*) FROM theses WHERE department LIKE ? AND "First published" LIKE ?', 
-                      ('%Economics%', '%2020%'))
-        combined = cursor.fetchone()[0]
-        logger.info(f"[DB DEBUG] Economics + 2020 theses count: {combined}")
-        
-        conn.close()
-        
-    except Exception as e:
-        logger.error(f"[DB DEBUG] Failed: {e}")
-
 def build_sql_query(parsed_query):
     """Build SQL query from LLM-parsed structure."""
     select = "SELECT * FROM theses"
@@ -131,11 +85,9 @@ def build_sql_query(parsed_query):
     role = parsed_query['role']
     intent = parsed_query['intent']
     
-    # Handle awards
     if intent == 'award' or search_type == 'award':
         where_clauses.append("(award IS NOT NULL AND award != '')")
     
-    # Handle person names based on role
     if entities.get('person_names'):
         name = entities['person_names'][0]
         
@@ -145,7 +97,7 @@ def build_sql_query(parsed_query):
         elif role == 'author':
             where_clauses.append("author LIKE ?")
             params.append(f'%{name}%')
-        else:  # both or unknown
+        else:
             where_clauses.append(
                 "(author LIKE ? OR advisor1 LIKE ? OR advisor2 LIKE ? OR advisor3 LIKE ?)"
             )
@@ -157,52 +109,37 @@ def build_sql_query(parsed_query):
         where_clauses.append('"First published" LIKE ?')
         params.append(f'%/{year_2digit}')
     
-    # Handle departments explicitly
     if entities.get('departments'):
         dept = entities['departments'][0]
         where_clauses.append("department LIKE ?")
         params.append(f'%{dept}%')
     
-    # Handle topics (search across multiple fields)
-    # Search even if we have person names or departments
     if entities.get('topics'):
         topic_conditions = []
-        for topic in entities['topics'][:5]:  # Use up to 5 topics
-            # Search in all relevant fields INCLUDING department
+        for topic in entities['topics'][:5]:
             topic_conditions.append(
                 "(Title LIKE ? OR keywords LIKE ? OR abstract LIKE ? OR disciplines LIKE ? OR department LIKE ?)"
             )
             params.extend([f'%{topic}%'] * 5)
         
         if topic_conditions:
-            # Use OR between different topics
             where_clauses.append(f"({' OR '.join(topic_conditions)})")
     
-    # Assemble query
     where = f"WHERE {' AND '.join(where_clauses)}" if where_clauses else ""
     query = f"{select} {where} {order_by} {limit}"
-    
-    # DEBUG: Log complete query
-    logger.info(f"[FULL SQL QUERY] {query}")
-    logger.info(f"[FULL PARAMS] {params}")
     
     return query, params
 
 def search_database(question):
     """Execute database search using LLM-enhanced parsing."""
-    # Run debug on first call (comment out after debugging)
-    # debug_database()
-    
     parsed = parse_query_with_llm(question)
     
-    # Handle special intents that don't need immediate DB query
     if parsed['needs_generation']:
         return parsed['intent'], [], parsed
     
     if parsed['needs_recommendation']:
         return parsed['intent'], [], parsed
     
-    # Build and execute query
     query, params = build_sql_query(parsed)
     
     try:
@@ -212,26 +149,8 @@ def search_database(question):
         
         cursor.execute(query, params)
         rows = cursor.fetchall()
-        
-        # DEBUG: If no results, try a simpler query
-        if not rows and parsed['entities'].get('topics'):
-            logger.info("[DEBUG] No results, trying simpler query...")
-            topic = parsed['entities']['topics'][0]
-            
-            # Try just department
-            cursor.execute('SELECT * FROM theses WHERE department LIKE ? LIMIT 10', (f'%{topic}%',))
-            dept_results = cursor.fetchall()
-            logger.info(f"[DEBUG] Department-only search found: {len(dept_results)} results")
-            
-            # Try just title/keywords
-            cursor.execute('SELECT * FROM theses WHERE Title LIKE ? OR keywords LIKE ? LIMIT 10', 
-                         (f'%{topic}%', f'%{topic}%'))
-            text_results = cursor.fetchall()
-            logger.info(f"[DEBUG] Title/keywords search found: {len(text_results)} results")
-        
         conn.close()
         
-        logger.info(f"[RESULTS] {len(rows)} theses found")
         return parsed['intent'], rows, parsed
         
     except Exception as e:
@@ -262,49 +181,109 @@ def generate_thesis_ideas(question, parsed):
     """Generate thesis ideas using LLM."""
     topics = parsed['entities'].get('topics', [])
     
-    # Search for related work
     related = []
+    advisors_found = []
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     
     for topic in topics[:3]:
         cursor.execute("""
-            SELECT Title, advisor1, department, keywords 
+            SELECT Title, advisor1, advisor2, advisor3, department, keywords 
             FROM theses 
-            WHERE Title LIKE ? OR keywords LIKE ? 
+            WHERE Title LIKE ? OR keywords LIKE ? OR abstract LIKE ? OR disciplines LIKE ?
             ORDER BY "First published" DESC 
-            LIMIT 5
-        """, (f'%{topic}%', f'%{topic}%'))
-        related.extend(cursor.fetchall())
+            LIMIT 10
+        """, (f'%{topic}%', f'%{topic}%', f'%{topic}%', f'%{topic}%'))
+        results = cursor.fetchall()
+        related.extend(results)
+        for r in results:
+            for adv in [r[1], r[2], r[3]]:
+                if adv and str(adv).strip():
+                    advisors_found.append((adv, r[4]))
+    
+    if not advisors_found:
+        cursor.execute("""
+            SELECT DISTINCT advisor1, department 
+            FROM theses 
+            WHERE advisor1 IS NOT NULL AND advisor1 != ''
+            ORDER BY "First published" DESC 
+            LIMIT 20
+        """)
+        general_advisors = cursor.fetchall()
+        advisors_found = [(adv[0], adv[1]) for adv in general_advisors if adv[0]]
     
     conn.close()
     
+    advisor_list = {}
+    for adv, dept in advisors_found[:15]:
+        if adv not in advisor_list:
+            advisor_list[adv] = dept
+    
     context = f"User request: {question}\n\n"
+    
     if related:
         context += "Related theses in database:\n"
         for r in related[:8]:
-            context += f"- \"{r[0]}\" (Advisor: {r[1]}, Dept: {r[2]})\n"
+            context += f"- \"{r[0]}\" (Advisor: {r[1]}, Dept: {r[4]})\n"
+        context += "\n"
+    else:
+        context += "No directly related theses found, but generating ideas for this topic.\n\n"
     
-    prompt = f"""{context}
+    context += "Available advisors from CMC thesis database:\n"
+    for adv, dept in list(advisor_list.items())[:10]:
+        context += f"- {adv} ({dept})\n"
+    
+    if not advisor_list:
+        context += "- No advisors found in database for this topic\n"
+    
+    prompt = f"""You are helping a CMC (Claremont McKenna College) undergraduate student plan a ONE SEMESTER senior thesis.
 
-Generate 5-7 specific, feasible thesis ideas. For each:
-1. **Title**: Specific and compelling
-2. **Overview**: What it explores (2-3 sentences)
-3. **Research Questions**: 2-3 specific questions
-4. **Methodology**: Brief approach
-5. **Significance**: Why it matters
-6. **Potential Advisor**: Based on related work above (if available)
-7. **Timeline**: Realistic estimate
+{context}
 
-Be specific and academically rigorous."""
+YOUR TASK: Generate 3-5 undergraduate thesis ideas.
+
+MANDATORY FORMAT FOR EACH IDEA:
+
+**Title**: [compelling title]
+
+**Overview**: [2-3 sentences]
+
+**Research Questions**:
+- [question 1]
+- [question 2]  
+- [question 3]
+
+**Methodology**: [doable in ONE SEMESTER by an undergraduate]
+
+**Significance**: [why it matters]
+
+**Potential Advisor**: [MUST copy exact name from advisor list above, e.g. "Mike Izbicki" or "Janet Smith". If none fit, write "Consult department"]
+
+**Timeline**: One semester (3-4 months)
+
+=================
+NON-NEGOTIABLE RULES:
+=================
+1. Timeline MUST be "One semester (3-4 months)" - NO exceptions
+2. Advisor MUST be copy-pasted from the list above - NEVER invent names like "Dr. Rachel Cummings" or "Dr. Been Kim"
+3. Scope MUST fit in 3-4 months of undergraduate work
+4. If you cannot find a good advisor match in the list, write exactly: "Consult department for advisor recommendation"
+5. DO NOT use advisors from Stanford, Harvard, Princeton, or any other university
+6. ONLY use advisors explicitly listed above from CMC
+
+Double-check each thesis idea follows ALL rules before including it."""
     
     try:
         response = client.chat.completions.create(
             model="llama-3.1-8b-instant",
             messages=[{"role": "user", "content": prompt}],
-            temperature=0.7,
+            temperature=0.3,
             max_tokens=2000
         )
+        return response.choices[0].message.content
+    except Exception as e:
+        logger.error(f"LLM failed: {e}")
+        return "I'm having trouble generating ideas. Please try rephrasing."
         return response.choices[0].message.content
     except Exception as e:
         logger.error(f"LLM failed: {e}")
@@ -322,7 +301,6 @@ def recommend_advisors(question, parsed):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     
-    # Search for relevant advisors
     for topic in topics[:5]:
         cursor.execute("""
             SELECT advisor1, advisor2, advisor3, "First published", Title, department
@@ -333,7 +311,6 @@ def recommend_advisors(question, parsed):
         """, (f'%{topic}%', f'%{topic}%', f'%{topic}%', f'%{topic}%'))
         
         rows = cursor.fetchall()
-        logger.info(f"Found {len(rows)} theses for topic '{topic}'")
         
         for row in rows:
             year_match = re.search(r'\b(19|20)\d{2}\b', row[3] or '')
@@ -353,7 +330,6 @@ def recommend_advisors(question, parsed):
     if not advisor_stats:
         return f"I couldn't find advisors matching those topics ({', '.join(topics)}). Try different or broader keywords."
     
-    # Score advisors
     current_year = datetime.now().year
     scored = []
     for adv, stats in advisor_stats.items():
@@ -373,7 +349,6 @@ def recommend_advisors(question, parsed):
     
     scored.sort(key=lambda x: x['score'], reverse=True)
     
-    # Use LLM to format recommendations
     prompt = f"""Question: {question}
 
 Top advisors by expertise in {', '.join(topics)}:
@@ -419,7 +394,6 @@ def handle_who_is(parsed):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     
-    # Check as advisor
     cursor.execute("""
         SELECT * FROM theses 
         WHERE advisor1 LIKE ? OR advisor2 LIKE ? OR advisor3 LIKE ?
@@ -427,7 +401,6 @@ def handle_who_is(parsed):
     """, (f'%{name}%', f'%{name}%', f'%{name}%'))
     advised = format_results(cursor.fetchall())
     
-    # Check as author
     cursor.execute("""
         SELECT * FROM theses 
         WHERE author LIKE ?
@@ -440,7 +413,6 @@ def handle_who_is(parsed):
     if not advised and not authored:
         return f"I couldn't find {name} in the thesis database."
     
-    # Use LLM to format nicely
     data = {
         'name': name,
         'as_advisor': {
@@ -475,7 +447,6 @@ Be concise and helpful."""
         return response.choices[0].message.content
     except Exception as e:
         logger.error(f"LLM failed: {e}")
-        # Fallback formatting
         info = f"**{name}**\n\n"
         if advised:
             info += f"**As Advisor:** {len(advised)} theses\n"
@@ -490,7 +461,6 @@ Be concise and helpful."""
 def generate_answer(question, intent, rows, parsed):
     """Generate answer using LLM for natural language responses."""
     
-    # Special intents
     if intent == 'thesis_ideas' or parsed.get('needs_generation'):
         return generate_thesis_ideas(question, parsed)
     
@@ -503,7 +473,6 @@ def generate_answer(question, intent, rows, parsed):
     results = format_results(rows)
     
     if not results:
-        # Use LLM to generate helpful "no results" message
         prompt = f"""The user asked: "{question}"
 
 No matching theses were found in the database. Generate a helpful response that:
@@ -523,7 +492,6 @@ No matching theses were found in the database. Generate a helpful response that:
         except:
             return "I couldn't find any theses matching your query. Try different keywords or broader search terms."
     
-    # Use LLM to create natural, conversational response
     prompt = f"""Question: {question}
 
 Found {len(results)} theses in the database:
@@ -549,7 +517,6 @@ Be helpful and conversational."""
         return response.choices[0].message.content
     except Exception as e:
         logger.error(f"LLM failed: {e}")
-        # Fallback: simple formatting
         output = f"Found {len(results)} theses:\n\n"
         for i, r in enumerate(results[:10], 1):
             output += f"{i}. **{r['Title']}**\n"
@@ -565,11 +532,11 @@ Be helpful and conversational."""
         return output
 
 def main():
-    print("🎓 CMC Thesis Chatbot (LLM-Enhanced)")
+    print("🎓 CMC Thesis Chatbot")
     print("="*50)
     print("Ask me anything about CMC theses!")
     print("="*50)
-    print("Commands: 'exit' to quit, 'debug' to inspect database\n")
+    print("Type 'exit' to quit\n")
     
     while True:
         try:
@@ -578,12 +545,6 @@ def main():
             if not question or question.lower() in ['exit', 'quit', 'q']:
                 print("👋 Goodbye!")
                 break
-            
-            if question.lower() == 'debug':
-                print("\n🔍 Running database diagnostics...")
-                debug_database()
-                print()
-                continue
             
             print("\n🔍 Searching...")
             
