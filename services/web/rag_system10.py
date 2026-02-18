@@ -1,4 +1,4 @@
-iimport sqlite3
+import sqlite3
 import logging
 from groq import Groq
 import json
@@ -530,6 +530,9 @@ Be helpful and conversational."""
                 output += f"   Year: {r['Year']}\n"
             output += "\n"
         return output
+
+def about():
+    ##create a function to handle "what is this thesis about" questions
 
 def main():
     print("🎓 CMC Thesis Chatbot")

@@ -2,36 +2,89 @@
 
 ![deploy](https://github.com/luisgomez214/CMC_Thesis_Chatbot/actions/workflows/deploy.yml/badge.svg)
 
-This GitHub repo is a senior thesis for Claremont McKenna College; it is a thesis about theses. The project is an interactive RAG-based chatbot that helps students, researchers, and faculty explore Claremont McKenna College senior theses. The goal was to create a domain-specific chatbot to show that it is possible to combat the limitations of AI, including hallucinations, outdated data, and lack of domain expertise. The website link is:
+A Retrieval-Augmented Generation (RAG) chatbot that answers questions about Claremont McKenna College senior theses using real database records — not general model knowledge.
 
-[CMCThesisChatbot](https://cmcthesischatbot.com)
+🌐 https://cmcthesischatbot.com
 
-## Overview
+---
 
-This system combines Groq's LLM, llama3-8b-8192, with a structured SQLite database to provide intelligent, thesis-specific answers. It supports search, analysis, and brainstorming based on metadata from CMC’s thesis archive (through Fall 2024).
+## What It Does
 
-**Data Collection**  
-- CSVs sourced from [Scholarship@Claremont](https://scholarship.claremont.edu)  
-- Cleaned, merged, and indexed into `theses.db` with FTS5
+This system translates natural language questions into structured database queries and semantic searches over CMC thesis metadata.
 
-**Architecture (RAG)**  
-- **Retrieve**: Matches user query to thesis data (title, author, department, etc.)  
-- **Augment**: Adds metadata to the prompt  
-- **Generate**: Groq LLM crafts accurate, natural responses  
-- **Format**: Returns structured, markdown-friendly output  
-- (Specifically: The LLM reads the prompt, generates SQL queries, executes them, and formulates the final answer.)
+It can:
 
-**Deployment**  
-- Flask backend + Docker  
-- CI/CD with GitHub Actions  
-- Deployed on AWS EC2 with secure HTTPS (Route 53 + ACM)
+- Search theses by title, topic, advisor, department, or year  
+- Rank advisors by topic expertise  
+- Filter by award, season, or publication date  
+- Summarize real abstracts  
+- Generate thesis ideas grounded in actual CMC data  
 
-**Features**  
-- Search by title, author, advisor, department, or keyword  
-- Run analytical queries (e.g., "How many Economics theses in 2020?")  
-- Get thesis ideas with outlines and advisor suggestions  
-- Summarize or explain thesis abstracts  
-- Explore advisor expertise
+Unlike ChatGPT, every response is backed by records from the CMC thesis archive.
+
+---
+
+## Architecture
+
+**Backend:** Flask  
+**Database:** SQLite (`theses2.db`)  
+**Embeddings:** SentenceTransformers (`all-MiniLM-L6-v2`)  
+**Vector Store:** ChromaDB (persistent, cosine similarity)  
+**LLM:** Groq `llama-3.1-8b-instant`  
+**Deployment:** Docker + AWS EC2  
+**CI/CD:** GitHub Actions  
+
+---
+
+## Query Pipeline
+
+```
+classify() → fetch() → respond()
+  (LLM)        (no LLM)      (LLM)
+```
+
+### 1. Classify  
+LLM extracts:
+- intent (title lookup, topic search, aggregation, person lookup)
+- entities (names, topics, filters)
+
+### 2. Fetch  
+Pure retrieval:
+- SQL for structured queries  
+- Vector search (ChromaDB) for semantic topic matching  
+- Hybrid (SQL filter → vector re-rank) for constrained topic queries  
+
+### 3. Respond  
+LLM formats only the retrieved records into a grounded answer.  
+It is explicitly instructed not to use outside knowledge.
+
+---
+
+## Hallucination Prevention
+
+- Topic-based advisor rankings use vector search first, then count advisors within real results  
+- Prompts include strict grounding instructions  
+- Advisor and author lookups run separate SQL queries  
+
+The model never invents advisors or theses.
+
+---
+
+## Data
+
+Source: Scholarship@Claremont  
+Stored in SQLite with fields including:
+
+- Title  
+- Author(s)  
+- Advisor(s)  
+- Department(s)  
+- Abstract  
+- Keywords  
+- Award  
+- Publication date  
+- Season  
+- URL  
 
 ---
 
@@ -41,7 +94,6 @@ This system combines Groq's LLM, llama3-8b-8192, with a structured SQLite databa
 | CMC Thesis Chatbot | ChatGPT-4o |
 |--------------------|------------|
 | <img src="screenshots/outline1.png" width="48%"> <img src="screenshots/outline2.png" width="48%"> | ![ChatGPT Outline](screenshots/CheckOutline.png) |
-| *Generates ideas based on real thesis metadata and advisor matching.* | *Ideas not grounded in CMC thesis data, risks repetition and lacks specific advisor context.* |
 
 ---
 
@@ -49,7 +101,6 @@ This system combines Groq's LLM, llama3-8b-8192, with a structured SQLite databa
 | CMC Thesis Chatbot | ChatGPT-4o |
 |--------------------|------------|
 | ![Advisor](screenshots/advisor.png) | ![ChatGPT Advisor](screenshots/CheckAdvisor.png) |
-| *Finds actual advisors from the thesis database based on query context.* | *Returns unrelated advisor info not present in the thesis metadata.* |
 
 ---
 
@@ -57,23 +108,47 @@ This system combines Groq's LLM, llama3-8b-8192, with a structured SQLite databa
 | CMC Thesis Chatbot | ChatGPT-4o |
 |--------------------|------------|
 | ![Thesis](screenshots/Thesis.png) | ![ChatGPT Thesis](screenshots/CheckThesis.png) |
-| *Searches and summarizes from actual theses in the CMC database.* | *Can summarize papers but lacks access to full CMC thesis archive.* |
 
 ---
 
-## Future Development 
+## Project Structure
 
-- Enhanced query handling for spell correction and edge cases
-- Expand metadata coverage (add full thesis text?)
-- Responsive UI design for mobile devices
-- User authentication for session tracking
-- Code optimization
+```
+rag_system17.py      # classify → fetch → respond
+config.yaml          # acronym expansion
+theses2.db           # SQLite database
+chroma_store/        # persistent vector index
+screenshots/
+Dockerfile
+.github/workflows/deploy.yml
+```
+
 ---
 
-## Acknowledgments
+## Setup
 
-Special thanks to:  
-1. My family (mom, grandma, grandpa, sister) for their unwavering support  
-2. Professor Mike Izbicki for guidance and mentorship  
-3. The CMC community for fostering an environment of academic excellence and innovation  
-4. Claremont Colleges Library for providing access to thesis repository data
+```bash
+pip install chromadb sentence-transformers groq numpy pyyaml flask
+
+# Build vector index (run once)
+python rag_system17.py --build-index
+
+# Start chatbot
+python rag_system17.py
+```
+
+Set API key:
+
+```bash
+export GROQ_API_KEY=your_key_here
+```
+
+---
+
+## Future Improvements
+
+- Web UI (currently CLI)
+- Caching layer
+- Full-text thesis embeddings
+- Multi-turn conversation support
+
